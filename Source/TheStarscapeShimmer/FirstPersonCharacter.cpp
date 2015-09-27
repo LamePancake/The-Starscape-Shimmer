@@ -21,6 +21,8 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	FirstPersonCameraComponent->AttachParent = GetCapsuleComponent();
 	FirstPersonCameraComponent->RelativeLocation = FVector(0, 0, 54.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 // Called when the game starts or when spawned
@@ -81,3 +83,8 @@ void AFirstPersonCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+void AFirstPersonCharacter::Tick(float deltaTime)
+{
+	Super::Tick(deltaTime);
+	UE_LOG(LogTemp, Warning, TEXT("I am updating!!"));
+}

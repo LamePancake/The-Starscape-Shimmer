@@ -31,6 +31,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+
+	// Called every frame to update custom logic
+	virtual void Tick(float deltaTime);
+
 protected:
 	void OnFire();
 
