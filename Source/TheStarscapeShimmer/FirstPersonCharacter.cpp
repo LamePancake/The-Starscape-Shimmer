@@ -60,7 +60,7 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Inp
 	InputComponent->BindAxis("LookUpRate", this, &AFirstPersonCharacter::LookUpAtRate);
 
 	// Bind the key press of E or Right face button for picking up object.
-	InputComponent->BindAction("PickUp", IE_Pressed, this, &AFirstPersonCharacter::PickUp);
+	InputComponent->BindAction("Interact", IE_Pressed, this, &AFirstPersonCharacter::Interact);
 }
 
 
@@ -106,10 +106,9 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 	//}
 }
 
-//Called every update to check if objects are within the character's bounding sphere
-void AFirstPersonCharacter::PickUp()
+//Called on key press to check if objects are within the character's bounding sphere
+void AFirstPersonCharacter::Interact()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Checking for pickups"));
 	// Stores and retrives actors with in the character's sphere
 	TArray<AActor*> CollectableActors;
 	PickUpSphere->GetOverlappingActors(CollectableActors);
@@ -118,11 +117,11 @@ void AFirstPersonCharacter::PickUp()
 	for (int i = 0; i < CollectableActors.Num(); i++)
 	{
 		// If it is a key, do what a key does.
-		AKeyPickup* const TestKey = Cast<AKeyPickup>(CollectableActors[i]);
-		if (TestKey && !TestKey->IsPendingKill() && TestKey->bIsActive)
+		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
+		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive)
 		{
-			TestKey->bIsActive = false;
-			TestKey->OnPickUp();
+			TestObj->bIsActive = false;
+			TestObj->OnInteraction();
 		}
 	}
 }

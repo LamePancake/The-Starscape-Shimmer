@@ -57,6 +57,6 @@ protected:
 	class APickup* GetPickupInView();
 
 	// Trys to pick up object within it's sphere when key pressed
-	UFUNCTION(BlueprintCallable, Category = Pickup)
-	void PickUp();
+	UFUNCTION(BlueprintCallable, Category = Interaction)
+	void Interact();
 };
