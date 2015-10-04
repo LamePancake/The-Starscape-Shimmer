@@ -23,4 +23,6 @@ public:
 	// Overrides the OnPickUp function, becauase blueprint native event
 	void OnPickUp_Implementation();
 
+	// Overrides the SetLocation method
+	void SetLocation_Implementation(FVector loc, FRotator rot);
 };

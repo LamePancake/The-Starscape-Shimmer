@@ -31,6 +31,8 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 	//Turn on the update method
 	PrimaryActorTick.bCanEverTick = true;
+
+	PickedUpItem = NULL;
 }
 
 // Called when the game starts or when spawned
@@ -98,6 +100,19 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
 
+	if (PickedUpItem != NULL)
+	{
+		FVector CamLoc;
+		FRotator CamRot;
+		float MaxUseDistance = 75.0f;
+
+		Controller->GetPlayerViewPoint(CamLoc, CamRot);
+		FVector Direction = CamRot.Vector();
+		Direction.Normalize();
+		FVector ItemLoc = CamLoc + (Direction * MaxUseDistance);
+
+		PickedUpItem->SetLocation(ItemLoc, CamRot);
+	}
 	//APickup* Usable = GetPickupInView();
 	//if (Usable)
 	//{
@@ -113,16 +128,31 @@ void AFirstPersonCharacter::Interact()
 	TArray<AActor*> CollectableActors;
 	PickUpSphere->GetOverlappingActors(CollectableActors);
 
+	/*if (PickedUpItem != NULL)
+	{
+		PickedUpItem->OnDrop();
+		PickedUpItem = NULL;
+		return;
+	}*/
+
 	// Go through all of the actors
 	for (int i = 0; i < CollectableActors.Num(); i++)
 	{
-		// If it is a key, do what a key does.
+		// If it is an object, do what the object does.
 		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
 		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive)
 		{
 			TestObj->bIsActive = false;
 			TestObj->OnInteraction();
 		}
+
+		APickup* const TestPickup = Cast<APickup>(CollectableActors[i]);
+		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive)
+		{
+			PickedUpItem = TestPickup;
+		}
+
+		//break;
 	}
 }
 

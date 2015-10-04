@@ -39,6 +39,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pickup)
 	USphereComponent* PickUpSphere;
 
+	class APickup* PickedUpItem;
+
 protected:
 	void OnFire();
 

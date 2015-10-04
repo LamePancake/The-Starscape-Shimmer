@@ -17,6 +17,13 @@ public:
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation();
 
+	// Sets the location of the pick up when it has been picked up.
+	UFUNCTION(BlueprintNativeEvent)
+	void SetLocation(FVector loc, FRotator rot);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void OnDrop();
+
 	// Function to call when the pick up is collected
 	UFUNCTION(BlueprintNativeEvent)
 	void OnPickUp();
