@@ -37,8 +37,24 @@
 *.sdf
 *.sln
 
-# All Content
-Content/*
+# All Starter Content
+Content/StarterContent/*
+
+# All Movies
+Content/Movies/*
+Content/Films/**/*.avi
+Content/Films/**/*.ogv
+Content/Films/**/*.mp3
+Content/Films/**/*.7z
+
+
+# Archives
+*.7z
+
+# Media
+*.avi
+*.ogv
+*.mp3
 
 # Precompiled Assets
 SourceArt/**/*.png
