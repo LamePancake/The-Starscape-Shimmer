@@ -3,6 +3,8 @@
 #include "TheStarscapeShimmer.h"
 #include "FirstPersonCharacter.h"
 #include "GameFramework/InputSettings.h"
+#include "Pickup.h"
+#include "KeyPickup.h"
 
 // Sets default values
 AFirstPersonCharacter::AFirstPersonCharacter()
@@ -22,6 +24,12 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	FirstPersonCameraComponent->RelativeLocation = FVector(0, 0, 54.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	// Create and attach the sphere component to the player
+	PickUpSphere = CreateDefaultSubobject <USphereComponent> (TEXT("PickUp Sphere"));
+	PickUpSphere->AttachTo(RootComponent);
+	PickUpSphere->SetSphereRadius(50.0f);
+
+	//Turn on the update method
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -50,6 +58,9 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Inp
 	InputComponent->BindAxis("TurnRate", this, &AFirstPersonCharacter::TurnAtRate);
 	InputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 	InputComponent->BindAxis("LookUpRate", this, &AFirstPersonCharacter::LookUpAtRate);
+
+	// Bind the key press of E or Right face button for picking up object.
+	InputComponent->BindAction("PickUp", IE_Pressed, this, &AFirstPersonCharacter::PickUp);
 }
 
 
@@ -86,5 +97,63 @@ void AFirstPersonCharacter::LookUpAtRate(float Rate)
 void AFirstPersonCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
-	UE_LOG(LogTemp, Warning, TEXT("I am updating!!"));
+
+	//APickup* Usable = GetPickupInView();
+	//if (Usable)
+	//{
+		//UE_LOG(LogTemp, Warning, TEXT("Attempting pick up"));
+		//Usable->OnPickUp();
+	//}
+}
+
+//Called every update to check if objects are within the character's bounding sphere
+void AFirstPersonCharacter::PickUp()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Checking for pickups"));
+	// Stores and retrives actors with in the character's sphere
+	TArray<AActor*> CollectableActors;
+	PickUpSphere->GetOverlappingActors(CollectableActors);
+
+	// Go through all of the actors
+	for (int i = 0; i < CollectableActors.Num(); i++)
+	{
+		// If it is a key, do what a key does.
+		AKeyPickup* const TestKey = Cast<AKeyPickup>(CollectableActors[i]);
+		if (TestKey && !TestKey->IsPendingKill() && TestKey->bIsActive)
+		{
+			TestKey->bIsActive = false;
+			TestKey->OnPickUp();
+		}
+	}
+}
+
+APickup* AFirstPersonCharacter::GetPickupInView()
+{
+	FVector CamLoc;
+	FRotator CamRot;
+
+	float MaxUseDistance = 5.0f;
+
+	if (Controller == NULL)
+		return NULL;
+
+	// This retrieves are camera point of view to find the start and direction we will trace. 
+	Controller->GetPlayerViewPoint(CamLoc, CamRot);
+	const FVector TraceStart = CamLoc;
+	const FVector Direction = CamRot.Vector();
+	const FVector TraceEnd = TraceStart + (Direction * MaxUseDistance);
+
+	FCollisionQueryParams TraceParams(FName(TEXT("TraceUsableActor")), true, this);
+	TraceParams.bTraceAsyncScene = true;
+	TraceParams.bReturnPhysicalMaterial = false;
+	TraceParams.bTraceComplex = true;
+
+	// FHitResults is passed in with the trace function and holds the result of the trace. 
+	FHitResult Hit(ForceInit);
+	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
+
+	// Uncomment this to visualize your line during gameplay. 
+	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f);
+
+	return Cast<APickup>(Hit.GetActor());
 }

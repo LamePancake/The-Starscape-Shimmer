@@ -35,6 +35,10 @@ public:
 	// Called every frame to update custom logic
 	virtual void Tick(float deltaTime);
 
+	// A sphere around the character used to tell if something is close enough to clollect.
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pickup)
+	USphereComponent* PickUpSphere;
+
 protected:
 	void OnFire();
 
@@ -49,4 +53,10 @@ protected:
 
 	/* Look up & down at a given rate. */
 	void LookUpAtRate(float Rate);
+
+	class APickup* GetPickupInView();
+
+	// Trys to pick up object within it's sphere when key pressed
+	UFUNCTION(BlueprintCallable, Category = Pickup)
+	void PickUp();
 };
