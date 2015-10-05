@@ -23,4 +23,11 @@ public:
 	// Function to call when the pick up is interacted with
 	UFUNCTION(BlueprintNativeEvent)
 		void OnInteract();
+
+private:
+	/*UMaterial* TheMaterial;
+
+	UMaterialInstanceDynamic TheMaterial_Dyn;
+
+	TArray <UMaterialExpression*> BaseColorMatChain;*/
 };
