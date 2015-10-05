@@ -5,6 +5,7 @@
 #include "GameFramework/InputSettings.h"
 #include "Pickup.h"
 #include "KeyPickup.h"
+#include "DoorObject.h"
 
 // Sets default values
 AFirstPersonCharacter::AFirstPersonCharacter()
@@ -27,7 +28,7 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	// Create and attach the sphere component to the player
 	PickUpSphere = CreateDefaultSubobject <USphereComponent> (TEXT("PickUp Sphere"));
 	PickUpSphere->AttachTo(RootComponent);
-	PickUpSphere->SetSphereRadius(50.0f);
+	PickUpSphere->SetSphereRadius(100.0f);
 
 	//Turn on the update method
 	PrimaryActorTick.bCanEverTick = true;
@@ -127,32 +128,59 @@ void AFirstPersonCharacter::Interact()
 	// Stores and retrives actors with in the character's sphere
 	TArray<AActor*> CollectableActors;
 	PickUpSphere->GetOverlappingActors(CollectableActors);
-
-	/*if (PickedUpItem != NULL)
-	{
-		PickedUpItem->OnDrop();
-		PickedUpItem = NULL;
-		return;
-	}*/
+	
+	// SHANE help me get rid of this boolean!
+	bool pickedUpObject = false;
 
 	// Go through all of the actors
 	for (int i = 0; i < CollectableActors.Num(); i++)
 	{
 		// If it is an object, do what the object does.
 		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
-		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive)
+		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive && PickedUpItem == NULL)
 		{
-			TestObj->bIsActive = false;
 			TestObj->OnInteraction();
 		}
 
-		APickup* const TestPickup = Cast<APickup>(CollectableActors[i]);
-		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive)
+		// Next check if it is a door and try to unlock if you are holding a key
+		ADoorObject* const TestDoor = Cast<ADoorObject>(CollectableActors[i]);
+		if (TestDoor && !TestDoor->IsPendingKill() && TestDoor->bIsActive && PickedUpItem != NULL)
 		{
-			PickedUpItem = TestPickup;
+			AKeyPickup* const TestKey = Cast<AKeyPickup>(PickedUpItem);
+			if (TestKey && TestDoor->IsLocked)
+			{
+				TestDoor->UnlockDoor(TestKey);
+			}
+			break;
 		}
 
-		//break;
+		// If it wasnt a door check if it is a pickup and save it if it is
+		APickup* const TestPickup = Cast<APickup>(CollectableActors[i]);
+		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && PickedUpItem == NULL)
+		{
+			PickedUpItem = TestPickup;
+			TestObj->bIsActive = false;
+			pickedUpObject = true;
+			break;
+		}
+	}
+
+	// Wish i could put this first, but you cannot drop the key before you check if they are trying to get through a door
+	if (PickedUpItem != NULL && !pickedUpObject) // Want to get rid of this bool
+	{
+		UWorld* const World = GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters s;
+			s.Owner = this;
+			s.Instigator = Instigator;
+
+			World->SpawnActor<AKeyPickup>(ActorToSpawn, PickedUpItem->GetActorLocation(), PickedUpItem->GetActorRotation(), s);
+		}
+		PickedUpItem->OnDrop();
+
+		PickedUpItem = NULL;
+		return;
 	}
 }
 

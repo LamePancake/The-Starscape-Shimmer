@@ -31,6 +31,8 @@ void APickup::OnPickUp_Implementation()
 
 void APickup::OnDrop_Implementation()
 {
-
+	this->SetActorEnableCollision(true);
+	bIsActive = true;
+	Destroy();
 }
 

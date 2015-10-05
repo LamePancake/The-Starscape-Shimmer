@@ -14,7 +14,6 @@ AKeyPickup::AKeyPickup()
 void AKeyPickup::OnPickUp_Implementation()
 {
 	Super::OnPickUp_Implementation();
-	UE_LOG(LogTemp, Warning, TEXT("HAHA, YOU CAN'T PICK ME UP"));
 }
 
 void AKeyPickup::SetLocation_Implementation(FVector loc, FRotator rot)

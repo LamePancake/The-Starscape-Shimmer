@@ -45,8 +45,6 @@ void AInteractableObject::OnInteraction_Implementation()
 {
 	// Other classes build upon this function
 	// No function
-	bIsActive = true;
-	UE_LOG(LogTemp, Warning, TEXT("In Interactable object"));
 }
 
 
