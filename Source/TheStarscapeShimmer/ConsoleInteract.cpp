@@ -7,7 +7,19 @@
 // Sets default values
 AConsoleInteract::AConsoleInteract()
 {
+	// Get Reference to Movie Screen Material for Driller Killer
+	/*static ConstructorHelpers::FObjectFinder<UMaterial> Material(TEXT("Material'/Game/Content/Films/Driller_Killer/DrillerKillerUncit197_Tex_Mat.uasset'"));
 
+	if (Material.Object != NULL)
+	{
+		TheMaterial = (UMaterial*)Material.Object;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("EMPTY MATERIAL"));
+	}*/
+
+	//TheMaterial_Dyn = UMaterialInstanceDynamic::Create(TheMaterial, this);
 }
 
 // Calls the interact method
@@ -20,5 +32,11 @@ void AConsoleInteract::OnInteraction_Implementation()
 void AConsoleInteract::OnInteract_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("HAHA, YOU CAN'T INTERACT BITCH"));
+	/*TheMaterial->GetExpressionsInPropertyChain(MP_BaseColor, BaseColorMatChain, NULL);
+	for (int i = 0; i < BaseColorMatChain.Max(); i++)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HueHueHueHueHue"));
+	}*/
+
 }
 
