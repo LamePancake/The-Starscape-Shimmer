@@ -13,7 +13,7 @@ class THESTARSCAPESHIMMER_API AFilmReelPickup : public APickup
 {
 	GENERATED_BODY()
 	
-	
-	
-	
+public:
+	UPROPERTY(EditAnywhere)
+	FString FilmName = FString(TEXT("Death Gloop"));	
 };
