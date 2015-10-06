@@ -28,9 +28,5 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 		void OnInteract();
 
-	UPROPERTY() AMovieScreenObject* MovieScreen;
-
 	UPROPERTY() UMaterialParameterCollection* ScreenMatParams;
-
-	//AMovieScreenObject* MovieScreenDefObj = AMovieScreenObject::GetClass()->GetDefaultObj<AMovieScreenObject>();
 };
