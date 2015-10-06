@@ -22,11 +22,17 @@ AConsoleInteract::AConsoleInteract()
 
 	//TheMaterial_Dyn = UMaterialInstanceDynamic::Create(TheMaterial, this);
 
-	static ConstructorHelpers::FObjectFinder<UBlueprint> MovieScreenObject(TEXT("BLUEPRINT'/Game/Content/Blueprints/BP_MovieScreenObject.uasset'"));
+	/*static ConstructorHelpers::FObjectFinder<UBlueprint> MovieScreenObject(TEXT("BLUEPRINT'/Game/Content/Blueprints/BP_MovieScreenObject.uasset'"));
 
 	if (MovieScreenObject.Object != NULL)
 	{
 		MovieScreen = (AMovieScreenObject*)MovieScreenObject.Object;
+	}*/
+
+	static ConstructorHelpers::FObjectFinder<UMaterialParameterCollection> ScrnMatParamColl(TEXT("MaterialParameterCollection'/Game/ScreenMatParams'"));
+	if (ScrnMatParamColl.Object != NULL)
+	{
+		ScreenMatParams = (UMaterialParameterCollection*)ScrnMatParamColl.Object;
 	}
 }
 
@@ -40,6 +46,7 @@ void AConsoleInteract::OnInteraction_Implementation()
 void AConsoleInteract::OnInteract_Implementation()
 {
 	UE_LOG(LogTemp, Warning, TEXT("HAHA, YOU CAN'T INTERACT BITCH"));
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatR")), 1.0);
 	/*TheMaterial->GetExpressionsInPropertyChain(MP_BaseColor, BaseColorMatChain, NULL);
 	for (int i = 0; i < BaseColorMatChain.Max(); i++)
 	{

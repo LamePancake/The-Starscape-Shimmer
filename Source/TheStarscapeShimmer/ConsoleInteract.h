@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Runtime/Engine/Classes/Kismet/KismetMaterialLibrary.h"
+#include "Runtime/Engine/Classes/Materials/MaterialParameterCollectionInstance.h"
 #include "InteractableObject.h"
 #include "ConsoleInteract.generated.h"
 
@@ -27,6 +29,8 @@ public:
 		void OnInteract();
 
 	UPROPERTY() AMovieScreenObject* MovieScreen;
+
+	UPROPERTY() UMaterialParameterCollection* ScreenMatParams;
 
 	//AMovieScreenObject* MovieScreenDefObj = AMovieScreenObject::GetClass()->GetDefaultObj<AMovieScreenObject>();
 };
