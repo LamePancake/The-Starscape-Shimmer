@@ -6,6 +6,8 @@
 #include "Pickup.h"
 #include "KeyPickup.h"
 #include "DoorObject.h"
+#include "ProjectorInteract.h"
+#include "FilmReelPickup.h"
 
 // Sets default values
 AFirstPersonCharacter::AFirstPersonCharacter()
@@ -150,6 +152,17 @@ void AFirstPersonCharacter::Interact()
 			if (TestKey && TestDoor->IsLocked)
 			{
 				TestDoor->UnlockDoor(TestKey);
+			}
+			break;
+		}
+		
+		AProjectorInteract* const Projector = Cast<AProjectorInteract>(CollectableActors[i]);
+		if (Projector && PickedUpItem != NULL)
+		{
+			AFilmReelPickup* const FilmReel = Cast<AFilmReelPickup>(PickedUpItem);
+			if (FilmReel)
+			{
+				//UE_LOG(YourLog, Warning, TEXT("Film's Name is %s"), *FilmReel->FilmName);
 			}
 			break;
 		}
