@@ -124,25 +124,14 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 	//}
 }
 
-// TODO: Sort out why HeldItem here has to be NULL
+// TODO: Cast a ray for pickup
 void AFirstPersonCharacter::Grip()
 {
 	// Stores and retrieves actors with in the character's sphere
 	TArray<AActor*> CollectableActors;
 	PickUpSphere->GetOverlappingActors(CollectableActors);
 
-	APickup* TestPickup = nullptr;
-	// Go through all of the actors
-	for (int i = 0; i < CollectableActors.Num(); i++)
-	{
-		// If it wasnt a door check if it is a pickup and save it if it is
-		TestPickup = Cast<APickup>(CollectableActors[i]);
-		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && HeldItem == NULL)
-			break;
-	}
-
-	// TODO: Not entirely sure what this is supposed to do? Shouldn't we be assigning the new item (TestPickup) to now be HeldItem?
-	if (TestPickup)
+	if (HeldItem)
 	{
 		UWorld* const World = GetWorld();
 		if (World)
@@ -154,20 +143,30 @@ void AFirstPersonCharacter::Grip()
 			World->SpawnActor<AKeyPickup>(ActorToSpawn, HeldItem->GetActorLocation(), HeldItem->GetActorRotation(), s);
 		}
 		HeldItem->OnDrop();
-		HeldItem = NULL;
+		HeldItem = nullptr;
 		return;
+	}
+
+	APickup* TestPickup = nullptr;
+	// Go through all of the actors
+	for (int i = 0; i < CollectableActors.Num(); i++)
+	{
+		// If the item can be picked up, pick it up and set HeldItem to be the itme
+		TestPickup = Cast<APickup>(CollectableActors[i]);
+		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && HeldItem == NULL)
+		{
+			this->HeldItem = TestPickup;
+			return;
+		}
 	}
 }
 
-//Called on key press to check if objects are within the character's bounding sphere
+// TODO: Cast a ray for interaction
 void AFirstPersonCharacter::Interact()
 {
 	// Stores and retrieves actors with in the character's sphere
 	TArray<AActor*> CollectableActors;
 	PickUpSphere->GetOverlappingActors(CollectableActors);
-	
-	// SHANE help me get rid of this boolean!
-	bool pickedUpObject = false;
 
 	// Go through all of the actors
 	for (int i = 0; i < CollectableActors.Num(); i++)
@@ -177,6 +176,7 @@ void AFirstPersonCharacter::Interact()
 		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive && HeldItem == NULL)
 		{
 			TestObj->OnInteraction(this);
+			return;
 		}
 	}
 }
