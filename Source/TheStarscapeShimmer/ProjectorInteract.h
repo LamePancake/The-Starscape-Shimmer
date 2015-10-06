@@ -23,17 +23,11 @@ public:
 		//PublicDependencyModuleNames.AddRange(new string[] { "MediaAssets"});
 	}
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Materials)
-		UMaterial* FilmMaterial;
-
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Materials)
-	//	UMediaPlayer* Film;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
 		ATheatreScreen* TheatreScreen;
 
 
-	void RunFilm()
+	void RunFilm(UMaterial* FilmMaterial/*, UMediaPlayer* Film*/)
 	{
 		TArray<UActorComponent*> components;
 
@@ -49,20 +43,4 @@ public:
 			}
 		}
 	}
-
-/*public:
-	// Sets default values for this actor's properties
-	//AConsoleInteract();
-
-	// Overrides the OnInteraction function, becauase blueprint native event
-	void OnInteraction_Implementation();
-
-	// Function to call when the pick up is interacted with
-	UFUNCTION(BlueprintNativeEvent)
-		void OnInteract();
-
-private:
-	/*UMaterial* TheMaterial;
-	UMaterialInstanceDynamic TheMaterial_Dyn;
-	TArray <UMaterialExpression*> BaseColorMatChain;*/
 };
