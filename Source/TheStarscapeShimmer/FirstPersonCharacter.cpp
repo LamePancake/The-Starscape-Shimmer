@@ -163,7 +163,7 @@ void AFirstPersonCharacter::Interact()
 			if (FilmReel)
 			{
 				//UE_LOG(YourLog, Warning, TEXT("Film's Name is %s"), *FilmReel->FilmName);
-				Projector->RunFilm();
+				Projector->RunFilm(FilmReel->FilmMaterial);
 			}
 			break;
 		}
