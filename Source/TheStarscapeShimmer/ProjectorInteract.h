@@ -4,7 +4,7 @@
 
 #include "InteractableObject.h"
 #include "TheatreScreen.h"
-//#include "Runtime/MediaAssets/Public/MediaPlayer.h"
+#include "Runtime/MediaAssets/Public/MediaPlayer.h"
 #include "ProjectorInteract.generated.h"
 
 
@@ -27,7 +27,7 @@ public:
 		ATheatreScreen* TheatreScreen;
 
 
-	void RunFilm(UMaterial* FilmMaterial/*, UMediaPlayer* Film*/)
+	void RunFilm(UMaterial* FilmMaterial, UMediaPlayer* Film)
 	{
 		TArray<UActorComponent*> components;
 
@@ -39,7 +39,8 @@ public:
 			{
 				//This is the static mesh component
 				thisComponent->SetMaterial(0, FilmMaterial);
-				//Film->Play();
+				Film->Rewind();
+				Film->Play();
 			}
 		}
 	}

@@ -3,7 +3,9 @@
 #pragma once
 
 #include "Pickup.h"
+#include "Runtime/MediaAssets/Public/MediaPlayer.h"
 #include "FilmReelPickup.generated.h"
+
 
 /**
  * 
@@ -17,6 +19,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Materials)
 		UMaterial* FilmMaterial;
 
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Materials)
-	//	UMediaPlayer* Film;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Materials)
+		UMediaPlayer* Film;
 };
