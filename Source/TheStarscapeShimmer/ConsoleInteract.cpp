@@ -2,6 +2,7 @@
 
 #include "TheStarscapeShimmer.h"
 #include "ConsoleInteract.h"
+#include "MovieScreenObject.h"
 
 
 // Sets default values
@@ -20,12 +21,19 @@ AConsoleInteract::AConsoleInteract()
 	}*/
 
 	//TheMaterial_Dyn = UMaterialInstanceDynamic::Create(TheMaterial, this);
+
+	/*static ConstructorHelpers::FObjectFinder<UBlueprint> MovieScreenObject(TEXT("BLUEPRINT'/Game/Content/Blueprints/BP_MovieScreenObject.uasset'"));
+
+	if (MovieScreenObject.Object != NULL)
+	{
+		MovieScreen = (AMovieScreenObject*)MovieScreenObject.Object;
+	}*/
 }
 
 // Calls the interact method
 void AConsoleInteract::OnInteraction_Implementation()
 {
-	Super::OnInteraction_Implementation();
+	//Super::OnInteraction_Implementation();
 	OnInteract_Implementation();
 }
 
