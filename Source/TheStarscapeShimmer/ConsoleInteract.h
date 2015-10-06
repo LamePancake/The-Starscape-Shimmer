@@ -24,9 +24,5 @@ public:
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
-	UPROPERTY() AMovieScreenObject* MovieScreen;
-
 	UPROPERTY() UMaterialParameterCollection* ScreenMatParams;
-
-	//AMovieScreenObject* MovieScreenDefObj = AMovieScreenObject::GetClass()->GetDefaultObj<AMovieScreenObject>();
 };

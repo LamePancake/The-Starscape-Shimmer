@@ -65,7 +65,8 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Inp
 	InputComponent->BindAxis("LookUpRate", this, &AFirstPersonCharacter::LookUpAtRate);
 
 	// Bind the key press of E or Right face button for picking up object.
-	InputComponent->BindAction("Interact", IE_Pressed, this, &AFirstPersonCharacter::Interact);
+	InputComponent->BindAction("Pickup", IE_Pressed, this, &AFirstPersonCharacter::Grip);
+	InputComponent->BindAction("Interaction", IE_Pressed, this, &AFirstPersonCharacter::Interact);
 }
 
 
@@ -172,7 +173,7 @@ void AFirstPersonCharacter::Interact()
 	{
 		// If it is an object, do what the object does.
 		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
-		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive && HeldItem == NULL)
+		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive)
 		{
 			TestObj->OnInteraction(this);
 			return;

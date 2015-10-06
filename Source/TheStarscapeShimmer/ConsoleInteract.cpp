@@ -8,26 +8,7 @@
 // Sets default values
 AConsoleInteract::AConsoleInteract()
 {
-	// Get Reference to Movie Screen Material for Driller Killer
-	/*static ConstructorHelpers::FObjectFinder<UMaterial> Material(TEXT("Material'/Game/Content/Films/Driller_Killer/DrillerKillerUncit197_Tex_Mat.uasset'"));
-
-	if (Material.Object != NULL)
-	{
-		TheMaterial = (UMaterial*)Material.Object;
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("EMPTY MATERIAL"));
-	}*/
-
-	//TheMaterial_Dyn = UMaterialInstanceDynamic::Create(TheMaterial, this);
-
-	/*static ConstructorHelpers::FObjectFinder<UBlueprint> MovieScreenObject(TEXT("BLUEPRINT'/Game/Content/Blueprints/BP_MovieScreenObject.uasset'"));
-
-	if (MovieScreenObject.Object != NULL)
-	{
-		MovieScreen = (AMovieScreenObject*)MovieScreenObject.Object;
-	}*/
+	// Get Reference to Movie Screen Material Parameter Collection
 
 	static ConstructorHelpers::FObjectFinder<UMaterialParameterCollection> ScrnMatParamColl(TEXT("MaterialParameterCollection'/Game/ScreenMatParams'"));
 	if (ScrnMatParamColl.Object != NULL)
@@ -42,5 +23,7 @@ void AConsoleInteract::OnInteraction_Implementation(AFirstPersonCharacter* Chara
 	Super::OnInteraction_Implementation(Character);
 	UE_LOG(LogTemp, Warning, TEXT("HAHA, YOU CAN'T INTERACT BITCH"));
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatR")), 1.0);
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatG")), 1.0);
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatB")), 1.0);
 }
 

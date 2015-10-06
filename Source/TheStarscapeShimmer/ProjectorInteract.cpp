@@ -14,6 +14,6 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 	if (!Reel) return;
 	
 	// Do some logic here to get the film and play it from da screen
-	//UE_LOG(YourLog, Warning, TEXT("Film's Name is %s"), *FilmReel->FilmName);
-	//this->RunFilm();
+	UE_LOG(LogTemp, Warning, TEXT("Film's Name is %s"), Reel->FilmMaterial->GetName());
+	this->RunFilm(Reel->FilmMaterial);
 }
