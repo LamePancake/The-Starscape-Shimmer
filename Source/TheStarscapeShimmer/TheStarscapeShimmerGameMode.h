@@ -12,8 +12,8 @@ UCLASS()
 class THESTARSCAPESHIMMER_API ATheStarscapeShimmerGameMode : public AGameMode
 {
 	GENERATED_BODY()
-	
-	
+
+	ATheStarscapeShimmerGameMode();
 	
 	
 };
