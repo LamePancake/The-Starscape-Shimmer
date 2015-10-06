@@ -31,20 +31,8 @@ AConsoleInteract::AConsoleInteract()
 }
 
 // Calls the interact method
-void AConsoleInteract::OnInteraction_Implementation()
+void AConsoleInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
-	//Super::OnInteraction_Implementation();
-	OnInteract_Implementation();
-}
-
-void AConsoleInteract::OnInteract_Implementation()
-{
-	UE_LOG(LogTemp, Warning, TEXT("HAHA, YOU CAN'T INTERACT BITCH"));
-	/*TheMaterial->GetExpressionsInPropertyChain(MP_BaseColor, BaseColorMatChain, NULL);
-	for (int i = 0; i < BaseColorMatChain.Max(); i++)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HueHueHueHueHue"));
-	}*/
-
+	Super::OnInteraction_Implementation(Character);
 }
 

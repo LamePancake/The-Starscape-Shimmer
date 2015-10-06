@@ -41,7 +41,7 @@ void AInteractableObject::Tick( float DeltaTime )
 }
 
 //Overridable method to do something when the player interacts with it.
-void AInteractableObject::OnInteraction_Implementation()
+void AInteractableObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
 	// Other classes build upon this function
 	// No function

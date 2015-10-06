@@ -20,11 +20,7 @@ public:
 	AConsoleInteract();
 
 	// Overrides the OnInteraction function, becauase blueprint native event
-	void OnInteraction_Implementation();
-
-	// Function to call when the console is interacted with
-	UFUNCTION(BlueprintNativeEvent)
-		void OnInteract();
+	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
 	UPROPERTY() AMovieScreenObject* MovieScreen;
 

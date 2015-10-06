@@ -35,7 +35,7 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	//Turn on the update method
 	PrimaryActorTick.bCanEverTick = true;
 
-	PickedUpItem = NULL;
+	HeldItem = NULL;
 }
 
 // Called when the game starts or when spawned
@@ -103,7 +103,7 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
 
-	if (PickedUpItem != NULL)
+	if (HeldItem != NULL)
 	{
 		FVector CamLoc;
 		FRotator CamRot;
@@ -114,7 +114,7 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 		Direction.Normalize();
 		FVector ItemLoc = CamLoc + (Direction * MaxUseDistance);
 
-		PickedUpItem->SetLocation(ItemLoc, CamRot);
+		HeldItem->SetLocation(ItemLoc, CamRot);
 	}
 	//APickup* Usable = GetPickupInView();
 	//if (Usable)
@@ -124,10 +124,45 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 	//}
 }
 
+// TODO: Sort out why HeldItem here has to be NULL
+void AFirstPersonCharacter::Grip()
+{
+	// Stores and retrieves actors with in the character's sphere
+	TArray<AActor*> CollectableActors;
+	PickUpSphere->GetOverlappingActors(CollectableActors);
+
+	APickup* TestPickup = nullptr;
+	// Go through all of the actors
+	for (int i = 0; i < CollectableActors.Num(); i++)
+	{
+		// If it wasnt a door check if it is a pickup and save it if it is
+		TestPickup = Cast<APickup>(CollectableActors[i]);
+		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && HeldItem == NULL)
+			break;
+	}
+
+	// TODO: Not entirely sure what this is supposed to do? Shouldn't we be assigning the new item (TestPickup) to now be HeldItem?
+	if (TestPickup)
+	{
+		UWorld* const World = GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters s;
+			s.Owner = this;
+			s.Instigator = Instigator;
+
+			World->SpawnActor<AKeyPickup>(ActorToSpawn, HeldItem->GetActorLocation(), HeldItem->GetActorRotation(), s);
+		}
+		HeldItem->OnDrop();
+		HeldItem = NULL;
+		return;
+	}
+}
+
 //Called on key press to check if objects are within the character's bounding sphere
 void AFirstPersonCharacter::Interact()
 {
-	// Stores and retrives actors with in the character's sphere
+	// Stores and retrieves actors with in the character's sphere
 	TArray<AActor*> CollectableActors;
 	PickUpSphere->GetOverlappingActors(CollectableActors);
 	
@@ -139,61 +174,10 @@ void AFirstPersonCharacter::Interact()
 	{
 		// If it is an object, do what the object does.
 		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
-		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive && PickedUpItem == NULL)
+		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive && HeldItem == NULL)
 		{
-			TestObj->OnInteraction();
+			TestObj->OnInteraction(this);
 		}
-
-		// Next check if it is a door and try to unlock if you are holding a key
-		ADoorObject* const TestDoor = Cast<ADoorObject>(CollectableActors[i]);
-		if (TestDoor && !TestDoor->IsPendingKill() && TestDoor->bIsActive && PickedUpItem != NULL)
-		{
-			AKeyPickup* const TestKey = Cast<AKeyPickup>(PickedUpItem);
-			if (TestKey && TestDoor->IsLocked)
-			{
-				TestDoor->UnlockDoor(TestKey);
-			}
-			break;
-		}
-		
-		AProjectorInteract* const Projector = Cast<AProjectorInteract>(CollectableActors[i]);
-		if (Projector && PickedUpItem != NULL)
-		{
-			AFilmReelPickup* const FilmReel = Cast<AFilmReelPickup>(PickedUpItem);
-			if (FilmReel)
-			{
-				//UE_LOG(YourLog, Warning, TEXT("Film's Name is %s"), *FilmReel->FilmName);
-			}
-			break;
-		}
-
-		// If it wasnt a door check if it is a pickup and save it if it is
-		APickup* const TestPickup = Cast<APickup>(CollectableActors[i]);
-		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && PickedUpItem == NULL)
-		{
-			PickedUpItem = TestPickup;
-			TestObj->bIsActive = false;
-			pickedUpObject = true;
-			break;
-		}
-	}
-
-	// Wish i could put this first, but you cannot drop the key before you check if they are trying to get through a door
-	if (PickedUpItem != NULL && !pickedUpObject) // Want to get rid of this bool
-	{
-		UWorld* const World = GetWorld();
-		if (World)
-		{
-			FActorSpawnParameters s;
-			s.Owner = this;
-			s.Instigator = Instigator;
-
-			World->SpawnActor<AKeyPickup>(ActorToSpawn, PickedUpItem->GetActorLocation(), PickedUpItem->GetActorRotation(), s);
-		}
-		PickedUpItem->OnDrop();
-
-		PickedUpItem = NULL;
-		return;
 	}
 }
 

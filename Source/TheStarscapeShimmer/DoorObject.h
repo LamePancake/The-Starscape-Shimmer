@@ -16,9 +16,7 @@ class THESTARSCAPESHIMMER_API ADoorObject : public AInteractableObject
 	ADoorObject();
 	
 	// Overrides the OnInteraction function, becauase blueprint native event
-	void OnInteraction_Implementation();
-
-	
+	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
 public:
 
