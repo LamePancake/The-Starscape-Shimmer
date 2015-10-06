@@ -11,9 +11,9 @@ APickup::APickup()
 }
 
 // Calls the pickup method if it is a pick up object
-void APickup::OnInteraction_Implementation()
+void APickup::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
-	Super::OnInteraction_Implementation();
+	Super::OnInteraction_Implementation(Character);
 	OnPickUp_Implementation();
 }
 

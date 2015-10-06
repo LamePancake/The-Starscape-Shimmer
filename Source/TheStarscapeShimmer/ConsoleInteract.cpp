@@ -37,21 +37,10 @@ AConsoleInteract::AConsoleInteract()
 }
 
 // Calls the interact method
-void AConsoleInteract::OnInteraction_Implementation()
+void AConsoleInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
-	//Super::OnInteraction_Implementation();
-	OnInteract_Implementation();
-}
-
-void AConsoleInteract::OnInteract_Implementation()
-{
+	Super::OnInteraction_Implementation(Character);
 	UE_LOG(LogTemp, Warning, TEXT("HAHA, YOU CAN'T INTERACT BITCH"));
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatR")), 1.0);
-	/*TheMaterial->GetExpressionsInPropertyChain(MP_BaseColor, BaseColorMatChain, NULL);
-	for (int i = 0; i < BaseColorMatChain.Max(); i++)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HueHueHueHueHue"));
-	}*/
-
 }
 

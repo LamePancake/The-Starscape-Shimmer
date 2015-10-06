@@ -10,11 +10,11 @@ AGeneratorInteract::AGeneratorInteract()
 }
 
 //Overrides the interation method
-void AGeneratorInteract::OnInteraction_Implementation()
+void AGeneratorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
-	Super::OnInteraction_Implementation();
-	//Play sound here
-	//Turn lights on here
+	Super::OnInteraction_Implementation(Character);
+	//TODO: Play sound here
+	//TODO: Turn lights on here
 	UE_LOG(LogTemp, Warning, TEXT("Your message"));
 }
 

@@ -15,9 +15,9 @@ ADoorObject::ADoorObject()
 }
 
 //Overrides the interation method
-void ADoorObject::OnInteraction_Implementation()
+void ADoorObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
-	Super::OnInteraction_Implementation();
+	Super::OnInteraction_Implementation(Character);
 }
 
 // Checks the door with the key to see if the key can open the door

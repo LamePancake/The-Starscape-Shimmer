@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "FirstPersonCharacter.h"
 #include "InteractableObject.generated.h"
 
 UCLASS()
@@ -34,6 +35,6 @@ public:
 
 	// Function to call when the player interacts with something
 	UFUNCTION(BlueprintNativeEvent)
-	void OnInteraction();
+	void OnInteraction(AFirstPersonCharacter* Character);
 
 };

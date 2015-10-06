@@ -16,7 +16,7 @@ class THESTARSCAPESHIMMER_API AGeneratorInteract : public AInteractableObject
 	AGeneratorInteract();
 
 	// Overrides the OnInteraction function, becauase blueprint native event
-	void OnInteraction_Implementation();
+	void OnInteraction_Implementation(AFirstPersonCharacter* Character);
 	
 	
 };

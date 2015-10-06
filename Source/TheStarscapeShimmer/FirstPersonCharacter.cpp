@@ -35,7 +35,7 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	//Turn on the update method
 	PrimaryActorTick.bCanEverTick = true;
 
-	PickedUpItem = NULL;
+	HeldItem = NULL;
 }
 
 // Called when the game starts or when spawned
@@ -103,7 +103,7 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
 
-	if (PickedUpItem != NULL)
+	if (HeldItem != NULL)
 	{
 		FVector CamLoc;
 		FRotator CamRot;
@@ -114,7 +114,7 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 		Direction.Normalize();
 		FVector ItemLoc = CamLoc + (Direction * MaxUseDistance);
 
-		PickedUpItem->SetLocation(ItemLoc, CamRot);
+		HeldItem->SetLocation(ItemLoc, CamRot);
 	}
 	//APickup* Usable = GetPickupInView();
 	//if (Usable)
@@ -124,63 +124,14 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 	//}
 }
 
-//Called on key press to check if objects are within the character's bounding sphere
-void AFirstPersonCharacter::Interact()
+// TODO: Cast a ray for pickup
+void AFirstPersonCharacter::Grip()
 {
-	// Stores and retrives actors with in the character's sphere
+	// Stores and retrieves actors with in the character's sphere
 	TArray<AActor*> CollectableActors;
 	PickUpSphere->GetOverlappingActors(CollectableActors);
-	
-	// SHANE help me get rid of this boolean!
-	bool pickedUpObject = false;
 
-	// Go through all of the actors
-	for (int i = 0; i < CollectableActors.Num(); i++)
-	{
-		// If it is an object, do what the object does.
-		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
-		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive && PickedUpItem == NULL)
-		{
-			TestObj->OnInteraction();
-		}
-
-		// Next check if it is a door and try to unlock if you are holding a key
-		ADoorObject* const TestDoor = Cast<ADoorObject>(CollectableActors[i]);
-		if (TestDoor && !TestDoor->IsPendingKill() && TestDoor->bIsActive && PickedUpItem != NULL)
-		{
-			AKeyPickup* const TestKey = Cast<AKeyPickup>(PickedUpItem);
-			if (TestKey && TestDoor->IsLocked)
-			{
-				TestDoor->UnlockDoor(TestKey);
-			}
-			break;
-		}
-		
-		AProjectorInteract* const Projector = Cast<AProjectorInteract>(CollectableActors[i]);
-		if (Projector && PickedUpItem != NULL)
-		{
-			AFilmReelPickup* const FilmReel = Cast<AFilmReelPickup>(PickedUpItem);
-			if (FilmReel)
-			{
-				//UE_LOG(YourLog, Warning, TEXT("Film's Name is %s"), *FilmReel->FilmName);
-				Projector->RunFilm();
-			}
-			break;
-		}
-
-		// If it wasnt a door check if it is a pickup and save it if it is
-		APickup* const TestPickup = Cast<APickup>(CollectableActors[i]);
-		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && PickedUpItem == NULL)
-		{
-			PickedUpItem = TestPickup;
-			TestObj->bIsActive = false;
-			pickedUpObject = true;
-			break;
-		}
-	}
-
-	// Wish i could put this first, but you cannot drop the key before you check if they are trying to get through a door
-	if (PickedUpItem != NULL && !pickedUpObject) // Want to get rid of this bool
+	if (HeldItem)
 	{
 		UWorld* const World = GetWorld();
 		if (World)
@@ -188,13 +139,44 @@ void AFirstPersonCharacter::Interact()
 			FActorSpawnParameters s;
 			s.Owner = this;
 			s.Instigator = Instigator;
-
-			World->SpawnActor<AKeyPickup>(ActorToSpawn, PickedUpItem->GetActorLocation(), PickedUpItem->GetActorRotation(), s);
+			World->SpawnActor<AKeyPickup>(ActorToSpawn, HeldItem->GetActorLocation(), HeldItem->GetActorRotation(), s);
 		}
-		PickedUpItem->OnDrop();
-
-		PickedUpItem = NULL;
+		HeldItem->OnDrop();
+		HeldItem = nullptr;
 		return;
+	}
+
+	APickup* TestPickup = nullptr;
+	// Go through all of the actors
+	for (int i = 0; i < CollectableActors.Num(); i++)
+	{
+		// If the item can be picked up, pick it up and set HeldItem to be the itme
+		TestPickup = Cast<APickup>(CollectableActors[i]);
+		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && HeldItem == NULL)
+		{
+			this->HeldItem = TestPickup;
+			return;
+		}
+	}
+}
+
+// TODO: Cast a ray for interaction
+void AFirstPersonCharacter::Interact()
+{
+	// Stores and retrieves actors with in the character's sphere
+	TArray<AActor*> CollectableActors;
+	PickUpSphere->GetOverlappingActors(CollectableActors);
+
+	// Go through all of the actors
+	for (int i = 0; i < CollectableActors.Num(); i++)
+	{
+		// If it is an object, do what the object does.
+		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
+		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive && HeldItem == NULL)
+		{
+			TestObj->OnInteraction(this);
+			return;
+		}
 	}
 }
 

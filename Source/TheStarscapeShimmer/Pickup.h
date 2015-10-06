@@ -15,7 +15,7 @@ public:
 	APickup();
 
 	// Overrides the OnInteraction function, becauase blueprint native event
-	void OnInteraction_Implementation();
+	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
 	// Sets the location of the pick up when it has been picked up.
 	UFUNCTION(BlueprintNativeEvent)

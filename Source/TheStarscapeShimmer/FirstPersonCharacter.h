@@ -39,7 +39,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pickup)
 	USphereComponent* PickUpSphere;
 
-	class APickup* PickedUpItem;
+	class APickup* HeldItem;
 
 	// Need this in order to drop the pickup, for some rease they don't work again once they have been dropped so i spawn a new one.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
@@ -62,7 +62,12 @@ protected:
 
 	class APickup* GetPickupInView();
 
-	// Trys to pick up object within it's sphere when key pressed
+	// Tries to pick up any nearby pickuppable™ objects
+	// TODO: Rename this piece of shit
+	UFUNCTION(BlueprintCallable, Category = Interaction)
+	void Grip();
+
+	// Interacts with the object under the reticle if possible
 	UFUNCTION(BlueprintCallable, Category = Interaction)
 	void Interact();
 };
