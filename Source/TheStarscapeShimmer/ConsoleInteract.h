@@ -5,6 +5,7 @@
 #include "InteractableObject.h"
 #include "ConsoleInteract.generated.h"
 
+class THESTARSCAPESHIMMER_API AMovieScreenObject;
 
 /**
  * 
@@ -25,7 +26,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 		void OnInteract();
 
-	//UPROPERTY() AMovieScreenObject* MovieScreen;
+	UPROPERTY() AMovieScreenObject* MovieScreen;
 
 	//AMovieScreenObject* MovieScreenDefObj = AMovieScreenObject::GetClass()->GetDefaultObj<AMovieScreenObject>();
 };

@@ -9,7 +9,7 @@ AMovieScreenObject::AMovieScreenObject()
 
 }
 
-// Overrides the OnInteraction function, becauase blueprint native event
+/*// Overrides the OnInteraction function, becauase blueprint native event
 void AMovieScreenObject::OnInteraction_Implementation()
 {
 
@@ -20,5 +20,5 @@ void AMovieScreenObject::OnInteract()
 {
 
 }
-
+*/
 

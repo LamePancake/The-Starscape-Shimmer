@@ -18,10 +18,10 @@ public:
 	AMovieScreenObject();
 
 	// Overrides the OnInteraction function, becauase blueprint native event
-	void OnInteraction_Implementation();
+	/*void OnInteraction_Implementation();
 
 	// Function to call when the movie screen is interacted with
 	UFUNCTION(BlueprintNativeEvent)
-		void OnInteract();
+		void OnInteract();*/
 };
 

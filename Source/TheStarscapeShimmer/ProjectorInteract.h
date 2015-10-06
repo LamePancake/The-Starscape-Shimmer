@@ -13,9 +13,9 @@ class THESTARSCAPESHIMMER_API AProjectorInteract : public AInteractableObject
 {
 	GENERATED_BODY()
 	
-public:
+/*public:
 	// Sets default values for this actor's properties
-	AConsoleInteract();
+	//AConsoleInteract();
 
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation();
@@ -25,7 +25,7 @@ public:
 		void OnInteract();
 
 private:
-	UMaterial* TheMaterial;
+	/*UMaterial* TheMaterial;
 	UMaterialInstanceDynamic TheMaterial_Dyn;
-	TArray <UMaterialExpression*> BaseColorMatChain;
+	TArray <UMaterialExpression*> BaseColorMatChain;*/
 };
