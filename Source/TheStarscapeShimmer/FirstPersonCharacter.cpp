@@ -173,7 +173,7 @@ void AFirstPersonCharacter::Interact()
 	{
 		// If it is an object, do what the object does.
 		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
-		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive)
+		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive ) 
 		{
 			TestObj->OnInteraction(this);
 			return;

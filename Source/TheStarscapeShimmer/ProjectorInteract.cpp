@@ -13,7 +13,7 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 	// They're not holding a film reel, so do nothing :)
 	if (!Reel) return;
 	
+	UE_LOG(LogTemp, Warning, TEXT("Attempting pick up %s"), *(Reel->Film->GetName()));
 	// Do some logic here to get the film and play it from da screen
-	UE_LOG(LogTemp, Warning, TEXT("Film's Name is %s"), Reel->FilmMaterial->GetName());
-	this->RunFilm(Reel->FilmMaterial);
+	this->RunFilm(Reel->FilmMaterial, Reel->Film);
 }
