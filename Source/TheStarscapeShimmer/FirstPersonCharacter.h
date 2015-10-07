@@ -41,10 +41,6 @@ public:
 
 	class APickup* HeldItem;
 
-	// Need this in order to drop the pickup, for some rease they don't work again once they have been dropped so i spawn a new one.
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Spawning)
-	TSubclassOf<class AKeyPickup> ActorToSpawn;
-
 protected:
 	void OnFire();
 

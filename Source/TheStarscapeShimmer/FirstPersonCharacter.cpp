@@ -117,12 +117,6 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 
 		HeldItem->SetLocation(ItemLoc, CamRot);
 	}
-	//APickup* Usable = GetPickupInView();
-	//if (Usable)
-	//{
-		//UE_LOG(LogTemp, Warning, TEXT("Attempting pick up"));
-		//Usable->OnPickUp();
-	//}
 }
 
 // TODO: Cast a ray for pickup
@@ -134,14 +128,6 @@ void AFirstPersonCharacter::Grip()
 
 	if (HeldItem)
 	{
-		UWorld* const World = GetWorld();
-		if (World)
-		{
-			FActorSpawnParameters s;
-			s.Owner = this;
-			s.Instigator = Instigator;
-			World->SpawnActor<AKeyPickup>(ActorToSpawn, HeldItem->GetActorLocation(), HeldItem->GetActorRotation(), s);
-		}
 		HeldItem->OnDrop();
 		HeldItem = nullptr;
 		return;
