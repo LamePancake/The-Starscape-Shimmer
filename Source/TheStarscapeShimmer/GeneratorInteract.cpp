@@ -6,18 +6,30 @@
 // Sets default values
 AGeneratorInteract::AGeneratorInteract()
 {
-
+	isTurnedOn = false;
 }
 
 //Overrides the interation method
 void AGeneratorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
 	Super::OnInteraction_Implementation(Character);
+
+	isTurnedOn = !isTurnedOn;
 	UAudioComponent* SpeakerAudio = GeneratorSpeaker->GetAudioComponent();
 	SpeakerAudio->Play();
-	//TODO: Play sound here
+
+	UAudioComponent* SpeakerAudio2 = GeneratorRunningSpeaker->GetAudioComponent();
+
+	if (isTurnedOn)
+	{
+		SpeakerAudio2->Play();
+	}
+	else
+	{
+		SpeakerAudio2->Stop();
+	}
+
 	//TODO: Turn lights on here
-	UE_LOG(LogTemp, Warning, TEXT("Your message"));
 }
 
 
