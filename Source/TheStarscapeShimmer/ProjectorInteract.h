@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <Materials/Material.h>
 #include "InteractableObject.h"
 #include "TheatreScreen.h"
 #include "Runtime/MediaAssets/Public/MediaPlayer.h"
@@ -15,7 +16,7 @@ UCLASS()
 class THESTARSCAPESHIMMER_API AProjectorInteract : public AInteractableObject
 {
 	GENERATED_BODY()
-	
+
 public:
 
 	AProjectorInteract()
@@ -44,4 +45,7 @@ public:
 			}
 		}
 	}
+
+	// Overrides the OnInteraction function, becauase blueprint native event
+	void OnInteraction_Implementation(AFirstPersonCharacter*);
 };
