@@ -21,4 +21,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Materials)
 		UMediaPlayer* Film;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Media)
+		USoundWave* FilmSound;
 };

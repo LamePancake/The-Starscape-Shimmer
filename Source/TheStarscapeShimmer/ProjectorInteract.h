@@ -5,6 +5,7 @@
 #include <Materials/Material.h>
 #include "InteractableObject.h"
 #include "TheatreScreen.h"
+#include "FilmReelPickup.h"
 #include "Runtime/MediaAssets/Public/MediaPlayer.h"
 #include "ProjectorInteract.generated.h"
 
@@ -27,24 +28,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
 		ATheatreScreen* TheatreScreen;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
+		AAmbientSound* TheatreSpeaker;
 
-	void RunFilm(UMaterial* FilmMaterial, UMediaPlayer* Film)
-	{
-		TArray<UActorComponent*> components;
 
-		TheatreScreen->GetComponents(components);
-		for (int i = 0; i < components.Num(); ++i) //Because there may be more components
-		{
-			UStaticMeshComponent* thisComponent = Cast<UStaticMeshComponent>(components[i]); //try to cast to static mesh component
-			if (thisComponent)
-			{
-				//This is the static mesh component
-				thisComponent->SetMaterial(0, FilmMaterial);
-				Film->Rewind();
-				Film->Play();
-			}
-		}
-	}
+	void RunFilm(AFilmReelPickup*);
 
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
