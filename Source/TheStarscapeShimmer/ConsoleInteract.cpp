@@ -25,5 +25,9 @@ void AConsoleInteract::OnInteraction_Implementation(AFirstPersonCharacter* Chara
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatR")), 0.0);
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatG")), 0.0);
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatB")), 0.0);
+
+	UAudioComponent* SpeakerAudio = ConsoleSpeaker->GetAudioComponent();
+	SpeakerAudio->Stop();
+	SpeakerAudio->Play();
 }
 
