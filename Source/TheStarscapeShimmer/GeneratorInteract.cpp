@@ -13,6 +13,8 @@ AGeneratorInteract::AGeneratorInteract()
 void AGeneratorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
 	Super::OnInteraction_Implementation(Character);
+	UAudioComponent* SpeakerAudio = GeneratorSpeaker->GetAudioComponent();
+	SpeakerAudio->Play();
 	//TODO: Play sound here
 	//TODO: Turn lights on here
 	UE_LOG(LogTemp, Warning, TEXT("Your message"));

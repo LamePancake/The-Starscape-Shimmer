@@ -11,12 +11,15 @@
 UCLASS()
 class THESTARSCAPESHIMMER_API AGeneratorInteract : public AInteractableObject
 {
+
+public:
 	GENERATED_BODY()
-	
+
 	AGeneratorInteract();
 
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter* Character);
 	
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio)
+	AAmbientSound* GeneratorSpeaker;
 };
