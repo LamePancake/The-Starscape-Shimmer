@@ -32,5 +32,8 @@ public:
 	bool IsLocked;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio)
-		AAmbientSound* DoorSpeaker;
+	AAmbientSound* DoorSpeaker;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio)
+	AAmbientSound* DoorUnlockSpeaker;
 };
