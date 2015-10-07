@@ -19,9 +19,15 @@ void ADoorObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
 	Super::OnInteraction_Implementation(Character);
 	AKeyPickup* Key = Cast<AKeyPickup>(Character->HeldItem);
+	UAudioComponent* SpeakerAudio = DoorSpeaker->GetAudioComponent();
+	
 	if (Key)
 	{
 		UnlockDoor(Key);
+	}
+	else
+	{
+		SpeakerAudio->Play();
 	}
 }
 
