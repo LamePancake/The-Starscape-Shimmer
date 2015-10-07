@@ -25,4 +25,7 @@ public:
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
 	UPROPERTY() UMaterialParameterCollection* ScreenMatParams;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
+		AAmbientSound* ConsoleSpeaker;
 };
