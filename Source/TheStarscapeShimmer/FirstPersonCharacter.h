@@ -41,6 +41,8 @@ public:
 
 	class APickup* HeldItem;
 
+	class AInteractableObject* LookAtItem;
+
 protected:
 	void OnFire();
 
@@ -57,6 +59,9 @@ protected:
 	void LookUpAtRate(float Rate);
 
 	// Checks to see if the object is in view of the player or not
+	class AInteractableObject* Trace();
+
+	// Checks to see if the object is in view of the player or not
 	bool CheckInView(class AInteractableObject* o);
 
 	// Tries to pick up any nearby pickuppable™ objects
@@ -67,4 +72,6 @@ protected:
 	// Interacts with the object under the reticle if possible
 	UFUNCTION(BlueprintCallable, Category = Interaction)
 	void Interact();
+
+	void HighlightObjectsInView();
 };

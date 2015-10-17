@@ -37,4 +37,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void OnInteraction(AFirstPersonCharacter* Character);
 
+	// Called when the player is looking at this object
+	void OnLookAt();
+
+	// Called when the player is not looking at the object anymore
+	void OnLookAway();
 };

@@ -47,4 +47,16 @@ void AInteractableObject::OnInteraction_Implementation(AFirstPersonCharacter* Ch
 	// No function
 }
 
+// Turns on custom rendering to render th glow
+void AInteractableObject::OnLookAt()
+{
+	ObjectMesh->SetRenderCustomDepth(true);
+}
+
+// Turns off custom rendering to take away the glow
+void AInteractableObject::OnLookAway()
+{
+	ObjectMesh->SetRenderCustomDepth(false);
+}
+
 

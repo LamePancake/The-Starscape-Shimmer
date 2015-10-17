@@ -117,9 +117,34 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 
 		HeldItem->SetLocation(ItemLoc, CamRot);
 	}
+
+	HighlightObjectsInView();
+	
 }
 
-// TODO: Cast a ray for pickup
+// TODO: Refactor and maybe call less frequently
+void AFirstPersonCharacter::HighlightObjectsInView()
+{
+	AInteractableObject* itemTest = Trace();
+	if (itemTest)
+	{
+		if (itemTest != LookAtItem)
+		{
+			if (LookAtItem)
+				LookAtItem->OnLookAway();
+			LookAtItem = NULL;
+		}
+		itemTest->OnLookAt();
+		LookAtItem = itemTest;
+	}
+	else
+	{
+		if (LookAtItem)
+			LookAtItem->OnLookAway();
+	}
+}
+
+// Checks objects around the player to see if they can be picked up
 void AFirstPersonCharacter::Grip()
 {
 	// Stores and retrieves actors with in the character's sphere
@@ -150,7 +175,7 @@ void AFirstPersonCharacter::Grip()
 	}
 }
 
-// TODO: Cast a ray for interaction
+// Checks objects around the player to see if they can be interacted with
 void AFirstPersonCharacter::Interact()
 {
 	// Stores and retrieves actors with in the character's sphere
@@ -173,12 +198,13 @@ void AFirstPersonCharacter::Interact()
 	}
 }
 
-bool AFirstPersonCharacter::CheckInView(AInteractableObject* o)
+// Returns an interactable object if the player is looking at one
+AInteractableObject* AFirstPersonCharacter::Trace()
 {
 	FVector CamLoc;
 	FRotator CamRot;
 
-	float MaxUseDistance = 100.0f;
+	float MaxUseDistance = 120.0f;
 
 	if (Controller == NULL)
 		return NULL;
@@ -201,7 +227,13 @@ bool AFirstPersonCharacter::CheckInView(AInteractableObject* o)
 	// Uncomment this to visualize your line during gameplay. 
 	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f);
 
-	AInteractableObject* test = Cast<AInteractableObject>(Hit.GetActor());
+	return Cast<AInteractableObject>(Hit.GetActor());
+}
+
+// Checks to see if th player is looking directly at an object.
+bool AFirstPersonCharacter::CheckInView(AInteractableObject* o)
+{
+	AInteractableObject* test = Trace();
 
 	if (test)
 	{
