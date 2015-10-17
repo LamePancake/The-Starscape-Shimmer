@@ -56,7 +56,8 @@ protected:
 	/* Look up & down at a given rate. */
 	void LookUpAtRate(float Rate);
 
-	class APickup* GetPickupInView();
+	// Checks to see if the object is in view of the player or not
+	bool CheckInView(class AInteractableObject* o);
 
 	// Tries to pick up any nearby pickuppable™ objects
 	// TODO: Rename this piece of shit

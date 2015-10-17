@@ -133,16 +133,19 @@ void AFirstPersonCharacter::Grip()
 		return;
 	}
 
-	APickup* TestPickup = nullptr;
+	//APickup* TestPickup = nullptr;
 	// Go through all of the actors
 	for (int i = 0; i < CollectableActors.Num(); i++)
 	{
 		// If the item can be picked up, pick it up and set HeldItem to be the itme
-		TestPickup = Cast<APickup>(CollectableActors[i]);
+		APickup* TestPickup = Cast<APickup>(CollectableActors[i]);
 		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && HeldItem == NULL)
 		{
-			this->HeldItem = TestPickup;
-			return;
+			if (CheckInView(TestPickup))
+			{
+				this->HeldItem = TestPickup;
+				return;
+			}
 		}
 	}
 }
@@ -161,18 +164,21 @@ void AFirstPersonCharacter::Interact()
 		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
 		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive ) 
 		{
-			TestObj->OnInteraction(this);
-			return;
+			if (CheckInView(TestObj))
+			{
+				TestObj->OnInteraction(this);
+				return;
+			}
 		}
 	}
 }
 
-APickup* AFirstPersonCharacter::GetPickupInView()
+bool AFirstPersonCharacter::CheckInView(AInteractableObject* o)
 {
 	FVector CamLoc;
 	FRotator CamRot;
 
-	float MaxUseDistance = 5.0f;
+	float MaxUseDistance = 100.0f;
 
 	if (Controller == NULL)
 		return NULL;
@@ -193,7 +199,15 @@ APickup* AFirstPersonCharacter::GetPickupInView()
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
 
 	// Uncomment this to visualize your line during gameplay. 
-	DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f);
+	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f);
 
-	return Cast<APickup>(Hit.GetActor());
+	AInteractableObject* test = Cast<AInteractableObject>(Hit.GetActor());
+
+	if (test)
+	{
+		if (test == o)
+			return true;
+	}
+
+	return false;
 }
