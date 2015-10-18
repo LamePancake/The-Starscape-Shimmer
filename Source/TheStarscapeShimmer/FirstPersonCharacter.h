@@ -24,6 +24,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
 
+	/** Base rate that the object rotates at. */
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	float BaseRotateRate;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -39,8 +43,10 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pickup)
 	USphereComponent* PickUpSphere;
 
+	// Item held by the player
 	class APickup* HeldItem;
 
+	// Item that the player is looking at
 	class AInteractableObject* LookAtItem;
 
 protected:
@@ -58,6 +64,12 @@ protected:
 	/* Look up & down at a given rate. */
 	void LookUpAtRate(float Rate);
 
+	// Rotates the object that is being held about the x axis
+	void RotateObjectX(float Val);
+	
+	// Rotates the object that is being held about the y axis
+	void RotateObjectY(float Val);
+
 	// Checks to see if the object is in view of the player or not
 	class AInteractableObject* Trace();
 
@@ -73,5 +85,6 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = Interaction)
 	void Interact();
 
+	// Highlights the object that is in view of the raycast
 	void HighlightObjectsInView();
 };

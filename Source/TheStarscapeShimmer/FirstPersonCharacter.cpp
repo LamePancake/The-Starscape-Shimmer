@@ -21,6 +21,9 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
 
+	// Set your rotate rate for held objects
+	BaseRotateRate = 3.0f;
+
 	// Create a CameraComponent	
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->AttachParent = GetCapsuleComponent();
@@ -35,7 +38,11 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	//Turn on the update method
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Set the current held item to nothing
 	HeldItem = NULL;
+
+	// Set the item currently being looked at to nothing
+	LookAtItem = NULL;
 }
 
 // Called when the game starts or when spawned
@@ -67,24 +74,44 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Inp
 	// Bind the key press of E or Right face button for picking up object.
 	InputComponent->BindAction("Pickup", IE_Pressed, this, &AFirstPersonCharacter::Grip);
 	InputComponent->BindAction("Interaction", IE_Pressed, this, &AFirstPersonCharacter::Interact);
+
+	// Bind the axis for rotating the held objects
+	InputComponent->BindAxis("RotateObjectX", this, &AFirstPersonCharacter::RotateObjectY);
+	InputComponent->BindAxis("RotateObjectY", this, &AFirstPersonCharacter::RotateObjectX);
 }
 
 
 void AFirstPersonCharacter::MoveForward(float Value)
 {
-	if (Value != 0.0f)
+	// Make sure the player is not holding the right mouse button
+	APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
+	if (PlayerController)
 	{
-		// add movement in that direction
-		AddMovementInput(GetActorForwardVector(), Value);
+		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
+		{
+			if (Value != 0.0f)
+			{
+				// add movement in that direction
+				AddMovementInput(GetActorForwardVector(), Value);
+			}
+		}
 	}
 }
 
 void AFirstPersonCharacter::MoveRight(float Value)
 {
-	if (Value != 0.0f)
+	// Make sure the player is not holding the right mouse button
+	APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
+	if (PlayerController)
 	{
-		// add movement in that direction
-		AddMovementInput(GetActorRightVector(), Value);
+		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
+		{
+			if (Value != 0.0f)
+			{
+				// add movement in that direction
+				AddMovementInput(GetActorRightVector(), Value);
+			}
+		}
 	}
 }
 
@@ -100,6 +127,44 @@ void AFirstPersonCharacter::LookUpAtRate(float Rate)
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
 }
 
+// Rotates the held object about the x axis when the a or d key and the right mouse button are pressed
+void AFirstPersonCharacter::RotateObjectX(float Val)
+{
+	if (HeldItem != NULL)
+	{
+		// Make sure the player is holding the right mouse button
+		APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
+		if (PlayerController)
+		{
+			if (PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
+			{
+				// rotate the object about the x axis
+				FRotator r = FRotator(Val * BaseRotateRate, 0.0f, 0.0f);
+				HeldItem->RotateObject(r);
+			}
+		}
+	}
+}
+
+// Rotates the held object about the y axis when the w or s key and the right mouse button are pressed
+void AFirstPersonCharacter::RotateObjectY(float Val)
+{
+	if (HeldItem != NULL)
+	{
+		// Make sure the player is holding the right mouse button
+		APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
+		if (PlayerController)
+		{
+			if (PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
+			{
+				// rotate the object about the y axis
+				FRotator r = FRotator(0.0f, Val * BaseRotateRate, 0.0f);
+				HeldItem->RotateObject(r);
+			}
+		}
+	}
+}
+
 void AFirstPersonCharacter::Tick(float deltaTime)
 {
 	Super::Tick(deltaTime);
@@ -108,7 +173,7 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 	{
 		FVector CamLoc;
 		FRotator CamRot;
-		float MaxUseDistance = 75.0f;
+		float MaxUseDistance = 85.0f;
 
 		Controller->GetPlayerViewPoint(CamLoc, CamRot);
 		FVector Direction = CamRot.Vector();

@@ -21,11 +21,15 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void SetLocation(FVector loc, FRotator rot);
 
+	void RotateObject(FRotator rot);
+
 	UFUNCTION(BlueprintNativeEvent)
 	void OnDrop();
 
 	// Function to call when the pick up is collected
 	UFUNCTION(BlueprintNativeEvent)
 	void OnPickUp();
+
+	FRotator CurrentRotation;
 	
 };
