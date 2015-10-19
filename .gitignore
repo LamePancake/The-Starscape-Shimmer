@@ -47,6 +47,7 @@ Content/Films/**/*.ogv
 Content/Films/**/*.mp3
 Content/Films/**/*.7z
 
+WindowsNoEditor/*
 
 # Archives
 *.7z

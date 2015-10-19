@@ -16,6 +16,13 @@ public:
 	// Sets default values for this character's properties
 	AFirstPersonCharacter();
 
+	/** spawn effects for footsteps */
+	void SpawnFootEffects();
+
+	/** This is the template for our footsteps */
+	UPROPERTY(Category = "Game Effects", EditAnywhere, BlueprintReadWrite)
+		TSubclassOf<class AAGameFootStepEffect> FootstepTemplate;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseTurnRate;
@@ -23,6 +30,12 @@ public:
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 	float BaseLookUpRate;
+
+	/** Rate at which footsteps play, larger == less often. */
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Footsteps)
+	int32 FootstepRate;
+
+	int32 FootstepTimer;
 
 	/** Base rate that the object rotates at. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
@@ -63,6 +76,9 @@ protected:
 
 	/* Look up & down at a given rate. */
 	void LookUpAtRate(float Rate);
+
+	/* Update step timer and play sounds accordingly. */
+	void UpdateFootsteps();
 
 	// Rotates the object that is being held about the x axis
 	void RotateObjectX(float Val);

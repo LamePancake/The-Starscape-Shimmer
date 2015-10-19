@@ -6,6 +6,7 @@
 #include "Pickup.h"
 #include "KeyPickup.h"
 #include "DoorObject.h"
+#include "AGameFootStepEffect.h"
 #include "ProjectorInteract.h"
 #include "FilmReelPickup.h"
 
@@ -20,6 +21,9 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
+
+	// setup footsteps
+	FootstepTimer = 0;
 
 	// Set your rotate rate for held objects
 	BaseRotateRate = 3.0f;
@@ -43,6 +47,41 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 
 	// Set the item currently being looked at to nothing
 	LookAtItem = NULL;
+}
+
+void AFirstPersonCharacter::SpawnFootEffects()
+{
+	//Rotation of the ray mesh (Horizontal and Vertical)
+	FRotator Rotation;
+	FHitResult Hit(ForceInit);
+	FVector Start, End;
+	static FName FootStepTag = FName(TEXT("FootStepTrace"));
+	FCollisionQueryParams TraceParams(FootStepTag, false, GetOwner());
+	//We need the ground physical material to be returned so this is very important
+	TraceParams.bReturnPhysicalMaterial = true;
+	if (FootstepTemplate)
+	{
+		Controller->GetPlayerViewPoint(Start, Rotation);
+
+		// Offset so that the character capsule doesn't interfer... :(
+		Start.X -= 20.0;
+		Start.Y -= 20.0;
+		Start.Z -= 150.0;
+		//The End point will be somewhere under the foot
+		End = Start + (FVector::FVector(0.0f, 0.0f, -1.0f) * 10);
+		//After this, Hit has everything we need to know about the ground
+		GetWorld()->LineTraceSingle(Hit, Start, End, ECC_EngineTraceChannel1, TraceParams);
+
+		//SpawnActorDeferred allow us to set variables before finishing spawning the actor.
+		AAGameFootStepEffect* EffectActor = GetWorld()->SpawnActorDeferred<AAGameFootStepEffect>(FootstepTemplate, GetActorLocation(), Rotation);
+		if (EffectActor)
+		{
+			//The physic material is stored in the Hit result, we set it in the effect actor so we can know what effect to spawn
+			EffectActor->SurfaceHit = Hit;
+			//Ok, our actor knows where (Hit.Location) to spawn, go on
+			UGameplayStatics::FinishSpawningActor(EffectActor, FTransform(Rotation, Hit.Location));
+		}
+	}
 }
 
 // Called when the game starts or when spawned
@@ -80,6 +119,15 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Inp
 	InputComponent->BindAxis("RotateObjectY", this, &AFirstPersonCharacter::RotateObjectX);
 }
 
+void AFirstPersonCharacter::UpdateFootsteps()
+{
+	++FootstepTimer;
+
+	if (FootstepTimer % FootstepRate == 0)
+	{
+		SpawnFootEffects();
+	}
+}
 
 void AFirstPersonCharacter::MoveForward(float Value)
 {
@@ -87,12 +135,14 @@ void AFirstPersonCharacter::MoveForward(float Value)
 	APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
 	if (PlayerController)
 	{
+
 		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
 		{
 			if (Value != 0.0f)
 			{
 				// add movement in that direction
 				AddMovementInput(GetActorForwardVector(), Value);
+				UpdateFootsteps();
 			}
 		}
 	}
@@ -104,12 +154,14 @@ void AFirstPersonCharacter::MoveRight(float Value)
 	APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
 	if (PlayerController)
 	{
+		
 		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
 		{
 			if (Value != 0.0f)
 			{
 				// add movement in that direction
 				AddMovementInput(GetActorRightVector(), Value);
+				UpdateFootsteps();
 			}
 		}
 	}
