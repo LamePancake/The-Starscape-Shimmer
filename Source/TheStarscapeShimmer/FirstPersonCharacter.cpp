@@ -135,7 +135,6 @@ void AFirstPersonCharacter::MoveForward(float Value)
 	APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
 	if (PlayerController)
 	{
-
 		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
 		{
 			if (Value != 0.0f)
@@ -154,7 +153,6 @@ void AFirstPersonCharacter::MoveRight(float Value)
 	APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
 	if (PlayerController)
 	{
-		
 		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
 		{
 			if (Value != 0.0f)
@@ -190,9 +188,12 @@ void AFirstPersonCharacter::RotateObjectX(float Val)
 		{
 			if (PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
 			{
-				// rotate the object about the x axis
-				FRotator r = FRotator(Val * BaseRotateRate, 0.0f, 0.0f);
-				HeldItem->RotateObject(r);
+				if (Val != 0.0f)
+				{
+					// rotate the object about the x axis
+					FRotator r = FRotator(Val * BaseRotateRate, 0.0f, 0.0f);
+					HeldItem->RotateObject(r);
+				}	
 			}
 		}
 	}
@@ -209,9 +210,12 @@ void AFirstPersonCharacter::RotateObjectY(float Val)
 		{
 			if (PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
 			{
-				// rotate the object about the y axis
-				FRotator r = FRotator(0.0f, Val * BaseRotateRate, 0.0f);
-				HeldItem->RotateObject(r);
+				if (Val != 0.0f)
+				{
+					// rotate the object about the y axis
+					FRotator r = FRotator(0.0f, Val * BaseRotateRate, 0.0f);
+					HeldItem->RotateObject(r);
+				}
 			}
 		}
 	}

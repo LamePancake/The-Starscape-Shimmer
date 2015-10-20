@@ -7,7 +7,7 @@
 // Sets default values
 APickup::APickup()
 {
-	CurrentRotation = FRotator();
+	CurrentRotation = FRotator(0.0f, 0.0f, 0.0f);
 }
 
 // Calls the pickup method if it is a pick up object
@@ -20,7 +20,7 @@ void APickup::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 void APickup::SetLocation_Implementation(FVector loc, FRotator rot)
 {
 	this->SetActorLocation(loc);
-	this->SetActorRotation(FRotator());
+	this->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
 	this->SetActorRotation(CurrentRotation);
 	this->AddActorWorldRotation(rot);
 	//this->SetActorRotation(rot);
@@ -36,7 +36,7 @@ void APickup::OnDrop_Implementation()
 {
 	this->SetActorEnableCollision(true);
 	bIsActive = true;
-	CurrentRotation = FRotator();
+	CurrentRotation = FRotator(0.0f, 0.0f, 0.0f);
 }
 
 void APickup::RotateObject(FRotator rot)
