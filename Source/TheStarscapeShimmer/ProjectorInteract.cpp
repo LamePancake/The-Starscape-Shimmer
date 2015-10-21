@@ -16,6 +16,7 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 	
 	// They're not holding a film reel, so do nothing :)
 	if (!Reel) return;
+	UE_LOG(LogTemp, Warning, TEXT("Reel Check"));
 	
 #ifdef WITH_EDITOR
 	if (!Reel->Film || !Reel->FilmSound)
