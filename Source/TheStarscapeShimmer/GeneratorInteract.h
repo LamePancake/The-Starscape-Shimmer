@@ -31,4 +31,8 @@ public:
 	// True when the generator is on, false if it is turned off
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Object)
 	bool isTurnedOn;
+
+	// Unlocks the door if the right key is passed to it.
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = Generator)
+	void PullLever();
 };

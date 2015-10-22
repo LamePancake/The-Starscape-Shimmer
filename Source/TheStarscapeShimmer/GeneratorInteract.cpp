@@ -28,6 +28,8 @@ void AGeneratorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 	{
 		SpeakerAudio2->Stop();
 	}
+	
+	PullLever();
 
 	//TODO: Turn lights on here
 }

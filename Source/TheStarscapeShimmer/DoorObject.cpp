@@ -25,7 +25,10 @@ void ADoorObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 	if (Key)
 	{
 		SpeakerAudio2->Play();
-		UnlockDoor(Key);
+		if (IsLocked && RequiredKey == Key->WhichDoor)
+		{
+			UnlockDoor();
+		}
 	}
 	else
 	{
@@ -34,11 +37,8 @@ void ADoorObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 }
 
 // Checks the door with the key to see if the key can open the door
-void ADoorObject::UnlockDoor(AKeyPickup* k)
-{
-	if (IsLocked && RequiredKey == k->WhichDoor)
-	{
-		//Unlock door here
-		Destroy();
-	}
-}
+//void ADoorObject::UnlockDoor_Implementation()
+//{
+	//Unlock door here
+	//Destroy();
+//}

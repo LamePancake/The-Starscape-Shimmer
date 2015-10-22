@@ -21,7 +21,8 @@ class THESTARSCAPESHIMMER_API ADoorObject : public AInteractableObject
 public:
 
 	// Unlocks the door if the right key is passed to it.
-	void UnlockDoor(class AKeyPickup* k);
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = Door)
+	void UnlockDoor();
 
 	// Tell us which door the key unlocks
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Door)
