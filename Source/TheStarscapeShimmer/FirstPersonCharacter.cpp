@@ -325,7 +325,7 @@ AInteractableObject* AFirstPersonCharacter::Trace()
 	FVector CamLoc;
 	FRotator CamRot;
 
-	float MaxUseDistance = 120.0f;
+	float MaxUseDistance = 160.0f;
 
 	if (Controller == NULL)
 		return NULL;
