@@ -18,6 +18,13 @@ ADoorObject::ADoorObject()
 void ADoorObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
 	Super::OnInteraction_Implementation(Character);
+
+	if (!IsLocked)
+	{
+		UnlockDoor();
+		return;
+	}
+
 	AKeyPickup* Key = Cast<AKeyPickup>(Character->HeldItem);
 	UAudioComponent* SpeakerAudio = DoorSpeaker->GetAudioComponent();
 	UAudioComponent* SpeakerAudio2 = DoorUnlockSpeaker->GetAudioComponent();
@@ -28,6 +35,7 @@ void ADoorObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 		if (IsLocked && RequiredKey == Key->WhichDoor)
 		{
 			UnlockDoor();
+			IsLocked = false;
 		}
 	}
 	else
