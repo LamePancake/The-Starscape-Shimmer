@@ -38,9 +38,11 @@ public:
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
+	// Refence to the film reel on the back of the projector
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Reel)
 	class AProjectorFilmReel* FilmReelBack;
 
+	// Reference to the Film reel on the front of the projector
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Reel)
 	class AProjectorFilmReel* FilmReelFront;
 	

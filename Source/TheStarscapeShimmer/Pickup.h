@@ -30,6 +30,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void OnPickUp();
 
+	// The Current rotation of the object
 	FRotator CurrentRotation;
 	
 };

@@ -14,10 +14,13 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 {
 	Super::OnInteraction_Implementation(Character);
 
+	// If the projector alread has a reel in it
 	if (CurrentFilmReel != NULL)
 	{
+		// Cannot take it out if you are holding something else
 		if (Character->HeldItem == nullptr)
 		{
+			// Give ti to the player to hold.
 			CurrentFilmReel->SetActorScale3D(FVector(3, 3, 3));
 			Character->HeldItem = CurrentFilmReel;
 			CurrentFilmReel = NULL;
@@ -48,9 +51,10 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 	FilmReelFront->RunReel();
 
 	// Drop the film reel
-	Character->HeldItem->OnDrop();
+	//Character->HeldItem->OnDrop();
 	Character->HeldItem = nullptr;
 
+	// Hide the film real in the projector, lol its a bit hacky
 	CurrentFilmReel->SetActorLocation(this->GetActorLocation());
 	CurrentFilmReel->SetActorScale3D(FVector(0, 0, 0));
 }
