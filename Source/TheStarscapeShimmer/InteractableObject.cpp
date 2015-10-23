@@ -20,7 +20,7 @@ AInteractableObject::AInteractableObject()
 	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ObjectMesh"));
 
 	//Turn physics on for the static mesh
-	ObjectMesh->SetSimulatePhysics(true);
+	ObjectMesh->SetSimulatePhysics(false);
 
 	// Attach static mesh component to the root component
 	ObjectMesh->AttachTo(RootComponent);
