@@ -62,6 +62,11 @@ public:
 	// Item that the player is looking at
 	class AInteractableObject* LookAtItem;
 
+	// Tries to pick up any nearby pickuppable™ objects
+	// TODO: Rename this piece of shit
+	UFUNCTION(BlueprintCallable, Category = Interaction)
+	void Grip();
+
 protected:
 	void OnFire();
 
@@ -92,10 +97,6 @@ protected:
 	// Checks to see if the object is in view of the player or not
 	bool CheckInView(class AInteractableObject* o);
 
-	// Tries to pick up any nearby pickuppable™ objects
-	// TODO: Rename this piece of shit
-	UFUNCTION(BlueprintCallable, Category = Interaction)
-	void Grip();
 
 	// Interacts with the object under the reticle if possible
 	UFUNCTION(BlueprintCallable, Category = Interaction)

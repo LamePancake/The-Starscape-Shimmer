@@ -3,6 +3,7 @@
 #include "TheStarscapeShimmer.h"
 #include "FilmReelPickup.h"
 #include "ProjectorInteract.h"
+#include "ProjectorFilmReel.h"
 
 #ifdef WITH_EDITOR
 #include "Runtime/Core/Public/Misc/OutputDevice.h"
@@ -12,7 +13,20 @@
 void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
 	Super::OnInteraction_Implementation(Character);
+
+	if (CurrentFilmReel != NULL)
+	{
+		if (Character->HeldItem == nullptr)
+		{
+			CurrentFilmReel->SetActorScale3D(FVector(3, 3, 3));
+			Character->HeldItem = CurrentFilmReel;
+			CurrentFilmReel = NULL;
+		}
+		return;
+	}
+
 	AFilmReelPickup* const Reel = Cast<AFilmReelPickup>(Character->HeldItem);
+	CurrentFilmReel = Reel;
 	
 	// They're not holding a film reel, so do nothing :)
 	if (!Reel) return;
@@ -29,6 +43,16 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 	UE_LOG(LogTemp, Warning, TEXT("Attempting pick up %s"), *(Reel->Film->GetName()));
 	// Do some logic here to get the film and play it from da screen
 	this->RunFilm(Reel);
+
+	FilmReelBack->RunReel();
+	FilmReelFront->RunReel();
+
+	// Drop the film reel
+	Character->HeldItem->OnDrop();
+	Character->HeldItem = nullptr;
+
+	CurrentFilmReel->SetActorLocation(this->GetActorLocation());
+	CurrentFilmReel->SetActorScale3D(FVector(0, 0, 0));
 }
 
 void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)
