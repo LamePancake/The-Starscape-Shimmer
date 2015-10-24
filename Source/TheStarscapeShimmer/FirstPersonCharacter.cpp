@@ -9,6 +9,7 @@
 #include "AGameFootStepEffect.h"
 #include "ProjectorInteract.h"
 #include "FilmReelPickup.h"
+#include "NotePickup.h"
 
 // Sets default values
 AFirstPersonCharacter::AFirstPersonCharacter()
@@ -116,6 +117,9 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Inp
 	InputComponent->BindAction("Pickup", IE_Pressed, this, &AFirstPersonCharacter::Grip);
 	InputComponent->BindAction("Interaction", IE_Pressed, this, &AFirstPersonCharacter::Interact);
 
+	// Bind the key press for E to read the a note
+	InputComponent->BindAction("Read", IE_Pressed, this, &AFirstPersonCharacter::ReadNote);
+
 	// Bind the axis for rotating the held objects
 	InputComponent->BindAxis("RotateObjectX", this, &AFirstPersonCharacter::RotateObjectY);
 	InputComponent->BindAxis("RotateObjectY", this, &AFirstPersonCharacter::RotateObjectX);
@@ -220,6 +224,18 @@ void AFirstPersonCharacter::RotateObjectY(float Val)
 					HeldItem->RotateObject(r);
 				}
 			}
+		}
+	}
+}
+
+void AFirstPersonCharacter::ReadNote()
+{
+	if (HeldItem != NULL)
+	{
+		ANotePickup* TestNote = Cast<ANotePickup>(HeldItem);
+		if (TestNote)
+		{
+			TestNote->Read();
 		}
 	}
 }

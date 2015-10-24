@@ -93,6 +93,9 @@ protected:
 	// Rotates the object that is being held about the y axis
 	void RotateObjectY(float Val);
 
+	// Tries to read a note if the player is holding one.
+	void ReadNote();
+
 	// Checks to see if the object is in view of the player or not
 	class AInteractableObject* Trace();
 
