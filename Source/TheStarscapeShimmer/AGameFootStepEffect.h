@@ -19,9 +19,13 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
 		USoundCue* ConcreteSound;
 
-	/** Footstep FX on concrete */
+	/** Footstep FX on carpet */
 	UPROPERTY(EditDefaultsOnly, Category = Sound)
 		USoundCue* CarpetSound;
+
+	/** Footstep FX on wood */
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+		USoundCue* WoodSound;
 
 	/** surface data for spawning */
 	UPROPERTY(BlueprintReadOnly, Category = Surface)

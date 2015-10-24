@@ -60,7 +60,7 @@ USoundCue* AAGameFootStepEffect::GetFootstepSound(TEnumAsByte<EPhysicalSurface> 
 		} break;
 		case GAME_SURFACE_Wood:
 		{
-			FootstepSound = CarpetSound; 	
+			FootstepSound = WoodSound; 	
 			//print(TEXT("wood"));
 		} break;
 		case GAME_SURFACE_Default:
