@@ -25,6 +25,8 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	// setup footsteps
 	FootstepTimer = 0;
 
+	Walking = false;
+
 	// Set your rotate rate for held objects
 	BaseRotateRate = 3.0f;
 
@@ -119,13 +121,14 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Inp
 	InputComponent->BindAxis("RotateObjectY", this, &AFirstPersonCharacter::RotateObjectX);
 }
 
-void AFirstPersonCharacter::UpdateFootsteps()
+void AFirstPersonCharacter::UpdateFootsteps(float delta)
 {
-	++FootstepTimer;
+	FootstepTimer += delta;
 
-	if (FootstepTimer % FootstepRate == 0)
+	if (FootstepTimer >= FootstepRate)
 	{
 		SpawnFootEffects();
+		FootstepTimer = 0;
 	}
 }
 
@@ -141,7 +144,7 @@ void AFirstPersonCharacter::MoveForward(float Value)
 			{
 				// add movement in that direction
 				AddMovementInput(GetActorForwardVector(), Value);
-				UpdateFootsteps();
+				Walking = true;
 			}
 		}
 	}
@@ -159,7 +162,7 @@ void AFirstPersonCharacter::MoveRight(float Value)
 			{
 				// add movement in that direction
 				AddMovementInput(GetActorRightVector(), Value);
-				UpdateFootsteps();
+				Walking = true;
 			}
 		}
 	}
@@ -237,6 +240,12 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 		FVector ItemLoc = CamLoc + (Direction * MaxUseDistance);
 
 		HeldItem->SetLocation(ItemLoc, CamRot);
+	}
+
+	if (Walking)
+	{
+		UpdateFootsteps(deltaTime);
+		Walking = false;
 	}
 
 	HighlightObjectsInView();

@@ -33,9 +33,11 @@ public:
 
 	/** Rate at which footsteps play, larger == less often. */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Footsteps)
-	int32 FootstepRate;
+	float FootstepRate;
 
-	int32 FootstepTimer;
+	float FootstepTimer;
+
+	bool Walking;
 
 	/** Base rate that the object rotates at. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
@@ -83,7 +85,7 @@ protected:
 	void LookUpAtRate(float Rate);
 
 	/* Update step timer and play sounds accordingly. */
-	void UpdateFootsteps();
+	void UpdateFootsteps(float delta);
 
 	// Rotates the object that is being held about the x axis
 	void RotateObjectX(float Val);
