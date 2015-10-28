@@ -17,7 +17,7 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(24.f, 96.0f);
 
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
