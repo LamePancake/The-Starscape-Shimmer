@@ -8,7 +8,7 @@
 ASliderInteract::ASliderInteract()
 {
 	Initialized = false;
-	Value = 0;
+	Value = 0.0;
 
 }
 
@@ -23,12 +23,11 @@ void ASliderInteract::OnInteraction_Implementation(AFirstPersonCharacter* Charac
 		Initialized = true;
 	}
 
-	Value += 0.05f;
+	Value += 0.1f;
 
 	if (Value > 1.0f) Value = 1.0f;
 
 	this->SetActorLocation(FVector(PositionA.X + Translation.X * Value, PositionA.Y + Translation.Y * Value, PositionA.Z + Translation.Z * Value));
-	print(PositionB.ToString());
 }
 
 //Overrides the interation method
@@ -42,10 +41,9 @@ void ASliderInteract::OnAltInteraction_Implementation(AFirstPersonCharacter* Cha
 		Initialized = true;
 	}
 
-	Value -= 0.05f;
+	Value -= 0.1f;
 
 	if (Value < 0.0f) Value = 0.0f;
 
 	this->SetActorLocation(FVector(PositionA.X + Translation.X * Value, PositionA.Y + Translation.Y * Value, PositionA.Z + Translation.Z * Value));
-	print(PositionB.ToString());
 }

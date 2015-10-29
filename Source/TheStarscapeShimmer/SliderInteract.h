@@ -18,6 +18,8 @@ public:
 	
 	void OnInteraction_Implementation(AFirstPersonCharacter* Character);
 	void OnAltInteraction_Implementation(AFirstPersonCharacter* Character);
+
+	float GetValue() { return Value; }
 protected:
 	bool Initialized;
 	FVector PositionA;

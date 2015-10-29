@@ -21,13 +21,16 @@ AConsoleInteract::AConsoleInteract()
 void AConsoleInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
 	Super::OnInteraction_Implementation(Character);
-	UE_LOG(LogTemp, Warning, TEXT("HAHA, YOU CAN'T INTERACT BITCH"));
-	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatR")), 0.0);
-	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatG")), 0.0);
-	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatB")), 0.0);
 
 	UAudioComponent* SpeakerAudio = ConsoleSpeaker->GetAudioComponent();
 	SpeakerAudio->Stop();
 	SpeakerAudio->Play();
+}
+
+void AConsoleInteract::Tick(float DeltaTime)
+{
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatR")), SliderA->GetValue());
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatG")), SliderB->GetValue());
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatB")), SliderC->GetValue());
 }
 
