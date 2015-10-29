@@ -17,7 +17,7 @@ public:
 	ASliderInteract();
 	
 	void OnInteraction_Implementation(AFirstPersonCharacter* Character);
-
+	void OnAltInteraction_Implementation(AFirstPersonCharacter* Character);
 protected:
 	bool Initialized;
 	FVector PositionA;

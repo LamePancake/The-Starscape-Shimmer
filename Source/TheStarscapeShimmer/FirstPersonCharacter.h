@@ -107,6 +107,10 @@ protected:
 	UFUNCTION(BlueprintCallable, Category = Interaction)
 	void Interact();
 
+	// Interacts with the object under the reticle if possible
+	UFUNCTION(BlueprintCallable, Category = Interaction)
+	void AltInteract();
+
 	// Highlights the object that is in view of the raycast
 	void HighlightObjectsInView();
 };

@@ -30,3 +30,22 @@ void ASliderInteract::OnInteraction_Implementation(AFirstPersonCharacter* Charac
 	this->SetActorLocation(FVector(PositionA.X + Translation.X * Value, PositionA.Y + Translation.Y * Value, PositionA.Z + Translation.Z * Value));
 	print(PositionB.ToString());
 }
+
+//Overrides the interation method
+void ASliderInteract::OnAltInteraction_Implementation(AFirstPersonCharacter* Character)
+{
+	if (!Initialized)
+	{
+		PositionA = this->GetActorLocation();
+		PositionB = FVector(PositionA.X + 10, PositionA.Y, PositionA.Z + 14);
+		Translation = FVector(PositionB.X - PositionA.X, PositionB.Y - PositionA.Y, PositionB.Z - PositionA.Z);
+		Initialized = true;
+	}
+
+	Value -= 0.05f;
+
+	if (Value < 0.0f) Value = 0.0f;
+
+	this->SetActorLocation(FVector(PositionA.X + Translation.X * Value, PositionA.Y + Translation.Y * Value, PositionA.Z + Translation.Z * Value));
+	print(PositionB.ToString());
+}

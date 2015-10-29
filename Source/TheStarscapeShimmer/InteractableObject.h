@@ -37,6 +37,10 @@ public:
 	UFUNCTION(BlueprintNativeEvent)
 	void OnInteraction(AFirstPersonCharacter* Character);
 
+	// Function to call when the player interacts with something
+	UFUNCTION(BlueprintNativeEvent)
+	void OnAltInteraction(AFirstPersonCharacter* Character);
+
 	// Called when the player is looking at this object
 	void OnLookAt();
 

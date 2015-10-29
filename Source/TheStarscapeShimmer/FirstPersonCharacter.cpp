@@ -116,6 +116,7 @@ void AFirstPersonCharacter::SetupPlayerInputComponent(class UInputComponent* Inp
 	// Bind the key press of E or Right face button for picking up object.
 	InputComponent->BindAction("Pickup", IE_Pressed, this, &AFirstPersonCharacter::Grip);
 	InputComponent->BindAction("Interaction", IE_Pressed, this, &AFirstPersonCharacter::Interact);
+	InputComponent->BindAction("AltInteraction", IE_Pressed, this, &AFirstPersonCharacter::AltInteract);
 
 	// Bind the key press for E to read the a note
 	InputComponent->BindAction("Read", IE_Pressed, this, &AFirstPersonCharacter::ReadNote);
@@ -338,6 +339,29 @@ void AFirstPersonCharacter::Interact()
 			if (CheckInView(TestObj))
 			{
 				TestObj->OnInteraction(this);
+				return;
+			}
+		}
+	}
+}
+
+// Checks objects around the player to see if they can be interacted with
+void AFirstPersonCharacter::AltInteract()
+{
+	// Stores and retrieves actors with in the character's sphere
+	TArray<AActor*> CollectableActors;
+	PickUpSphere->GetOverlappingActors(CollectableActors);
+
+	// Go through all of the actors
+	for (int i = 0; i < CollectableActors.Num(); i++)
+	{
+		// If it is an object, do what the object does.
+		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
+		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive)
+		{
+			if (CheckInView(TestObj))
+			{
+				TestObj->OnAltInteraction(this);
 				return;
 			}
 		}

@@ -5,6 +5,8 @@
 #include "ProjectorInteract.h"
 #include "ProjectorFilmReel.h"
 
+#define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
+
 #ifdef WITH_EDITOR
 #include "Runtime/Core/Public/Misc/OutputDevice.h"
 #endif // WITH_EDITOR
@@ -62,7 +64,7 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)
 {
 	TArray<UStaticMeshComponent*> Comps;
-
+	
 	TheatreScreen->GetComponents(Comps);
 	if (Comps.Num() > 0)
 	{

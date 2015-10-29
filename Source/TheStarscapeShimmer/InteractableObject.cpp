@@ -47,6 +47,13 @@ void AInteractableObject::OnInteraction_Implementation(AFirstPersonCharacter* Ch
 	// No function
 }
 
+//Overridable method to do something when the player interacts with it.
+void AInteractableObject::OnAltInteraction_Implementation(AFirstPersonCharacter* Character)
+{
+	// Other classes build upon this function
+	// No function
+}
+
 // Turns on custom rendering to render th glow
 void AInteractableObject::OnLookAt()
 {
