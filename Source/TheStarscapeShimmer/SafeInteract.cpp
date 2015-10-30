@@ -17,28 +17,26 @@ void ASafeInteract::OnInteraction_Implementation(AFirstPersonCharacter* Characte
 {
 	Super::OnInteraction_Implementation(Character);
 
+	UAudioComponent* SpeakerAudio = SafeSpeaker->GetAudioComponent();
+	UAudioComponent* SpeakerAudio2 = SafeUnlockSpeaker->GetAudioComponent();
+
 	if (!IsLocked)
 	{
+		SpeakerAudio2->Play();
 		UnlockSafe();
 		return;
 	}
 
-	//UAudioComponent* SpeakerAudio = SafeSpeaker->GetAudioComponent();
-	//UAudioComponent* SpeakerAudio2 = SafeUnlockSpeaker->GetAudioComponent();
-
-	//ToDo: Add input code here to check if they endered the right combination
+	//TODO: Add input code here to check if they endered the right combination
 	if (IsLocked)
 	{
-		//if (SpeakerAudio2)
-			//SpeakerAudio2->Play();
-
-		UnlockSafe();
+		SpeakerAudio2->Play();
 		IsLocked = false;
+		UnlockSafe();
 	}
 	else
 	{
-		//if (SpeakerAudio)
-			//SpeakerAudio->Play();
+		SpeakerAudio->Play();
 	}
 }
 
