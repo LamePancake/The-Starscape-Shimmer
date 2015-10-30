@@ -22,16 +22,24 @@ public:
 
 	AProjectorInteract()
 	{
+		HasPower = false;
 		//PublicDependencyModuleNames.AddRange(new string[] { "MediaAssets"});
 		CurrentFilmReel = NULL;
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
-		ATheatreScreen* TheatreScreen;
+	ATheatreScreen* TheatreScreen;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
 	AAmbientSound* TheatreSpeaker;
 
+	// Tells us if the projector has power or not
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projector)
+	bool HasPower;
+
+	// Turns the power on and off for the projector
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Projector)
+	void Power();
 
 	void RunFilm(AFilmReelPickup*);
 

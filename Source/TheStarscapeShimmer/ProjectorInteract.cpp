@@ -30,6 +30,9 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 		return;
 	}
 
+	if (!HasPower)
+		return;
+
 	AFilmReelPickup* const Reel = Cast<AFilmReelPickup>(Character->HeldItem);
 	CurrentFilmReel = Reel;
 	
@@ -78,4 +81,9 @@ void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)
 	SpeakerAudio->Stop();
 	SpeakerAudio->SetSound(Reel->FilmSound);
 	SpeakerAudio->Play();
+}
+
+void AProjectorInteract::Power_Implementation()
+{
+	HasPower = !HasPower;
 }

@@ -24,7 +24,7 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Safe)
 	float Code;
 
-	// Tell us if the safe is locked
+	// Tells us if the safe is locked
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Safe)
 	bool IsLocked;
 	
