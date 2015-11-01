@@ -73,10 +73,12 @@ void AFirstPersonCharacter::SpawnFootEffects()
 		//The End point will be somewhere under the foot
 		End = Start + (FVector::FVector(0.0f, 0.0f, -1.0f) * 10);
 		//After this, Hit has everything we need to know about the ground
-		GetWorld()->LineTraceSingle(Hit, Start, End, ECC_EngineTraceChannel1, TraceParams);
+		GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_EngineTraceChannel1, TraceParams);
 
 		//SpawnActorDeferred allow us to set variables before finishing spawning the actor.
-		AAGameFootStepEffect* EffectActor = GetWorld()->SpawnActorDeferred<AAGameFootStepEffect>(FootstepTemplate, GetActorLocation(), Rotation);
+		FVector Scale(1, 1, 1);
+		FTransform Transform(Rotation, GetActorLocation(), Scale);
+		AAGameFootStepEffect* EffectActor = GetWorld()->SpawnActorDeferred<AAGameFootStepEffect>(FootstepTemplate, Transform);
 		if (EffectActor)
 		{
 			//The physic material is stored in the Hit result, we set it in the effect actor so we can know what effect to spawn
