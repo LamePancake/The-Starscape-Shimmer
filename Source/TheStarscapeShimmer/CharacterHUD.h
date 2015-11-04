@@ -2,6 +2,8 @@
 
 //HUD based on this tutorial https://wiki.unrealengine.com/HUD,_Canvas,_Entire_Class_Sample,_Create_Buttons_%26_Draw_Materials
 #pragma once
+#pragma warning(disable: 4263)
+#pragma warning(disable: 4264)
 
 #include "GameFramework/HUD.h"
 #include "CharacterHUD.generated.h"
