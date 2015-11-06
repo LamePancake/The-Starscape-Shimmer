@@ -161,11 +161,6 @@ private:
 	double ElapsedTime;
 };
 
-static void FakeFunction() {
-	// do nothing
-	while (1);
-}
-
 static void ProceduralFunction(ProceduralWorkerThreads* ThreadPool, int Index) {
 	while (1) {
 		while (ThreadPool->Finished[Index]);
@@ -283,7 +278,6 @@ AProceduralStaticMeshActor::~AProceduralStaticMeshActor() {
 	// REALLY want to make this cleaner, but it might not happen
 	InstanceCount--;
 	if (InstanceCount == 0) {
-		WorkerThreads->Stop();
 		delete WorkerThreads;
 	}
 }
