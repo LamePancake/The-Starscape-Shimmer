@@ -14,6 +14,38 @@
 struct ProceduralWorkerThreads;
 static void ProceduralFunction(ProceduralWorkerThreads*, int);
 
+class FProceduralRunnable : public FRunnable {
+
+public:
+	FProceduralRunnable(const int Index, ProceduralWorkerThreads* Threads)
+		: Index(Index), ThreadPool(Threads)
+	{}
+
+	// We've already done all necessary initialisation in the constructor
+	virtual bool Init() override {
+		return true;
+	}
+
+	// I didn't want to bother putting the function in here for now
+	// TOOD: Move the function into here sometime from now
+	virtual uint32 Run() override {
+		ProceduralFunction(ThreadPool, Index);
+		return 0;
+	}
+
+	virtual void Exit() override {
+		// Lol don't do anything here
+	}
+
+	virtual void Stop() override {
+		// Lol don't do anything here
+	}
+
+private:
+	int Index;
+	ProceduralWorkerThreads* ThreadPool;
+};
+
 struct ProceduralWorkerThreads {
 	
 	// Initialise the threads
@@ -21,9 +53,18 @@ struct ProceduralWorkerThreads {
 		: CompletionCounter(0), ChunkOffsets(nullptr), ChunkSizes(nullptr), ShouldStop(false), ShouldGenerate(false),
 			StartSignal(), StartMutex(), ElapsedTime(0.0) {
 		for (int i = 0; i < NUM_THREADS; i++) {
+			FString ThreadName = FString::Printf(TEXT("ProcThread %d"), i);
 			Finished[i] = true;
-			Threads[i] = std::thread(ProceduralFunction, this, i);
-			Threads[i].detach();
+			Runnables[i] = new FProceduralRunnable(i, this);
+			Threads[i] = FRunnableThread::Create(Runnables[i], ThreadName.GetCharArray().GetData(), 0, TPri_Normal);
+		}
+	}
+
+	// TODO Clean up the rest of this stupid object
+	virtual ~ProceduralWorkerThreads() {
+		Stop();
+		for (int i = 0; i < NUM_THREADS; i++) {
+			delete Runnables[i];
 		}
 	}
 
@@ -106,7 +147,10 @@ struct ProceduralWorkerThreads {
 	std::atomic<bool> Finished[NUM_THREADS];
 	
 private:
-	std::thread Threads[NUM_THREADS];
+	FRunnableThread* Threads[NUM_THREADS];
+
+	// The runnable objects that handle the content generation
+	FProceduralRunnable* Runnables[NUM_THREADS];
 
 	// An array holding the pointers into the colours array for each thread 
 	uint32_t* ChunkOffsets;
