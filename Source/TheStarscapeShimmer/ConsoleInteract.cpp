@@ -29,8 +29,9 @@ void AConsoleInteract::OnInteraction_Implementation(AFirstPersonCharacter* Chara
 
 void AConsoleInteract::Tick(float DeltaTime)
 {
-	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatR")), SliderA->GetValue());
-	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatG")), SliderB->GetValue());
-	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("DesatB")), SliderC->GetValue());
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderA")), SliderA->GetValue());
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderB")), SliderB->GetValue());
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderC")), SliderC->GetValue());
+	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderD")), SliderD->GetValue());
 }
 
