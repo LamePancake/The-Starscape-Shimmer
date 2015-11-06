@@ -5,9 +5,6 @@
 #include "ProceduralStaticMeshActor.h"
 #include "AllowWindowsPlatformTypes.h"
 #include <atomic>
-#include <thread>
-#include <condition_variable>
-#include <mutex>
 #include <cmath>
 #include "HideWindowsPlatformTypes.h"
 
@@ -50,8 +47,7 @@ struct ProceduralWorkerThreads {
 	
 	// Initialise the threads
 	ProceduralWorkerThreads()
-		: CompletionCounter(0), ChunkOffsets(nullptr), ChunkSizes(nullptr), ShouldStop(false), ShouldGenerate(false),
-			StartSignal(), StartMutex(), ElapsedTime(0.0) {
+		: CompletionCounter(0), ChunkOffsets(nullptr), ChunkSizes(nullptr), ShouldStop(false), ShouldGenerate(false), ElapsedTime(0.0) {
 		for (int i = 0; i < NUM_THREADS; i++) {
 			FString ThreadName = FString::Printf(TEXT("ProcThread %d"), i);
 			Finished[i] = true;
@@ -139,9 +135,7 @@ struct ProceduralWorkerThreads {
 	std::atomic<bool> ShouldStop;
 
 	// The variable that signals when to start (and its associated lock)
-	std::condition_variable StartSignal;
 	std::atomic<bool> ShouldGenerate;
-	std::mutex StartMutex;
 
 	// Array to hold whether a given thread has finished execution yet
 	std::atomic<bool> Finished[NUM_THREADS];
