@@ -13,8 +13,8 @@ void ANotePickup::Read()
 		ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
 		if (h)
 		{
-			h->DrawReticle = !h->DrawReticle;
-			h->DrawString = !h->DrawString;
+			h->DrawNoteString = !h->DrawNoteString;
+			h->DrawSafeString = false;
 			h->NoteString = Note;
 		}
 	}
@@ -29,8 +29,7 @@ void ANotePickup::OnDrop_Implementation()
 		ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
 		if (h)
 		{
-			h->DrawReticle = true;
-			h->DrawString = false;
+			h->DrawNoteString = false;
 			h->NoteString = "";
 		}
 	}

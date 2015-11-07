@@ -22,7 +22,7 @@ public:
 
 	// The code to unlock the safe
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Safe)
-	float Code;
+	FString Code;
 
 	// Tells us if the safe is locked
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Safe)
@@ -35,7 +35,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio)
 	AAmbientSound* SafeUnlockSpeaker;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Safe)
+	bool EnteringCombination;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Safe)
+	FString TestCombination;
+
+	int CombinationLength;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Safe)
+	AFirstPersonCharacter* CharacterReference;
+
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
 	
+	bool EnterCombination();
+
+	void Tick(float DeltaTime);
 };

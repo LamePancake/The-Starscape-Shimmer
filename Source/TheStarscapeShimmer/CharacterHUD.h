@@ -41,17 +41,24 @@ public:
 
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool DrawString;
+	bool DrawNoteString;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
 	FString NoteString;
+
+	// True if we want to draw a string
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool DrawSafeString;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
+	FString SafeString;
 
 	// Add other hud things here like text or other things.
 
 	//Draws the reticle on screen
 	void DrawHUD_Reticle();
 
-	void DrawHUD_String();
+	void DrawHUD_String(FString string);
 
 
 	//Draws the texture on screen
