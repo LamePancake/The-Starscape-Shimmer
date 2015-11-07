@@ -86,3 +86,7 @@ DerivedDataCache/*
 *.swp
 *.swo
 .ctrlp_cache/
+Deploy/StarscapeShimmerBetaV1.zip
+Deploy/StarscapeShimmerBetaV1.zip.tmp
+Deploy/StarscapeShimmerBetaV1/Manifest_NonUFSFiles.txt
+Deploy/StarscapeShimmerBetaV1/TheStarscapeShimmer/Content/Paks/TheStarscapeShimmer-WindowsNoEditor.pak
