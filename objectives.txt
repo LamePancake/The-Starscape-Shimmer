@@ -1,0 +1,48 @@
+Objective manager
+-----------------
+*   Player controller
+*   List of objectives
+    []  Completion condition(s) to check
+    []  Things that happen when the objective becomes active
+    []  Things that happen when the objective is completed
+
+1.  Turn on the power
+    i.      Find the key
+    ii.     Open the door to the generator room
+    iii.    Go down the stairs to the generator room
+    iv.     Hit the generator lever
+
+2.  Decode the movie with the poster picture
+    i.      Open the door to the movie theatre
+    ii.     Open the door to go upstairs
+    iii.    Head upstairs and open the door to the projector room
+    iv.     Pick up the film reel from the shelf and put in the projector (poster is interactable now)
+    v.      Go back down the stairs and head to the contraption
+    vi.     Fiddle with the various dials on the contraption to adjust the movie's settings
+    vii.    See the poster
+
+3.  Find the poster and interact with it to reveal the safe
+    i.      Leave the theatre room
+    ii.     Explore the theatre until reaching the room beside the projector room (which will contain the safe)
+    iii.    Interact with the poster to reveal the safe
+
+4.  Decode the movie with the safe combination
+    i.      Return to the projector room
+    ii.     Take the movie with the safe combination in it off the shelf and put it in the projector (safe is interactable now)
+    iii.    Go to the contraption
+    iv.     Adjust everything until the combination is visible
+    v.      Go back to the safe and enter the combination
+    vi.     Retrieve the film reel contained within
+
+5.  Decode the final film
+    i.      Return to the projector room
+    ii.     Put the film in the projector
+    iii.    Go to the contraption and adjust it until the portal opens (portal is then open)
+
+6.  Finish the game
+    i.      Step through the portal
+    ii.     Go up the stairs
+    iii.    Activate the projector at the top?
+    iv.     Try to run back down
+    v.      Get caught
+    vi.     End

@@ -14,6 +14,8 @@ class THESTARSCAPESHIMMER_API ATheatreScreen : public AInteractableObject
 	GENERATED_BODY()
 	
 	
-	
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Materials)
+	class UMaterial* ScreenOffMaterial;
 	
 };

@@ -21,7 +21,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
-	// True when the pickup is able to be picked up, false if something deactivates the pickup
+	// True when the pickup is able to be picked up, false if something deactivates it
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Object)
 	bool bIsActive;
 

@@ -22,10 +22,13 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 		// Cannot take it out if you are holding something else
 		if (Character->HeldItem == nullptr)
 		{
-			// Give ti to the player to hold.
+			StopFilm();
+			// Give it to the player to hold.
 			CurrentFilmReel->SetActorScale3D(FVector(3, 3, 3));
 			Character->HeldItem = CurrentFilmReel;
 			CurrentFilmReel = NULL;
+			FilmReelBack->RunReel();
+			FilmReelFront->RunReel();
 		}
 		return;
 	}
@@ -59,9 +62,28 @@ void AProjectorInteract::OnInteraction_Implementation(AFirstPersonCharacter* Cha
 	//Character->HeldItem->OnDrop();
 	Character->HeldItem = nullptr;
 
-	// Hide the film real in the projector, lol its a bit hacky
+	// Hide the film reel in the projector, lol its a bit hacky
 	CurrentFilmReel->SetActorLocation(this->GetActorLocation());
 	CurrentFilmReel->SetActorScale3D(FVector(0, 0, 0));
+}
+
+///<summary>Stops the currently playing film and its audio, if any.</summary>
+void AProjectorInteract::StopFilm()
+{
+	if (CurrentFilmReel == NULL) return;
+
+	TArray<UStaticMeshComponent*> Comps;
+
+	TheatreScreen->GetComponents(Comps);
+	if (Comps.Num() > 0)
+	{
+		UStaticMeshComponent* Mesh = Comps[0];
+		Mesh->SetMaterial(0, TheatreScreen->ScreenOffMaterial);
+		CurrentFilmReel->Film->Pause();
+	}
+
+	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
+	SpeakerAudio->Stop();
 }
 
 void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)

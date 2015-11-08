@@ -43,6 +43,8 @@ public:
 
 	void RunFilm(AFilmReelPickup*);
 
+	void StopFilm();
+
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
