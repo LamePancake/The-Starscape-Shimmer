@@ -28,15 +28,9 @@ void ACharacterHUD::DrawHUD_Reticle()
 	DrawFullSizeTile(reticle, ViewportCenter.X - (reticle->GetSurfaceWidth() / 2), ViewportCenter.Y - (reticle->GetSurfaceHeight() / 2), FColor(255, 255, 255, 255));
 }
 
-void ACharacterHUD::DrawHUD_String(FString string)
+void ACharacterHUD::DrawHUD_String(UFont* font, FString string, const float& X, const float& Y, const float& TheScale)
 {
-	//Get the width and height of the screen
-	const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-
-	//Calculate the center of the screen            
-	const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
-
-	DrawText(VerdanaFont, string, ViewportCenter.X + ((string.Len() + 8) / 2), ViewportSize.Y * 0.55, FColor(255, 255, 255, 255), DefaultFontScale);
+	DrawText(font, string, X, Y, FColor(255, 255, 255, 255), TheScale);
 }
 
 void ACharacterHUD::DrawHUD()
@@ -55,10 +49,26 @@ void ACharacterHUD::DrawHUD()
 		DrawHUD_Reticle();
 
 	if (DrawNoteString)
-		DrawHUD_String(NoteString);
+	{
+		//Get the width and height of the screen
+		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+		//Calculate the center of the screen            
+		const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
+
+		DrawHUD_String(VerdanaFont, NoteString, ViewportCenter.X - (VerdanaFont->GetStringSize(*(NoteString)) * DefaultFontScale / 2), ViewportSize.Y * 0.3, DefaultFontScale);
+	}
 
 	if (DrawSafeString)
-		DrawHUD_String(SafeString);
+	{
+		//Get the width and height of the screen
+		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+		//Calculate the center of the screen            
+		const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
+
+		DrawHUD_String(VerdanaFont, "Enter the Combination:", ViewportCenter.X - (VerdanaFont->GetStringSize(TEXT("Enter the Combination:")) * 2.5 / 2), ViewportSize.Y * 0.35, 2.5f);
+		DrawHUD_String(VerdanaFont, SafeString, ViewportCenter.X - (VerdanaFont->GetStringSize(*(SafeString)) * 2 / 2), ViewportSize.Y * 0.6, 2.0f);
+	}
+
 
 	//Put other hud related things here.
 }

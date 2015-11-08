@@ -62,7 +62,17 @@ void ASafeInteract::Tick(float DeltaTime)
 	if (EnteringCombination)
 	{
 		h->DrawSafeString = true;
-		h->SafeString = "Enter the combination: " + TestCombination;
+		FString string = TestCombination;
+		
+		if (CombinationLength < 8)
+		{
+			string += "_";
+			for (int i = 0; i <  (8 - CombinationLength) - 1; i++)
+			{
+				string += " ";
+			}
+		}
+		h->SafeString = string;
 
 		APlayerController* PlayerController = Cast<APlayerController>(CharacterReference->GetController());
 		if (PlayerController)

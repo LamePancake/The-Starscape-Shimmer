@@ -58,7 +58,7 @@ public:
 	//Draws the reticle on screen
 	void DrawHUD_Reticle();
 
-	void DrawHUD_String(FString string);
+	void DrawHUD_String(UFont* font, FString string, const float& X, const float& Y, const float& TheScale);
 
 
 	//Draws the texture on screen
@@ -99,7 +99,7 @@ public:
 		NewText.Scale.Set(TheScale, TheScale);
 
 		//Outline gets its alpha from the main color
-		NewText.bOutlined = true;
+		NewText.bOutlined = DrawOutline;
 		NewText.OutlineColor = OutlineColor;
 		NewText.OutlineColor.A = TheColor.A * 2;
 
