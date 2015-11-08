@@ -52,4 +52,6 @@ public:
 	bool EnterCombination();
 
 	void Tick(float DeltaTime);
+
+	bool CheckInput();
 };
