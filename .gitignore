@@ -41,7 +41,7 @@
 Content/StarterContent/*
 
 # All Movies
-Content/Movies/*
+Content/Movies/**/*.avi
 Content/Films/**/*.avi
 Content/Films/**/*.ogv
 Content/Films/**/*.mp3
@@ -90,3 +90,4 @@ Deploy/StarscapeShimmerBetaV1.zip
 Deploy/StarscapeShimmerBetaV1.zip.tmp
 Deploy/StarscapeShimmerBetaV1/Manifest_NonUFSFiles.txt
 Deploy/StarscapeShimmerBetaV1/TheStarscapeShimmer/Content/Paks/TheStarscapeShimmer-WindowsNoEditor.pak
+Deploy/
