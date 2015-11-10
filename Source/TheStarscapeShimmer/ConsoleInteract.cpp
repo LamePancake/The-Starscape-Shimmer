@@ -35,3 +35,7 @@ void AConsoleInteract::Tick(float DeltaTime)
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderD")), SliderD->GetValue());
 }
 
+/*void AConsoleInteract::CurrentFilm_Implementation(FString reelName) 
+{
+	filmName = reelName;
+}*/
