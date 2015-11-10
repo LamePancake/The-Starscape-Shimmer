@@ -37,11 +37,6 @@ AFirstPersonCharacter::AFirstPersonCharacter()
 	FirstPersonCameraComponent->RelativeLocation = FVector(0, 0, 54.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
-	// Create and attach the sphere component to the player
-	PickUpSphere = CreateDefaultSubobject <USphereComponent> (TEXT("PickUp Sphere"));
-	PickUpSphere->AttachTo(RootComponent);
-	PickUpSphere->SetSphereRadius(100.0f);
-
 	//Turn on the update method
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -296,10 +291,6 @@ void AFirstPersonCharacter::HighlightObjectsInView()
 // Checks objects around the player to see if they can be picked up
 void AFirstPersonCharacter::Grip()
 {
-	// Stores and retrieves actors with in the character's sphere
-	TArray<AActor*> CollectableActors;
-	PickUpSphere->GetOverlappingActors(CollectableActors);
-
 	if (HeldItem)
 	{
 		HeldItem->OnDrop();
@@ -307,67 +298,33 @@ void AFirstPersonCharacter::Grip()
 		return;
 	}
 
-	//APickup* TestPickup = nullptr;
-	// Go through all of the actors
-	for (int i = 0; i < CollectableActors.Num(); i++)
-	{
-		// If the item can be picked up, pick it up and set HeldItem to be the itme
-		APickup* TestPickup = Cast<APickup>(CollectableActors[i]);
-		if (TestPickup && !TestPickup->IsPendingKill() && TestPickup->bIsActive && HeldItem == NULL)
-		{
-			if (CheckInView(TestPickup))
-			{
-				this->HeldItem = TestPickup;
-				return;
-			}
-		}
-	}
+	AInteractableObject* interactable = Trace();
+
+	APickup* pickup = Cast<APickup>(interactable);
+
+	if (pickup != NULL)
+		this->HeldItem = pickup;
+	
+	return;
+
 }
 
 // Checks objects around the player to see if they can be interacted with
 void AFirstPersonCharacter::Interact()
 {
-	// Stores and retrieves actors with in the character's sphere
-	TArray<AActor*> CollectableActors;
-	PickUpSphere->GetOverlappingActors(CollectableActors);
-
-	// Go through all of the actors
-	for (int i = 0; i < CollectableActors.Num(); i++)
-	{
-		// If it is an object, do what the object does.
-		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
-		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive ) 
-		{
-			if (CheckInView(TestObj))
-			{
-				TestObj->OnInteraction(this);
-				return;
-			}
-		}
-	}
+	AInteractableObject* interactable = Trace();
+	if (interactable != NULL)
+		interactable->OnInteraction(this);
+	return;
 }
 
 // Checks objects around the player to see if they can be interacted with
 void AFirstPersonCharacter::AltInteract()
 {
-	// Stores and retrieves actors with in the character's sphere
-	TArray<AActor*> CollectableActors;
-	PickUpSphere->GetOverlappingActors(CollectableActors);
-
-	// Go through all of the actors
-	for (int i = 0; i < CollectableActors.Num(); i++)
-	{
-		// If it is an object, do what the object does.
-		AInteractableObject* const TestObj = Cast<AInteractableObject>(CollectableActors[i]);
-		if (TestObj && !TestObj->IsPendingKill() && TestObj->bIsActive)
-		{
-			if (CheckInView(TestObj))
-			{
-				TestObj->OnAltInteraction(this);
-				return;
-			}
-		}
-	}
+	AInteractableObject* interactable = Trace();
+	if (interactable != NULL)
+		interactable->OnAltInteraction(this);
+	return;
 }
 
 // Returns an interactable object if the player is looking at one
@@ -400,18 +357,4 @@ AInteractableObject* AFirstPersonCharacter::Trace()
 	//DrawDebugLine(GetWorld(), TraceStart, TraceEnd, FColor::Red, false, 1.0f);
 
 	return Cast<AInteractableObject>(Hit.GetActor());
-}
-
-// Checks to see if th player is looking directly at an object.
-bool AFirstPersonCharacter::CheckInView(AInteractableObject* o)
-{
-	AInteractableObject* test = Trace();
-
-	if (test)
-	{
-		if (test == o)
-			return true;
-	}
-
-	return false;
 }
