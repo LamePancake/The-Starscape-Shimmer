@@ -3,16 +3,17 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "ObjectiveActor.generated.h"
+#include "Objective.h"
+#include "ObjectiveManager.generated.h"
 
 UCLASS()
-class THESTARSCAPESHIMMER_API AObjectiveActor : public AActor
+class THESTARSCAPESHIMMER_API AObjectiveManager : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AObjectiveActor();
+	AObjectiveManager();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -20,9 +21,9 @@ public:
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
 
-	virtual void OnActivate() {}
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Objectives)
+		TArray<AObjective*> Objectives;
 
-	virtual void OnComplete() {}
-
-	
+private:
+	uint32 CurrentObjectiveIdx;
 };
