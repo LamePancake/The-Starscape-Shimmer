@@ -25,11 +25,11 @@ public:
 	void UnlockDoor();
 
 	// Tell us which door the key unlocks
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Door)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Door)
 	float RequiredKey;
 
 	// Tell us which door the key unlocks
-	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = Door)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Door)
 	bool IsLocked;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio)

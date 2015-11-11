@@ -54,10 +54,6 @@ public:
 	// Called every frame to update custom logic
 	virtual void Tick(float deltaTime);
 
-	// A sphere around the character used to tell if something is close enough to clollect.
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Pickup)
-	USphereComponent* PickUpSphere;
-
 	// Item held by the player
 	class APickup* HeldItem;
 
@@ -101,7 +97,6 @@ protected:
 
 	// Checks to see if the object is in view of the player or not
 	bool CheckInView(class AInteractableObject* o);
-
 
 	// Interacts with the object under the reticle if possible
 	UFUNCTION(BlueprintCallable, Category = Interaction)

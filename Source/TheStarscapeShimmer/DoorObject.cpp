@@ -9,9 +9,6 @@ ADoorObject::ADoorObject()
 {
 	// Set the key to none for now, but it will probably stay
 	RequiredKey = -1.0f;
-
-	// The door is locked.
-	IsLocked = true;
 }
 
 //Overrides the interation method
