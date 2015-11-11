@@ -59,8 +59,11 @@ void ASafeInteract::Tick(float DeltaTime)
 
 	if (EnteringCombination)
 	{
-		c->SetIgnoreLookInput(true);
-		c->SetIgnoreMoveInput(true);
+		if ((this->GetActorLocation() - CharacterReference->GetActorLocation()).Size() > 400.0f)
+		{
+			EnteringCombination = false;
+			Fade = -1.0;
+		}
 
 		h->DrawSafeString = true;
 		FString string = TestCombination;
@@ -82,9 +85,6 @@ void ASafeInteract::Tick(float DeltaTime)
 
 			if (EnterCombination())
 			{
-				c->SetIgnoreLookInput(false);
-				c->SetIgnoreMoveInput(false);
-
 				EnteringCombination = false;
 				h->DrawSafeString = false;
 				h->SafeString = "";
@@ -105,13 +105,11 @@ void ASafeInteract::Tick(float DeltaTime)
 	{
 		h->DrawSafeString = false;
 		h->SafeString = "";
-		c->SetIgnoreLookInput(false);
-		c->SetIgnoreMoveInput(false);
 	}
 
 	if (Fade != 0)
 	{
-		h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (50 * DeltaTime * Fade), 0.0f, 150.0f);
+		h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (200 * DeltaTime * Fade), 0.0f, 150.0f);
 
 		if (h->BlackBackgroundAlpha == 0.0f || h->BlackBackgroundAlpha == 150)
 			Fade = 0;
