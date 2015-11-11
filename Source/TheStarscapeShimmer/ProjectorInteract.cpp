@@ -112,6 +112,26 @@ void AProjectorInteract::Power_Implementation()
 
 void AProjectorInteract::FastForward_Implementation()
 {
+	if (HasPower) {
+		CurrentFilmReel->Film->SetRate(3);
+		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
+		SpeakerAudio->SetPitchMultiplier(3);
+	}
+}
+
+void AProjectorInteract::PlayReverse_Implementation()
+{
 	if(HasPower)
-		CurrentFilmReel->Film->SetRate(2);
+		CurrentFilmReel->Film->SetRate(-2);
+	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
+	SpeakerAudio->Stop();
+}
+
+void AProjectorInteract::PlayNormal_Implementation()
+{
+	if (HasPower) {
+		CurrentFilmReel->Film->SetRate(1);
+		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
+		SpeakerAudio->SetPitchMultiplier(1);
+	}
 }

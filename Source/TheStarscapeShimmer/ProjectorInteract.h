@@ -11,7 +11,7 @@
 
 
 /**
- * 
+ *
  */
 UCLASS()
 class THESTARSCAPESHIMMER_API AProjectorInteract : public AInteractableObject
@@ -28,21 +28,27 @@ public:
 	}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
-	ATheatreScreen* TheatreScreen;
+		ATheatreScreen* TheatreScreen;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
-	AAmbientSound* TheatreSpeaker;
+		AAmbientSound* TheatreSpeaker;
 
 	// Tells us if the projector has power or not
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projector)
-	bool HasPower;
+		bool HasPower;
 
 	// Turns the power on and off for the projector
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Projector)
-	void Power();
+		void Power();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Projector)
-	void FastForward();
+		void FastForward();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Projector)
+		void PlayReverse();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Projector)
+		void PlayNormal();
 
 	void RunFilm(AFilmReelPickup*);
 
@@ -58,7 +64,7 @@ public:
 	// Reference to the Film reel on the front of the projector
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Reel)
 	class AProjectorFilmReel* FilmReelFront;
-	
+
 	// Stores a reference to the film reel that is currently running
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Reel)
 	class AFilmReelPickup* CurrentFilmReel;
