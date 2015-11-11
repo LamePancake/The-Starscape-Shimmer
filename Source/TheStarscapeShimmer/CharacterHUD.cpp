@@ -52,10 +52,8 @@ void ACharacterHUD::DrawHUD()
 	{
 		//Get the width and height of the screen
 		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-		//Calculate the center of the screen            
-		const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
 
-		DrawHUD_String(VerdanaFont, NoteString, ViewportCenter.X - (VerdanaFont->GetStringSize(*(NoteString)) * DefaultFontScale / 2), ViewportSize.Y * 0.3, DefaultFontScale);
+		DrawHUD_String(VerdanaFont, NoteString, ViewportSize.X * 0.2, ViewportSize.Y * 0.3, DefaultFontScale);
 	}
 
 	if (DrawSafeString)
