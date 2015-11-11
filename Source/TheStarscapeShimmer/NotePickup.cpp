@@ -22,6 +22,9 @@ void ANotePickup::Read()
 	APlayerController* c = GetWorld()->GetFirstPlayerController();
 	if (c)
 	{
+		c->SetIgnoreLookInput(!c->IsLookInputIgnored());
+		c->SetIgnoreMoveInput(!c->IsMoveInputIgnored());
+
 		ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
 		if (h)
 		{
@@ -38,6 +41,9 @@ void ANotePickup::OnDrop_Implementation()
 	APlayerController* c = GetWorld()->GetFirstPlayerController();
 	if (c)
 	{
+		c->SetIgnoreLookInput(false);
+		c->SetIgnoreMoveInput(false);
+
 		ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
 		if (h)
 		{

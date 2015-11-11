@@ -47,15 +47,16 @@ bool ASafeInteract::EnterCombination()
 void ASafeInteract::Tick(float DeltaTime)
 {
 	APlayerController* c = GetWorld()->GetFirstPlayerController();
-	if (!c)
-		return;
+	if (!c) return;
 
 	ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
-	if (!h)
-		return;
+	if (!h) return;
 
 	if (EnteringCombination)
 	{
+		c->SetIgnoreLookInput(true);
+		c->SetIgnoreMoveInput(true);
+
 		h->DrawSafeString = true;
 		FString string = TestCombination;
 		
@@ -76,6 +77,9 @@ void ASafeInteract::Tick(float DeltaTime)
 
 			if (EnterCombination())
 			{
+				c->SetIgnoreLookInput(false);
+				c->SetIgnoreMoveInput(false);
+
 				EnteringCombination = false;
 				h->DrawSafeString = false;
 				h->SafeString = "";
@@ -95,6 +99,8 @@ void ASafeInteract::Tick(float DeltaTime)
 	{
 		h->DrawSafeString = false;
 		h->SafeString = "";
+		c->SetIgnoreLookInput(false);
+		c->SetIgnoreMoveInput(false);
 	}
 }
 
