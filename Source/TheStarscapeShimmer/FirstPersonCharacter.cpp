@@ -303,8 +303,10 @@ void AFirstPersonCharacter::Grip()
 
 	APickup* Pickup = Cast<APickup>(Interactable);
 
-	if (Pickup != NULL && Pickup->bIsActive)
+	if (Pickup != NULL && Pickup->bIsActive) {
 		this->HeldItem = Pickup;
+		HeldItem->OnPickUp();
+	}
 	
 	return;
 
