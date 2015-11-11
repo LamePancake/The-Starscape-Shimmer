@@ -23,8 +23,9 @@ ASafeInteract::ASafeInteract()
 //Overrides the interation method
 void ASafeInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
+	if (!bIsActive) return;
 	Super::OnInteraction_Implementation(Character);
-
+	
 	if (IsLocked)
 	{
 		CharacterReference = Character;
@@ -35,13 +36,11 @@ void ASafeInteract::OnInteraction_Implementation(AFirstPersonCharacter* Characte
 		else
 			Fade = -1.0;
 	}
-
-	if (!IsLocked)
+	else
 	{
 		UAudioComponent* SpeakerAudio2 = SafeUnlockSpeaker->GetAudioComponent();
 		SpeakerAudio2->Play();
 		UnlockSafe();
-		return;
 	}
 }
 
@@ -112,7 +111,7 @@ void ASafeInteract::Tick(float DeltaTime)
 
 	if (Fade != 0)
 	{
-		h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (50 * DeltaTime * Fade), 0.0f, 150.0f);
+		h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (200 * DeltaTime * Fade), 0.0f, 150.0f);
 
 		if (h->BlackBackgroundAlpha == 0.0f || h->BlackBackgroundAlpha == 150)
 			Fade = 0;

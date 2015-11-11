@@ -23,15 +23,14 @@ void APickup::SetLocation_Implementation(FVector loc, FRotator rot)
 	this->ObjectMesh->SetEnableGravity(false);
 	this->ObjectMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	this->SetActorLocation(loc);
-	this->SetActorRotation(FRotator(0.0f, 0.0f, 0.0f));
 	this->SetActorRotation(CurrentRotation);
 	this->AddActorWorldRotation(rot);
-	//this->SetActorRotation(rot);
 }
 
 void APickup::OnPickUp_Implementation()
 {
-	//Empty, built upon by children
+	if (!bIsActive) return;
+	// Empty, built upon by children
 }
 
 void APickup::OnDrop_Implementation()

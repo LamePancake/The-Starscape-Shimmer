@@ -3,6 +3,7 @@
 #include "TheStarscapeShimmer.h"
 #include "FilmReelPickup.h"
 
-
-
-
+AFilmReelPickup::~AFilmReelPickup() {
+	Film->Pause();
+	Film->Rewind();
+}

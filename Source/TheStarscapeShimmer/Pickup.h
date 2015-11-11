@@ -23,11 +23,11 @@ public:
 
 	void RotateObject(FRotator rot);
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Pickup)
 	void OnDrop();
 
 	// Function to call when the pick up is collected
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Pickup)
 	void OnPickUp();
 
 	// The Current rotation of the object

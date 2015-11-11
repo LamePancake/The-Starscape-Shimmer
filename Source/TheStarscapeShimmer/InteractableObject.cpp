@@ -43,6 +43,7 @@ void AInteractableObject::Tick( float DeltaTime )
 //Overridable method to do something when the player interacts with it.
 void AInteractableObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
+	if (!bIsActive) return;
 	// Other classes build upon this function
 	// No function
 }
@@ -50,11 +51,12 @@ void AInteractableObject::OnInteraction_Implementation(AFirstPersonCharacter* Ch
 //Overridable method to do something when the player interacts with it.
 void AInteractableObject::OnAltInteraction_Implementation(AFirstPersonCharacter* Character)
 {
+	if (!bIsActive) return;
 	// Other classes build upon this function
 	// No function
 }
 
-// Turns on custom rendering to render th glow
+// Turns on custom rendering to render the glow
 void AInteractableObject::OnLookAt()
 {
 	if (!bIsActive) return;

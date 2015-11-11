@@ -253,6 +253,7 @@ void AFirstPersonCharacter::Tick(float deltaTime)
 		Direction.Normalize();
 		FVector ItemLoc = CamLoc + (Direction * MaxUseDistance);
 
+		//HeldItem->SetActorLocationAndRotation(ItemLoc, CamRot.Quaternion(), false, nullptr, ETeleportType::TeleportPhysics);
 		HeldItem->SetLocation(ItemLoc, CamRot);
 	}
 
@@ -298,12 +299,14 @@ void AFirstPersonCharacter::Grip()
 		return;
 	}
 
-	AInteractableObject* interactable = Trace();
+	AInteractableObject* Interactable = Trace();
 
-	APickup* pickup = Cast<APickup>(interactable);
+	APickup* Pickup = Cast<APickup>(Interactable);
 
-	if (pickup != NULL)
-		this->HeldItem = pickup;
+	if (Pickup != NULL && Pickup->bIsActive) {
+		this->HeldItem = Pickup;
+		HeldItem->OnPickUp();
+	}
 	
 	return;
 
@@ -338,7 +341,7 @@ AInteractableObject* AFirstPersonCharacter::Trace()
 	if (Controller == NULL)
 		return NULL;
 
-	// This retrieves are camera point of view to find the start and direction we will trace. 
+	// This retrieves our camera point of view to find the start and direction we will trace. 
 	Controller->GetPlayerViewPoint(CamLoc, CamRot);
 	const FVector TraceStart = CamLoc;
 	const FVector Direction = CamRot.Vector();
