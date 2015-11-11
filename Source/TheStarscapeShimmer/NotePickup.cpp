@@ -23,9 +23,6 @@ void ANotePickup::Read()
 	APlayerController* c = GetWorld()->GetFirstPlayerController();
 	if (c)
 	{
-		c->SetIgnoreLookInput(!c->IsLookInputIgnored());
-		c->SetIgnoreMoveInput(!c->IsMoveInputIgnored());
-
 		ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
 		if (h)
 		{
@@ -47,9 +44,6 @@ void ANotePickup::OnDrop_Implementation()
 	APlayerController* c = GetWorld()->GetFirstPlayerController();
 	if (c)
 	{
-		c->SetIgnoreLookInput(false);
-		c->SetIgnoreMoveInput(false);
-
 		ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
 		if (h)
 		{
@@ -70,7 +64,7 @@ void ANotePickup::Tick(float DeltaTime)
 			ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
 			if (h)
 			{
-				h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (50 * DeltaTime * Fade), 0.0f, 150.0f);
+				h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (200 * DeltaTime * Fade), 0.0f, 150.0f);
 
 				if (h->BlackBackgroundAlpha == 0.0f || h->BlackBackgroundAlpha == 150)
 					Fade = 0;
