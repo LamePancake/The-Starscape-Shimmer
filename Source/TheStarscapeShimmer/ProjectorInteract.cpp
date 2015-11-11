@@ -96,6 +96,7 @@ void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)
 		UStaticMeshComponent* Mesh = Comps[0];
 		Mesh->SetMaterial(0, Reel->FilmMaterial);
 		Reel->Film->Rewind();
+		Reel->Film->Play();
 	}
 
 	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();

@@ -111,7 +111,7 @@ void ASafeInteract::Tick(float DeltaTime)
 
 	if (Fade != 0)
 	{
-		h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (50 * DeltaTime * Fade), 0.0f, 150.0f);
+		h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (200 * DeltaTime * Fade), 0.0f, 150.0f);
 
 		if (h->BlackBackgroundAlpha == 0.0f || h->BlackBackgroundAlpha == 150)
 			Fade = 0;
