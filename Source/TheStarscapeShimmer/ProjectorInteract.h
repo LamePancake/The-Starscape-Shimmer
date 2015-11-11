@@ -41,6 +41,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Projector)
 	void Power();
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Projector)
+	void FastForward();
+
 	void RunFilm(AFilmReelPickup*);
 
 	void StopFilm();
