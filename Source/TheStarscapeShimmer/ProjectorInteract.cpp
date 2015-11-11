@@ -109,3 +109,9 @@ void AProjectorInteract::Power_Implementation()
 {
 	HasPower = !HasPower;
 }
+
+void AProjectorInteract::FastForward_Implementation()
+{
+	if(HasPower)
+		CurrentFilmReel->Film->SetRate(2);
+}
