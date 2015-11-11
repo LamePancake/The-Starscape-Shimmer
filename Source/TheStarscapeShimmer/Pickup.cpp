@@ -19,6 +19,7 @@ void APickup::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 
 void APickup::SetLocation_Implementation(FVector loc, FRotator rot)
 {
+	this->ObjectMesh->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	this->ObjectMesh->SetEnableGravity(false);
 	this->SetActorLocation(loc);
 	this->SetActorRotation(CurrentRotation);
@@ -33,6 +34,7 @@ void APickup::OnPickUp_Implementation()
 
 void APickup::OnDrop_Implementation()
 {
+	this->ObjectMesh->SetCollisionEnabled(ECollisionEnabled::Type::QueryAndPhysics);
 	this->ObjectMesh->SetEnableGravity(true);
 	bIsActive = true;
 	CurrentRotation = FRotator(0.0f, 0.0f, 0.0f);
