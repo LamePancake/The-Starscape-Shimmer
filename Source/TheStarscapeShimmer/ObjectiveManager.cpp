@@ -15,6 +15,13 @@ AObjectiveManager::AObjectiveManager()
 void AObjectiveManager::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// TODO: Take this out once we finish the game
+	if (Objectives.Num() == 0) {
+		UE_LOG(LogTemp, Warning, TEXT("ObjectiveManager.BeginPlay: No objectives!"));
+		return;
+	}
+
 	Objectives[0]->OnActivate();
 }
 

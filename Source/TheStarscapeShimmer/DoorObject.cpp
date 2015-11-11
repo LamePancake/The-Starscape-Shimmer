@@ -40,10 +40,3 @@ void ADoorObject::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 		SpeakerAudio->Play();
 	}
 }
-
-// Checks the door with the key to see if the key can open the door
-//void ADoorObject::UnlockDoor_Implementation()
-//{
-	//Unlock door here
-	//Destroy();
-//}

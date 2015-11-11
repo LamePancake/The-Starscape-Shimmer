@@ -22,20 +22,19 @@ ASafeInteract::ASafeInteract()
 //Overrides the interation method
 void ASafeInteract::OnInteraction_Implementation(AFirstPersonCharacter* Character)
 {
+	if (!bIsActive) return;
 	Super::OnInteraction_Implementation(Character);
-
+	
 	if (IsLocked)
 	{
 		CharacterReference = Character;
 		EnteringCombination = !EnteringCombination;
 	}
-
-	if (!IsLocked)
+	else
 	{
 		UAudioComponent* SpeakerAudio2 = SafeUnlockSpeaker->GetAudioComponent();
 		SpeakerAudio2->Play();
 		UnlockSafe();
-		return;
 	}
 }
 

@@ -10,7 +10,7 @@ AKeyPickup::AKeyPickup()
 	WhichDoor = -1.0f;
 }
 
-//Handles the pick up if it is a key
+// Handles the pick up if it is a key
 void AKeyPickup::OnPickUp_Implementation()
 {
 	Super::OnPickUp_Implementation();
