@@ -31,6 +31,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
 	UTexture2D* reticle;
 	
+	// Background for when the player reads a note or enters the safe code
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
+	UTexture2D* BlackBackground;
+
 	// Just incase we dont want to draw the hud
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawTheHUD;
@@ -42,6 +46,10 @@ public:
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawNoteString;
+
+	// Representns the alpha channel of the black background.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	float BlackBackgroundAlpha;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
 	FString NoteString;
@@ -59,6 +67,9 @@ public:
 	void DrawHUD_Reticle();
 
 	void DrawHUD_String(UFont* font, FString string, const float& X, const float& Y, const float& TheScale);
+
+	// Draws an image to the screen
+	void DrawHUD_Image(UTexture2D* tex, float alpha, float x, float y, float width, float height);
 
 
 	//Draws the texture on screen
@@ -81,6 +92,30 @@ public:
 			tex->GetSurfaceWidth(), //texture width from start
 			tex->GetSurfaceHeight(), //texture height from start
 			BLEND_Translucent
+			);
+	}
+
+	//Draws the texture on screen
+	FORCEINLINE void DrawImage(UTexture2D* tex, float x, float y, const FColor& Color, float width, float height)
+	{
+		if (!Canvas)
+			return;
+		if (!tex)
+			return;
+
+		Canvas->SetDrawColor(Color);
+
+		//Draw
+		Canvas->K2_DrawTexture(
+			tex,
+			FVector2D(x, y),
+			FVector2D(width, height),
+			FVector2D(0, 0),
+			FVector2D(1, 1),
+			Color,
+			BLEND_Translucent,
+			0,
+			FVector2D(0, 0)
 			);
 	}
 

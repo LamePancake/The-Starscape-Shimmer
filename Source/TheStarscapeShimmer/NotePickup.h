@@ -14,11 +14,19 @@ class THESTARSCAPESHIMMER_API ANotePickup : public APickup
 	GENERATED_BODY()
 	
 public:
+	ANotePickup();
+
 	void Read();
 
-	// The String the note holds
+	// The index into the note array for the note
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
-	FString Note;
+	int32 NoteIndex;
+
+	float Fade;
 
 	void OnDrop_Implementation();
+
+	static const FString Notes[];
+
+	void Tick(float DeltaTime);
 };

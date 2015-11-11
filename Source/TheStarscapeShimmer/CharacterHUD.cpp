@@ -10,6 +10,7 @@ ACharacterHUD::ACharacterHUD()
 	DrawReticle = true;
 	DrawNoteString = false;
 	DrawSafeString = false;
+	BlackBackgroundAlpha = 0.0f;
 	SafeString = "";
 
 	DefaultFontScale = 1.5f;
@@ -33,6 +34,11 @@ void ACharacterHUD::DrawHUD_String(UFont* font, FString string, const float& X, 
 	DrawText(font, string, X, Y, FColor(255, 255, 255, 255), TheScale);
 }
 
+void ACharacterHUD::DrawHUD_Image(UTexture2D* tex, float alpha, float x, float y, float width, float height)
+{
+	DrawImage(tex, x, y, FColor(255, 255, 255, alpha), width, height);
+}
+
 void ACharacterHUD::DrawHUD()
 {
 	//Draw HUD?
@@ -48,26 +54,37 @@ void ACharacterHUD::DrawHUD()
 	if (DrawReticle)
 		DrawHUD_Reticle();
 
-	if (DrawNoteString)
+	if (BlackBackgroundAlpha != 0)
 	{
 		//Get the width and height of the screen
 		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-		//Calculate the center of the screen            
-		const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
+		DrawHUD_Image(BlackBackground, BlackBackgroundAlpha, 0, 0, ViewportSize.X, ViewportSize.Y);
 
-		DrawHUD_String(VerdanaFont, NoteString, ViewportCenter.X - (VerdanaFont->GetStringSize(*(NoteString)) * DefaultFontScale / 2), ViewportSize.Y * 0.3, DefaultFontScale);
+		if (BlackBackgroundAlpha == 150.0f)
+		{
+			if (DrawNoteString)
+			{
+				//Get the width and height of the screen
+				const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+
+				DrawHUD_String(VerdanaFont, NoteString, ViewportSize.X * 0.2, ViewportSize.Y * 0.3, DefaultFontScale);
+			}
+
+			if (DrawSafeString)
+			{
+				//Get the width and height of the screen
+				const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+				//Calculate the center of the screen            
+				const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
+
+				DrawHUD_String(VerdanaFont, "Enter the Combination:", ViewportCenter.X - (VerdanaFont->GetStringSize(TEXT("Enter the Combination:")) * 2.5 / 2), ViewportSize.Y * 0.35, 2.5f);
+				DrawHUD_String(VerdanaFont, SafeString, ViewportCenter.X - (VerdanaFont->GetStringSize(*(SafeString)) * 2 / 2), ViewportSize.Y * 0.6, 2.0f);
+			}
+		}
 	}
 
-	if (DrawSafeString)
-	{
-		//Get the width and height of the screen
-		const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
-		//Calculate the center of the screen            
-		const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
 
-		DrawHUD_String(VerdanaFont, "Enter the Combination:", ViewportCenter.X - (VerdanaFont->GetStringSize(TEXT("Enter the Combination:")) * 2.5 / 2), ViewportSize.Y * 0.35, 2.5f);
-		DrawHUD_String(VerdanaFont, SafeString, ViewportCenter.X - (VerdanaFont->GetStringSize(*(SafeString)) * 2 / 2), ViewportSize.Y * 0.6, 2.0f);
-	}
+	
 
 
 	//Put other hud related things here.

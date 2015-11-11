@@ -54,4 +54,6 @@ public:
 	void Tick(float DeltaTime);
 
 	bool CheckInput();
+
+	float Fade;
 };
