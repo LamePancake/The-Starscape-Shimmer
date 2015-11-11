@@ -29,4 +29,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = Objective)
 		void IsComplete(bool& Result);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Objective)
+		bool ShouldShimmer;
 };
