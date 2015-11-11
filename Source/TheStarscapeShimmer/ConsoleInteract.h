@@ -27,12 +27,6 @@ public:
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
-	/*UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Console)
-		void CurrentFilm(FString reelName);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Console)
-		FString filmName;*/
-
 	UPROPERTY() UMaterialParameterCollection* ScreenMatParams;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Screen)
