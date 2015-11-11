@@ -5,6 +5,7 @@
 
 void AFilmReelPickup::BeginDestroy() {
 	Super::BeginDestroy();
+	if (!Film) return;
 	Film->Pause();
 	Film->Rewind();
 }
