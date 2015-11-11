@@ -8,6 +8,7 @@
 ANotePickup::ANotePickup()
 {
 	NoteIndex = 0;
+	Fade = 0.0f;
 }
 
 const FString ANotePickup::Notes[] =
@@ -31,6 +32,11 @@ void ANotePickup::Read()
 			h->DrawNoteString = !h->DrawNoteString;
 			h->DrawSafeString = false;
 			h->NoteString = Notes[NoteIndex];
+
+			if (h->DrawNoteString)
+				Fade = 1.0;
+			else
+				Fade = -1.0;
 		}
 	}
 }
@@ -49,6 +55,26 @@ void ANotePickup::OnDrop_Implementation()
 		{
 			h->DrawNoteString = false;
 			h->NoteString = "";
+			Fade = -1.0;
+		}
+	}
+}
+
+void ANotePickup::Tick(float DeltaTime)
+{
+	if (Fade != 0)
+	{
+		APlayerController* c = GetWorld()->GetFirstPlayerController();
+		if (c)
+		{
+			ACharacterHUD* h = Cast<ACharacterHUD>(c->GetHUD());
+			if (h)
+			{
+				h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (50 * DeltaTime * Fade), 0.0f, 150.0f);
+
+				if (h->BlackBackgroundAlpha == 0.0f || h->BlackBackgroundAlpha == 150)
+					Fade = 0;
+			}
 		}
 	}
 }

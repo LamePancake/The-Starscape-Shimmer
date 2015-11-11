@@ -22,7 +22,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
 	int32 NoteIndex;
 
+	float Fade;
+
 	void OnDrop_Implementation();
 
 	static const FString Notes[];
+
+	void Tick(float DeltaTime);
 };

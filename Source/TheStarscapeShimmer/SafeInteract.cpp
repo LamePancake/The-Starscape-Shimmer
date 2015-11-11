@@ -17,6 +17,7 @@ ASafeInteract::ASafeInteract()
 	EnteringCombination = false;
 	TestCombination = "";
 	CombinationLength = 0;
+	Fade = 0;
 }
 
 //Overrides the interation method
@@ -28,6 +29,11 @@ void ASafeInteract::OnInteraction_Implementation(AFirstPersonCharacter* Characte
 	{
 		CharacterReference = Character;
 		EnteringCombination = !EnteringCombination;
+
+		if (EnteringCombination)
+			Fade = 1.0;
+		else
+			Fade = -1.0;
 	}
 
 	if (!IsLocked)
@@ -59,7 +65,7 @@ void ASafeInteract::Tick(float DeltaTime)
 
 		h->DrawSafeString = true;
 		FString string = TestCombination;
-		
+
 		if (CombinationLength < COMBINATION_LENGTH)
 		{
 			string += "_";
@@ -87,6 +93,7 @@ void ASafeInteract::Tick(float DeltaTime)
 				SpeakerAudio2->Play();
 				IsLocked = false;
 				UnlockSafe();
+				Fade = -1.0;
 			}
 			else
 			{
@@ -101,6 +108,14 @@ void ASafeInteract::Tick(float DeltaTime)
 		h->SafeString = "";
 		c->SetIgnoreLookInput(false);
 		c->SetIgnoreMoveInput(false);
+	}
+
+	if (Fade != 0)
+	{
+		h->BlackBackgroundAlpha = FMath::Clamp(h->BlackBackgroundAlpha + (50 * DeltaTime * Fade), 0.0f, 150.0f);
+
+		if (h->BlackBackgroundAlpha == 0.0f || h->BlackBackgroundAlpha == 150)
+			Fade = 0;
 	}
 }
 
