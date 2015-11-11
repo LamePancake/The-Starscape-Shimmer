@@ -16,7 +16,7 @@ class THESTARSCAPESHIMMER_API AFilmReelPickup : public APickup
 	GENERATED_BODY()
 	
 public:
-	virtual ~AFilmReelPickup();
+	void BeginDestroy();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Materials)
 		UMaterial* FilmMaterial;
