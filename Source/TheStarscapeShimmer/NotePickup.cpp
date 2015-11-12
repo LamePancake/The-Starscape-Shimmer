@@ -15,7 +15,8 @@ const FString ANotePickup::Notes[] =
 {
 	"This is a test note\nThis is a test note.\nThis is a test note\nThis is a test note.\nThis is a test note\nThis is a test note.\nThis is a test note\nThis is a test note.\n",
 	"This is another Test\nThis is another test.",
-	"Dear group,\nIf you are reading this then my code got commited.\nI am sorry to tell you that this note is just a test note.\n\nWhy did you spend time reading this?\n\nSincerely,\nTrevor"
+	"Dear group,\nIf you are reading this then my code got commited.\nI am sorry to tell you that this note is just a test note.\n\nWhy did you spend time reading this?\n\nSincerely,\nTrevor",
+	"RUN!"
 };
 
 void ANotePickup::Read()
