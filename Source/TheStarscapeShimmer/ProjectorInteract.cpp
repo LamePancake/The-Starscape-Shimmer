@@ -113,9 +113,9 @@ void AProjectorInteract::Power_Implementation()
 void AProjectorInteract::FastForward_Implementation()
 {
 	if (HasPower) {
-		CurrentFilmReel->Film->SetRate(3);
+		CurrentFilmReel->Film->SetRate(2);
 		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
-		SpeakerAudio->SetPitchMultiplier(3);
+		SpeakerAudio->SetPitchMultiplier(2);
 	}
 }
 
@@ -130,8 +130,12 @@ void AProjectorInteract::PlayReverse_Implementation()
 void AProjectorInteract::PlayNormal_Implementation()
 {
 	if (HasPower) {
-		CurrentFilmReel->Film->SetRate(1);
 		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
+		CurrentFilmReel->Film->SetRate(1);
 		SpeakerAudio->SetPitchMultiplier(1);
+		//FTimespan currentTime = CurrentFilmReel->Film->GetTime();
+		//SpeakerAudio->Stop();
+		//UE_LOG(LogTemp, Warning, TEXT("timespan Seconds: %f"), currentTime.GetSeconds());
+		//SpeakerAudio->Play(currentTime.GetTotalSeconds());
 	}
 }
