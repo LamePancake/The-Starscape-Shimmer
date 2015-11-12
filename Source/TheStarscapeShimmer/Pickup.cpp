@@ -21,6 +21,7 @@ void APickup::SetLocation_Implementation(FVector loc, FRotator rot)
 {
 	this->ObjectMesh->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
 	this->ObjectMesh->SetEnableGravity(false);
+	this->ObjectMesh->SetAllPhysicsPosition(loc);
 	this->SetActorLocation(loc);
 	this->SetActorRotation(CurrentRotation);
 	this->AddActorWorldRotation(rot);
