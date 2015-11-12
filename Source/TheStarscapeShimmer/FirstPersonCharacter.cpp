@@ -140,7 +140,7 @@ void AFirstPersonCharacter::MoveForward(float Value)
 	APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
 	if (PlayerController)
 	{
-		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
+		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton) || (PlayerController->IsInputKeyDown(EKeys::RightMouseButton) && HeldItem == NULL))
 		{
 			if (Value != 0.0f)
 			{
@@ -158,7 +158,7 @@ void AFirstPersonCharacter::MoveRight(float Value)
 	APlayerController* PlayerController = Cast<APlayerController>(this->GetController());
 	if (PlayerController)
 	{
-		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton))
+		if (!PlayerController->IsInputKeyDown(EKeys::RightMouseButton) || (PlayerController->IsInputKeyDown(EKeys::RightMouseButton) && HeldItem == NULL))
 		{
 			if (Value != 0.0f)
 			{
