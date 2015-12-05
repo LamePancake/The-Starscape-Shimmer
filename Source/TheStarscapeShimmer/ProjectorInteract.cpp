@@ -4,6 +4,7 @@
 #include "FilmReelPickup.h"
 #include "ProjectorInteract.h"
 #include "ProjectorFilmReel.h"
+#include <stdlib.h> 
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
 
@@ -97,12 +98,36 @@ void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)
 		Mesh->SetMaterial(0, Reel->FilmMaterial);
 		Reel->Film->Rewind();
 		Reel->Film->Play();
+
+		puzzleZoneStart = rand() % (int)(puzzleStartMax) + puzzleStartMin;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Start: %f"), puzzleZoneStart));
+		puzzleZoneEnd = puzzleZoneStart + puzzleDurationInMinutes;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("End: %f"), puzzleZoneEnd));
 	}
 
 	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
 	SpeakerAudio->Stop();
 	SpeakerAudio->SetSound(Reel->FilmSound);
 	SpeakerAudio->Play();
+}
+
+void AProjectorInteract::Tick(float DeltaTime)
+{
+	if (CurrentFilmReel != NULL) {
+		double minutesElapsed = CurrentFilmReel->Film->GetTime().GetTotalMinutes();
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Elapsed: %f"), minutesElapsed));
+		if (minutesElapsed >= puzzleZoneStart && minutesElapsed <= puzzleZoneEnd) {
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("In Puzzle Zone")));
+			inPuzzleZone = true;
+			UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 0.0f);
+		}
+		else {
+			if (inPuzzleZone) {
+				UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 1.0f);
+				inPuzzleZone = false;
+			}
+		}
+	}
 }
 
 void AProjectorInteract::Power_Implementation()
@@ -113,18 +138,19 @@ void AProjectorInteract::Power_Implementation()
 void AProjectorInteract::FastForward_Implementation()
 {
 	if (HasPower) {
-		CurrentFilmReel->Film->SetRate(2);
+		CurrentFilmReel->Film->SetRate(16);
 		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
-		SpeakerAudio->SetPitchMultiplier(2);
+		//SpeakerAudio->Stop();
 	}
 }
 
 void AProjectorInteract::PlayReverse_Implementation()
 {
-	if(HasPower)
-		CurrentFilmReel->Film->SetRate(-2);
-	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
-	SpeakerAudio->Stop();
+	if (HasPower) {
+		CurrentFilmReel->Film->SetRate(-16);
+		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
+		SpeakerAudio->Stop();
+	}
 }
 
 void AProjectorInteract::PlayNormal_Implementation()
@@ -132,7 +158,8 @@ void AProjectorInteract::PlayNormal_Implementation()
 	if (HasPower) {
 		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
 		CurrentFilmReel->Film->SetRate(1);
-		SpeakerAudio->SetPitchMultiplier(1);
+		SpeakerAudio->Play(CurrentFilmReel->Film->GetTime().GetTotalSeconds());
+
 		//FTimespan currentTime = CurrentFilmReel->Film->GetTime();
 		//SpeakerAudio->Stop();
 		//UE_LOG(LogTemp, Warning, TEXT("timespan Seconds: %f"), currentTime.GetSeconds());
