@@ -115,18 +115,45 @@ void AProjectorInteract::Tick(float DeltaTime)
 {
 	if (CurrentFilmReel != NULL) {
 		double minutesElapsed = CurrentFilmReel->Film->GetTime().GetTotalMinutes();
-		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Elapsed: %f"), minutesElapsed));
-		if (minutesElapsed >= puzzleZoneStart && minutesElapsed <= puzzleZoneEnd) {
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("In Puzzle Zone")));
+		if (!puzzleLocked && minutesElapsed >= puzzleZoneStart && minutesElapsed <= puzzleZoneEnd) {
+			if (!inPuzzleZone)
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("In Puzzle Zone")));
+
 			inPuzzleZone = true;
-			UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 0.0f);
+			UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 1.0f);
 		}
-		else {
-			if (inPuzzleZone) {
-				UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 1.0f);
+		
+		if (puzzleLocked) {
+			if (minutesElapsed > puzzleZoneEnd) {
+				CurrentFilmReel->Film->Seek(FTimespan::FromMinutes(puzzleZoneStart));
+			}
+		} else if (inPuzzleZone) {
+			if (minutesElapsed > puzzleZoneEnd) {
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Out of Puzzle Zone")));
+				UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 0.0f);
 				inPuzzleZone = false;
 			}
 		}
+	}
+}
+
+void AProjectorInteract::LockPuzzleZone() 
+{
+	if (CurrentFilmReel->Film != NULL)
+	{
+		puzzleLocked = true;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Puzzle Zone Locked")));
+		UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZoneLocked")), 1.0f);
+	}
+}
+
+void AProjectorInteract::UnlockPuzzleZone()
+{
+	if (CurrentFilmReel->Film != NULL)
+	{
+		puzzleLocked = false;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Puzzle Zone Unlocked")));
+		UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZoneLocked")), 0.0f);
 	}
 }
 

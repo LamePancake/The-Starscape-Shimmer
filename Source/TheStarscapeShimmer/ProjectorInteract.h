@@ -74,6 +74,10 @@ public:
 
 	void StopFilm();
 
+	void LockPuzzleZone();
+
+	void UnlockPuzzleZone();
+
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
 
