@@ -81,6 +81,10 @@ void AProjectorInteract::StopFilm()
 		UStaticMeshComponent* Mesh = Comps[0];
 		Mesh->SetMaterial(0, TheatreScreen->ScreenOffMaterial);
 		CurrentFilmReel->Film->Pause();
+		puzzleZoneStart = 0;
+		puzzleZoneEnd = 0;
+		inPuzzleZone = false;
+		puzzleLocked = false;
 	}
 
 	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
