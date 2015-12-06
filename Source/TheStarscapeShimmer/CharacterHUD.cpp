@@ -16,6 +16,8 @@ ACharacterHUD::ACharacterHUD()
 	FadeInAtStart = false;
 	FadeAtPortal = false;
 	FadeInAtEnd = false;
+	PortalTeleport = false;
+	FadeAfterPortal = false;
 
 	DefaultFontScale = 1.5f;
 }
@@ -65,6 +67,30 @@ void ACharacterHUD::DrawHUD()
 		if (BlackBackgroundAlpha <= 0)
 		{
 			FadeInAtStart = false;
+			BlackBackgroundAlpha = 0;
+		}
+	}
+
+	if (FadeAtPortal)
+	{
+		BlackBackgroundAlpha += 3;
+
+		if (BlackBackgroundAlpha >= 255)
+		{
+			BlackBackgroundAlpha = 255;
+			PortalTeleport = true;
+			FadeAtPortal = false;
+			FadeAfterPortal = true;
+		}
+	}
+
+	if (FadeAfterPortal)
+	{
+		BlackBackgroundAlpha -= 3;
+
+		if (BlackBackgroundAlpha <= 0)
+		{
+			FadeAfterPortal = false;
 			BlackBackgroundAlpha = 0;
 		}
 	}

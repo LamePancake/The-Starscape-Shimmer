@@ -51,6 +51,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool FadeAtPortal;
 
+	// Tells the blueprint when to teleport
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool PortalTeleport;
+
+	// Fade when in portal after teleport
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool FadeAfterPortal;
+
 	// Fade at end
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool FadeInAtEnd;
