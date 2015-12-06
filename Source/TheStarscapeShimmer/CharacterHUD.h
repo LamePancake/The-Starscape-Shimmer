@@ -43,6 +43,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawReticle;
 
+	// Fade in at the start
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool FadeInAtStart;
+
+	// Fade when in portal
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool FadeAtPortal;
+
+	// Fade at end
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool FadeInAtEnd;
+
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawNoteString;

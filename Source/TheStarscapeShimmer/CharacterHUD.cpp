@@ -10,8 +10,12 @@ ACharacterHUD::ACharacterHUD()
 	DrawReticle = true;
 	DrawNoteString = false;
 	DrawSafeString = false;
-	BlackBackgroundAlpha = 0.0f;
+	BlackBackgroundAlpha = 0;
 	SafeString = "";
+
+	FadeInAtStart = false;
+	FadeAtPortal = false;
+	FadeInAtEnd = false;
 
 	DefaultFontScale = 1.5f;
 }
@@ -53,6 +57,17 @@ void ACharacterHUD::DrawHUD()
 	// Draws the reticle.
 	if (DrawReticle)
 		DrawHUD_Reticle();
+
+	if (FadeInAtStart)
+	{
+		BlackBackgroundAlpha -= 3;
+
+		if (BlackBackgroundAlpha <= 0)
+		{
+			FadeInAtStart = false;
+			BlackBackgroundAlpha = 0;
+		}
+	}
 
 	if (BlackBackgroundAlpha != 0)
 	{
