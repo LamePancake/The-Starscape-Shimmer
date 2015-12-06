@@ -19,6 +19,8 @@ ACharacterHUD::ACharacterHUD()
 	PortalTeleport = false;
 	FadeAfterPortal = false;
 
+	DrawNoteImage = false;
+
 	DefaultFontScale = 1.5f;
 }
 
@@ -105,10 +107,18 @@ void ACharacterHUD::DrawHUD()
 		{
 			if (DrawNoteString)
 			{
-				//Get the width and height of the screen
-				const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+				if (DrawNoteImage)
+				{
+					const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+					DrawHUD_Image(NoteImage, 255, ViewportSize.X * 0.1f, ViewportSize.Y * 0.1f, ViewportSize.X * 0.8, ViewportSize.Y * 0.8);
+				}
+				else
+				{
+					//Get the width and height of the screen
+					const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 
-				DrawHUD_String(VerdanaFont, NoteString, ViewportSize.X * 0.2, ViewportSize.Y * 0.3, DefaultFontScale);
+					DrawHUD_String(VerdanaFont, NoteString, ViewportSize.X * 0.2, ViewportSize.Y * 0.3, DefaultFontScale);
+				}			
 			}
 
 			if (DrawSafeString)

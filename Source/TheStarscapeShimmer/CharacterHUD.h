@@ -35,6 +35,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
 	UTexture2D* BlackBackground;
 
+	// Background for when the player reads a note or enters the safe code
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
+	UTexture2D* NoteImage;
+
 	// Just incase we dont want to draw the hud
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawTheHUD;
@@ -66,6 +70,10 @@ public:
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawNoteString;
+
+	// True if we want to draw a string
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool DrawNoteImage;
 
 	// Representns the alpha channel of the black background.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
