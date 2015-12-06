@@ -18,14 +18,14 @@ void ASliderInteract::OnInteraction_Implementation(AFirstPersonCharacter* Charac
 	if (!Initialized)
 	{
 		PositionA = this->GetActorLocation();
-		PositionB = FVector(PositionA.X + 10, PositionA.Y, PositionA.Z + 14);
+		PositionB = FVector(PositionA.X + XOffset, PositionA.Y, PositionA.Z + ZOffset);
 		Translation = FVector(PositionB.X - PositionA.X, PositionB.Y - PositionA.Y, PositionB.Z - PositionA.Z);
 		Initialized = true;
 	}
 
-	Value += 0.1f;
+	Value += Delta;
 
-	if (Value > 1.0f) Value = 1.0f;
+	if (Value > Max) Value = Max;
 
 	this->SetActorLocation(FVector(PositionA.X + Translation.X * Value, PositionA.Y + Translation.Y * Value, PositionA.Z + Translation.Z * Value));
 }
@@ -36,14 +36,14 @@ void ASliderInteract::OnAltInteraction_Implementation(AFirstPersonCharacter* Cha
 	if (!Initialized)
 	{
 		PositionA = this->GetActorLocation();
-		PositionB = FVector(PositionA.X + 10, PositionA.Y, PositionA.Z + 14);
+		PositionB = FVector(PositionA.X + XOffset, PositionA.Y, PositionA.Z + ZOffset);
 		Translation = FVector(PositionB.X - PositionA.X, PositionB.Y - PositionA.Y, PositionB.Z - PositionA.Z);
 		Initialized = true;
 	}
 
-	Value -= 0.1f;
+	Value -= Delta;
 
-	if (Value < 0.0f) Value = 0.0f;
+	if (Value < Min) Value = Min;
 
 	this->SetActorLocation(FVector(PositionA.X + Translation.X * Value, PositionA.Y + Translation.Y * Value, PositionA.Z + Translation.Z * Value));
 }

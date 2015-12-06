@@ -44,4 +44,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Console)
 		ASliderInteract* SliderD;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Console)
+		ASliderInteract* SliderFilmSpeed;
 };
