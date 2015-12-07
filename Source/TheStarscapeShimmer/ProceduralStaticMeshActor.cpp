@@ -173,27 +173,16 @@ static void ProceduralFunction(ProceduralWorkerThreads* ThreadPool, int Index) {
 		FVector Bounds = *ThreadPool->GetBounds();				// Make a copy in case we're supposed to stop later
 		double ElapsedTime = ThreadPool->GetElapsedTime();
 
+		Vec2 Pos;
+		Vec2 ShaderBounds = { Bounds.Y, Bounds.Z };
 		for (uint32_t i = 0; i < Size && !ThreadPool->ShouldStop; i++) {
 			uint32_t Y = (i + Offset) / (uint32_t)Bounds.Y;
 			uint32_t Z = (i + Offset) % (uint32_t)Bounds.Y;
 
-			double ShiftedY = (Y / Bounds.Y * 2) - 1.0;
-			double ShiftedZ = (Z / Bounds.Z * 2) - 1.0;
+			Pos.X = Y;
+			Pos.Y = Z;
 
-			// Use the lookup tables, which are hopefully faster than computing the values
-			float mov0 = ShiftedY + ShiftedZ + CosLookup(SinLookup(ElapsedTime) * 2.0) * 100.f + SinLookup(ShiftedY / 100.f) * 1000.f;
-			float mov1 = ShiftedY / 0.9 + ElapsedTime;
-			float mov2 = ShiftedY / 0.2;
-			float c1 = fabs(SinLookup(mov1 + ElapsedTime) / 2.f + mov2 / 2.f - mov1 - mov2 + ElapsedTime);
-			float c2 = fabs(SinLookup(c1 + SinLookup(mov0 / 1000.f + ElapsedTime) + SinLookup(ShiftedZ / 40.f + ElapsedTime) + SinLookup((ShiftedY + ShiftedZ) / 100.f) * 3.f));
-			float c3 = fabs(SinLookup(c2 + CosLookup(mov1 + mov2 + c2) + CosLookup(mov2) + SinLookup(ShiftedY / 1000.f)));
-
-			// TODO: Need some check here to make sure we don't write to the buffer if the thread stopped
-			// *Theoretically*, nothing should be freed before we finish the loop, but I don't really trust that. At all.
-			Chunk[i * 4] = (uint8)(c1 * 255);
-			Chunk[(i * 4) + 1] = (uint8)(c2 * 255);
-			Chunk[(i * 4) + 2] = (uint8)(c3 * 255);
-			Chunk[(i * 4) + 3] = 255;
+			CirclePlasma(Chunk + i * 4, &Pos, &ShaderBounds, ElapsedTime);
 		}
 
 		ThreadPool->Finished[Index] = true;
@@ -287,9 +276,13 @@ void AProceduralStaticMeshActor::PostInitializeComponents() {
 
 	TextureBounds = FVector(0, 64, 64);
 
+	//FTransform CurrentTransform = ActorToWorld();
+
 	FVector Origin(0, 0, 0);
 	GetActorBounds(false, Origin, this->Bounds);
-	Bounds = TextureBounds;
+	Bounds = TextureBounds;///= 3;
+
+	// If the actor is rotated
 
 	// Convert the static material in our mesh into a dynamic one, and store it (please note that if you have more than one material that you wish to mark dynamic, do so here).
 	DynamicMat = GetStaticMeshComponent()->CreateAndSetMaterialInstanceDynamic(0);

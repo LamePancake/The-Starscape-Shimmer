@@ -16,7 +16,7 @@ class THESTARSCAPESHIMMER_API ANotePickup : public APickup
 public:
 	ANotePickup();
 
-	void Read();
+	virtual void Read();
 
 	// The index into the note array for the note
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
