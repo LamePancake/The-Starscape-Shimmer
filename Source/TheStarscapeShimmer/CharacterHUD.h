@@ -35,6 +35,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
 	UTexture2D* BlackBackground;
 
+	// Background for when the player reads a note or enters the safe code
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
+	UTexture2D* NoteImage;
+
 	// Just incase we dont want to draw the hud
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawTheHUD;
@@ -43,9 +47,33 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawReticle;
 
+	// Fade in at the start
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool FadeInAtStart;
+
+	// Fade when in portal
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool FadeAtPortal;
+
+	// Tells the blueprint when to teleport
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool PortalTeleport;
+
+	// Fade when in portal after teleport
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool FadeAfterPortal;
+
+	// Fade at end
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool FadeInAtEnd;
+
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawNoteString;
+
+	// True if we want to draw a string
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool DrawNoteImage;
 
 	// Representns the alpha channel of the black background.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)

@@ -4,6 +4,7 @@
 #include "FilmReelPickup.h"
 #include "ProjectorInteract.h"
 #include "ProjectorFilmReel.h"
+#include <stdlib.h> 
 
 #define print(text) if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 1.5, FColor::White,text)
 
@@ -80,6 +81,10 @@ void AProjectorInteract::StopFilm()
 		UStaticMeshComponent* Mesh = Comps[0];
 		Mesh->SetMaterial(0, TheatreScreen->ScreenOffMaterial);
 		CurrentFilmReel->Film->Pause();
+		puzzleZoneStart = 0;
+		puzzleZoneEnd = 0;
+		inPuzzleZone = false;
+		puzzleLocked = false;
 	}
 
 	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
@@ -97,12 +102,63 @@ void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)
 		Mesh->SetMaterial(0, Reel->FilmMaterial);
 		Reel->Film->Rewind();
 		Reel->Film->Play();
+
+		puzzleZoneStart = rand() % (int)(puzzleStartMax) + puzzleStartMin;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Start: %f"), puzzleZoneStart));
+		puzzleZoneEnd = puzzleZoneStart + puzzleDurationInMinutes;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("End: %f"), puzzleZoneEnd));
 	}
 
 	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
 	SpeakerAudio->Stop();
 	SpeakerAudio->SetSound(Reel->FilmSound);
 	SpeakerAudio->Play();
+}
+
+void AProjectorInteract::Tick(float DeltaTime)
+{
+	if (CurrentFilmReel != NULL) {
+		double minutesElapsed = CurrentFilmReel->Film->GetTime().GetTotalMinutes();
+		if (!puzzleLocked && minutesElapsed >= puzzleZoneStart && minutesElapsed <= puzzleZoneEnd) {
+			if (!inPuzzleZone)
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("In Puzzle Zone")));
+
+			inPuzzleZone = true;
+			UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 1.0f);
+		}
+		
+		if (puzzleLocked) {
+			if (minutesElapsed > puzzleZoneEnd) {
+				CurrentFilmReel->Film->Seek(FTimespan::FromMinutes(puzzleZoneStart));
+			}
+		} else if (inPuzzleZone) {
+			if (minutesElapsed > puzzleZoneEnd) {
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Out of Puzzle Zone")));
+				UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 0.0f);
+				inPuzzleZone = false;
+			}
+		}
+	}
+}
+
+void AProjectorInteract::LockPuzzleZone() 
+{
+	if (CurrentFilmReel->Film != NULL)
+	{
+		puzzleLocked = true;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Puzzle Zone Locked")));
+		UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZoneLocked")), 1.0f);
+	}
+}
+
+void AProjectorInteract::UnlockPuzzleZone()
+{
+	if (CurrentFilmReel->Film != NULL)
+	{
+		puzzleLocked = false;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Puzzle Zone Unlocked")));
+		UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZoneLocked")), 0.0f);
+	}
 }
 
 void AProjectorInteract::Power_Implementation()
@@ -113,18 +169,19 @@ void AProjectorInteract::Power_Implementation()
 void AProjectorInteract::FastForward_Implementation()
 {
 	if (HasPower) {
-		CurrentFilmReel->Film->SetRate(2);
+		CurrentFilmReel->Film->SetRate(16);
 		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
-		SpeakerAudio->SetPitchMultiplier(2);
+		//SpeakerAudio->Stop();
 	}
 }
 
 void AProjectorInteract::PlayReverse_Implementation()
 {
-	if(HasPower)
-		CurrentFilmReel->Film->SetRate(-2);
-	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
-	SpeakerAudio->Stop();
+	if (HasPower) {
+		CurrentFilmReel->Film->SetRate(-16);
+		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
+		SpeakerAudio->Stop();
+	}
 }
 
 void AProjectorInteract::PlayNormal_Implementation()
@@ -132,7 +189,8 @@ void AProjectorInteract::PlayNormal_Implementation()
 	if (HasPower) {
 		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
 		CurrentFilmReel->Film->SetRate(1);
-		SpeakerAudio->SetPitchMultiplier(1);
+		SpeakerAudio->Play(CurrentFilmReel->Film->GetTime().GetTotalSeconds());
+
 		//FTimespan currentTime = CurrentFilmReel->Film->GetTime();
 		//SpeakerAudio->Stop();
 		//UE_LOG(LogTemp, Warning, TEXT("timespan Seconds: %f"), currentTime.GetSeconds());
