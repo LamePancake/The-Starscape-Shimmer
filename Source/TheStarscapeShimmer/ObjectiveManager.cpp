@@ -25,6 +25,14 @@ void AObjectiveManager::BeginPlay()
 	Objectives[0]->OnActivate();
 }
 
+int32 AObjectiveManager::CurrentObjectiveNum() const {
+	return CurrentObjectiveIdx;
+}
+
+int32 AObjectiveManager::NumObjectives() const {
+	return Objectives.Num();
+}
+
 // Called every frame
 void AObjectiveManager::Tick( float DeltaTime )
 {

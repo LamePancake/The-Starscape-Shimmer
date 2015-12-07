@@ -16,7 +16,11 @@ class THESTARSCAPESHIMMER_API ANotePickup : public APickup
 public:
 	ANotePickup();
 
-	void Read();
+	virtual void Read();
+
+	// Background for when the player reads a note or enters the safe code
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
+	UTexture2D* NoteImage;
 
 	// The index into the note array for the note
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)

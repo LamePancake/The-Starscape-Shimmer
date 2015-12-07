@@ -3,6 +3,7 @@
 #pragma once
 
 #include <cstdint>
+#include "ProceduralFunc.h"
 #include "Engine/StaticMeshActor.h"
 #include "ProceduralStaticMeshActor.generated.h"
 

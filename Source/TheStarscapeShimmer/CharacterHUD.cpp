@@ -10,8 +10,16 @@ ACharacterHUD::ACharacterHUD()
 	DrawReticle = true;
 	DrawNoteString = false;
 	DrawSafeString = false;
-	BlackBackgroundAlpha = 0.0f;
+	BlackBackgroundAlpha = 0;
 	SafeString = "";
+
+	FadeInAtStart = false;
+	FadeAtPortal = false;
+	FadeInAtEnd = false;
+	PortalTeleport = false;
+	FadeAfterPortal = false;
+
+	DrawNoteImage = false;
 
 	DefaultFontScale = 1.5f;
 }
@@ -54,6 +62,41 @@ void ACharacterHUD::DrawHUD()
 	if (DrawReticle)
 		DrawHUD_Reticle();
 
+	if (FadeInAtStart)
+	{
+		BlackBackgroundAlpha -= 3;
+
+		if (BlackBackgroundAlpha <= 0)
+		{
+			FadeInAtStart = false;
+			BlackBackgroundAlpha = 0;
+		}
+	}
+
+	if (FadeAtPortal)
+	{
+		BlackBackgroundAlpha += 3;
+
+		if (BlackBackgroundAlpha >= 255)
+		{
+			BlackBackgroundAlpha = 255;
+			PortalTeleport = true;
+			FadeAtPortal = false;
+			FadeAfterPortal = true;
+		}
+	}
+
+	if (FadeAfterPortal)
+	{
+		BlackBackgroundAlpha -= 3;
+
+		if (BlackBackgroundAlpha <= 0)
+		{
+			FadeAfterPortal = false;
+			BlackBackgroundAlpha = 0;
+		}
+	}
+
 	if (BlackBackgroundAlpha != 0)
 	{
 		//Get the width and height of the screen
@@ -64,10 +107,18 @@ void ACharacterHUD::DrawHUD()
 		{
 			if (DrawNoteString)
 			{
-				//Get the width and height of the screen
-				const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+				if (DrawNoteImage)
+				{
+					const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+					DrawHUD_Image(NoteImage, 255, ViewportSize.X * 0.1f, ViewportSize.Y * 0.1f, ViewportSize.X * 0.8, ViewportSize.Y * 0.8);
+				}
+				else
+				{
+					//Get the width and height of the screen
+					const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 
-				DrawHUD_String(VerdanaFont, NoteString, ViewportSize.X * 0.2, ViewportSize.Y * 0.3, DefaultFontScale);
+					DrawHUD_String(VerdanaFont, NoteString, ViewportSize.X * 0.2, ViewportSize.Y * 0.3, DefaultFontScale);
+				}			
 			}
 
 			if (DrawSafeString)
