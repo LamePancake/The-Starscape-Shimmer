@@ -6,6 +6,7 @@
 #include "Runtime/Engine/Classes/Materials/MaterialParameterCollectionInstance.h"
 #include "InteractableObject.h"
 #include "SliderInteract.h"
+#include "ProjectorInteract.h"
 #include "ConsoleInteract.generated.h"
 
 class THESTARSCAPESHIMMER_API AMovieScreenObject;
@@ -46,4 +47,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Console)
 		ASliderInteract* SliderFilmSpeed;
+
+	UPROPERTY(EditAnywhere, Category = Console)
+		AProjectorInteract* FilmProjector;
 };

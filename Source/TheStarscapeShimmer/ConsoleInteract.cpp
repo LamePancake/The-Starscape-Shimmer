@@ -34,6 +34,7 @@ void AConsoleInteract::Tick(float DeltaTime)
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderC")), SliderC->GetValue());
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderD")), SliderD->GetValue());
 
-
+	if (FilmProjector != NULL)
+		FilmProjector->ScalePlayRate(SliderFilmSpeed->GetValue());
 }
 

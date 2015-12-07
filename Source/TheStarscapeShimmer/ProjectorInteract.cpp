@@ -132,6 +132,9 @@ void AProjectorInteract::Tick(float DeltaTime)
 			if (minutesElapsed > puzzleZoneEnd) {
 				CurrentFilmReel->Film->Seek(FTimespan::FromMinutes(puzzleZoneStart));
 			}
+			else if (minutesElapsed < puzzleZoneStart) {
+				CurrentFilmReel->Film->Seek(FTimespan::FromMinutes(puzzleZoneEnd));
+			}
 		} else if (inPuzzleZone) {
 			if (minutesElapsed > puzzleZoneEnd) {
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Out of Puzzle Zone")));
@@ -170,12 +173,11 @@ void AProjectorInteract::Power_Implementation()
 void AProjectorInteract::ScalePlayRate(float scale) {
 	
 	int playRate = scale * maxPlayRate;
-
-	if (playRate == 0) playRate = 1;
+	if (playRate == 0) playRate = 1.0f;
 	
-	if (CurrentFilmReel->Film != NULL && playRate != currentPlayRate) {
+	if (CurrentFilmReel != NULL && CurrentFilmReel->Film != NULL && playRate != currentPlayRate) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Changed Rate %d"), playRate));
-
+		currentPlayRate = playRate;
 		CurrentFilmReel->Film->SetRate(playRate);
 
 		/*if (playRate == 1) { // Rate normal again so play audio again
