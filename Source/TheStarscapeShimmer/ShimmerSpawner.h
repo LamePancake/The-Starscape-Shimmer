@@ -4,6 +4,7 @@
 
 #include "GameFramework/Actor.h"
 #include "ObjectiveManager.h"
+#include "FirstPersonCharacter.h"
 #include "ShimmerSpawner.generated.h"
 
 /**
@@ -24,6 +25,12 @@ public:
 	
 	// Called every frame
 	virtual void Tick( float DeltaSeconds ) override;
+
+	UFUNCTION(BlueprintCallable, Category = Object)
+		void Enable();
+
+	UFUNCTION(BlueprintCallable, Category = Object)
+		void Disable();
 
 	// The final rate (number spawned per second) at which shimmers should be spawned
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
@@ -49,13 +56,31 @@ public:
 
 	// The index that will be considered as the "first" index in the objective manager. This must be <= ObjectiveManager.NumObjectives() - 1.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
-		int32 FirstIndex;
+		int32 StartObjective;
 
 	// The index that will be considered as the "final" index in the objective manager. This must be <= ObjectiveManager.NumObjectives() - 1
 	// If this is the same as FirstIndex, all final properties will be applied immediately.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
-		int32 LastIndex;
+		int32 FinalObjective;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
 		AObjectiveManager* ObjectiveManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
+		AEmitter* ShimmerTemplate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
+		USoundWave* ShimmerSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
+		AFirstPersonCharacter* Character;
+
+private:
+	TArray<AEmitter*>      ParticleInstances;
+	TArray<AAmbientSound*> SoundInstances;
+	TArray<double> TimeLeft; // Will also be used to determine whether this emitter is in use for spawning purposes
+	double TimeSinceLastSpawn;
+	uint8 NumSteps;
+
+	bool IsEnabled;
 };

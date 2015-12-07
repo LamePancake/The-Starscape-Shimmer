@@ -22,10 +22,7 @@ public:
 	virtual void Tick( float DeltaSeconds ) override;
 
 	UFUNCTION(BlueprintCallable, Category = ObjectiveInfo)
-		int32 NumRemainingObjectives() const;
-
-	UFUNCTION(BlueprintCallable, Category = ObjectiveInfo)
-		int32 NumCompletedObjectives() const;
+		int32 CurrentObjectiveNum() const;
 
 	UFUNCTION(BlueprintCallable, Category = ObjectiveInfo)
 		int32 NumObjectives() const;

@@ -25,11 +25,7 @@ void AObjectiveManager::BeginPlay()
 	Objectives[0]->OnActivate();
 }
 
-int32 AObjectiveManager::NumRemainingObjectives() const {
-	return Objectives.Num() - CurrentObjectiveIdx;
-}
-
-int32 AObjectiveManager::NumCompletedObjectives() const {
+int32 AObjectiveManager::CurrentObjectiveNum() const {
 	return CurrentObjectiveIdx;
 }
 
