@@ -110,9 +110,10 @@ void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)
 	}
 
 	UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
+	SpeakerAudio->bStopWhenOwnerDestroyed = false;
 	SpeakerAudio->Stop();
 	SpeakerAudio->SetSound(Reel->FilmSound);
-	SpeakerAudio->Play();
+	SpeakerAudio->Play(0.0f);
 }
 
 void AProjectorInteract::Tick(float DeltaTime)
@@ -166,12 +167,29 @@ void AProjectorInteract::Power_Implementation()
 	HasPower = !HasPower;
 }
 
+void AProjectorInteract::ScalePlayRate(float scale) {
+	
+	int playRate = scale * maxPlayRate;
+
+	if (playRate == 0) playRate = 1;
+	
+	if (CurrentFilmReel->Film != NULL && playRate != currentPlayRate) {
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Changed Rate %d"), playRate));
+
+		CurrentFilmReel->Film->SetRate(playRate);
+
+		/*if (playRate == 1) { // Rate normal again so play audio again
+			TheatreSpeaker->Play(CurrentFilmReel->Film->GetTime().GetTotalSeconds());
+		}*/
+	}
+}
+
 void AProjectorInteract::FastForward_Implementation()
 {
 	if (HasPower) {
 		CurrentFilmReel->Film->SetRate(16);
 		UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
-		//SpeakerAudio->Stop();
+		SpeakerAudio->Stop();
 	}
 }
 

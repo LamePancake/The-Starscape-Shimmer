@@ -33,5 +33,7 @@ void AConsoleInteract::Tick(float DeltaTime)
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderB")), SliderB->GetValue());
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderC")), SliderC->GetValue());
 	UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("SliderD")), SliderD->GetValue());
+
+
 }
 

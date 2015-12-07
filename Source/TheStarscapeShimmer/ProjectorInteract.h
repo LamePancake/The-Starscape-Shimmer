@@ -26,6 +26,8 @@ public:
 	double puzzleDurationInMinutes = 4.0;
 	double puzzleStartMin = 4;
 	double puzzleStartMax = 16;
+	int maxPlayRate = 16;
+	int currentPlayRate = 1;
 	bool inPuzzleZone = false;
 	bool puzzleLocked = false;
 
@@ -77,6 +79,8 @@ public:
 	void LockPuzzleZone();
 
 	void UnlockPuzzleZone();
+
+	void ScalePlayRate(float scale);
 
 	// Overrides the OnInteraction function, becauase blueprint native event
 	void OnInteraction_Implementation(AFirstPersonCharacter*);
