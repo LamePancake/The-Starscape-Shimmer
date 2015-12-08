@@ -64,7 +64,7 @@ void ACharacterHUD::DrawHUD()
 
 	if (FadeInAtStart)
 	{
-		BlackBackgroundAlpha -= 3;
+		BlackBackgroundAlpha -= 5;
 
 		if (BlackBackgroundAlpha <= 0)
 		{
@@ -75,7 +75,7 @@ void ACharacterHUD::DrawHUD()
 
 	if (FadeAtPortal)
 	{
-		BlackBackgroundAlpha += 3;
+		BlackBackgroundAlpha += 8;
 
 		if (BlackBackgroundAlpha >= 255)
 		{
@@ -88,7 +88,7 @@ void ACharacterHUD::DrawHUD()
 
 	if (FadeAfterPortal)
 	{
-		BlackBackgroundAlpha -= 3;
+		BlackBackgroundAlpha -= 8;
 
 		if (BlackBackgroundAlpha <= 0)
 		{
