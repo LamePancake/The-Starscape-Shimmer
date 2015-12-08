@@ -83,6 +83,9 @@ public:
 		USoundWave* ShimmerSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
+		FAttenuationSettings ShimmerAttenuation;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
 		AFirstPersonCharacter* Character;
 
 private:

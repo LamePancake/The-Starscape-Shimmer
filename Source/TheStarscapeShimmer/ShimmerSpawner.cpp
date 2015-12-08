@@ -23,9 +23,11 @@ void AShimmerSpawner::BeginPlay()
 	Super::BeginPlay();
 	MinPitchMultiplier = MinPitchMultiplier < MIN_PITCH ? MIN_PITCH : MinPitchMultiplier;
 	NumSteps = FinalObjective - StartObjective;
-	// Initialise the object pools
+	
+	// Set the actor template from which we'll generate our shimmers
 	FActorSpawnParameters Params;
 	Params.Template = ShimmerTemplate;
+
 	for (int i = 0; i < SHIMMER_POOL_SIZE; i++) {
 		AEmitter* Shimmer = GetWorld()->SpawnActor<AEmitter>(AEmitter::StaticClass(), Params);
 		AAmbientSound* Sound = GetWorld()->SpawnActor<AAmbientSound>(AAmbientSound::StaticClass());
@@ -34,7 +36,10 @@ void AShimmerSpawner::BeginPlay()
 		Shimmer->Deactivate();
 		Shimmer->GetParticleSystemComponent()->bAutoActivate = false;
 
-		Sound->GetAudioComponent()->SetSound(ShimmerSound);
+		UAudioComponent* AudioComp = Sound->GetAudioComponent();
+		AudioComp->SetSound(ShimmerSound);
+		AudioComp->bOverrideAttenuation = true;
+		AudioComp->AttenuationOverrides = ShimmerAttenuation;
 
 		ParticleInstances.Add(Shimmer);
 		SoundInstances.Add(Sound);
