@@ -29,6 +29,9 @@ public:
 	int maxPlayRate = 16;
 	int currentPlayRate = 1;
 	bool inPuzzleZone = false;
+
+	// Need this to be accessible in Blueprints
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Puzzle)
 	bool puzzleLocked = false;
 
 	void Tick(float DeltaTime);

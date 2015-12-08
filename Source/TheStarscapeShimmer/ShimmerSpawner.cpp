@@ -2,6 +2,7 @@
 
 #include "TheStarscapeShimmer.h"
 #include "ShimmerSpawner.h"
+#include "Audio.h"
 #include <cmath>
 
 #define SHIMMER_POOL_SIZE (10)
@@ -20,6 +21,7 @@ AShimmerSpawner::AShimmerSpawner()
 void AShimmerSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+	MinPitchMultiplier = MinPitchMultiplier < MIN_PITCH ? MIN_PITCH : MinPitchMultiplier;
 	NumSteps = FinalObjective - StartObjective;
 	// Initialise the object pools
 	FActorSpawnParameters Params;
@@ -112,10 +114,9 @@ void AShimmerSpawner::Tick( float DeltaTime )
 		double Y = CurrentInnerRadius + ((RAND_MAX - rand()) / (double)RAND_MAX * CurrentRadiusArea);
 		double Z = CurrentInnerRadius + ((RAND_MAX - rand()) / (double)RAND_MAX * CurrentRadiusArea);
 
-		// Determine the direction
+		// Determine the direction (don't change Z since we want it to spawn at least above the player)
 		X *= (rand() > RAND_MAX / 2) ? 1 : -1;
 		Y *= (rand() > RAND_MAX / 2) ? 1 : -1;
-		Z *= (rand() > RAND_MAX / 2) ? 1 : -1;
 
 
 		// We're spawning shimmers quicker than they're becoming available, so we'll make another one (and a sound)
@@ -140,15 +141,18 @@ void AShimmerSpawner::Tick( float DeltaTime )
 		AEmitter* AvailableShimmer = ParticleInstances[AvailableShimmerIdx];
 		AAmbientSound* AvailableSound = SoundInstances[AvailableShimmerIdx];
 
-		FVector SpawnLocation(/*X*/ + Centre.X, /*Y*/ + Centre.Y, /*Z*/ + Centre.Z);
+		FVector SpawnLocation(X + Centre.X, Y + Centre.Y, Z + Centre.Z);
 		AvailableShimmer->SetActorLocation(SpawnLocation);
 		AvailableSound->SetActorLocation(SpawnLocation);
 		// TODO: Change volume and pitch based on linear interpolation values
+		float Distance = sqrtf((X * X) + (Y * Y) + (Z * Z));
+		float NewPitchMultiplier = fmaxf(MinPitchMultiplier, 1 - Distance * PitchLowerRate);
 		
 		// Start the shimmer
-		TimeLeft[AvailableShimmerIdx] = ShimmerSound->Duration;
 		AvailableShimmer->Activate();
 		AvailableShimmer->SetActorHiddenInGame(false);
+		AvailableSound->GetAudioComponent()->SetPitchMultiplier(NewPitchMultiplier);
+		TimeLeft[AvailableShimmerIdx] = ShimmerSound->Duration * (1 / NewPitchMultiplier); // Adjust the sound duration so that it plays fully
 		AvailableSound->GetAudioComponent()->Play();
 		TimeSinceLastSpawn = 0;
 	}

@@ -32,6 +32,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Object)
 		void Disable();
 
+	// The minimum pitch multiplier; note that this will be clamped at Unreal's MIN_PITCH value (0.4 as of this writing)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
+		float MinPitchMultiplier;
+
+	// The amount by which the pitch will be lowered based on distance from the player
+	// Should probably be a small value, like 0.005, for best results
+	// This will not drop below MinPitchMultiplier
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
+		float PitchLowerRate;
+
 	// The final rate (number spawned per second) at which shimmers should be spawned
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = ShimmerProperties)
 		float FinalRate;
