@@ -67,6 +67,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool FadeInAtEnd;
 
+	// Fade during pause
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool PauseFade;
+
+	// Fade during pause out
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+	bool PauseFadeOut;
+
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool DrawNoteString;
