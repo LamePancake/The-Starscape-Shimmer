@@ -13,6 +13,10 @@ class THESTARSCAPESHIMMER_API AFirstPersonCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FirstPersonCameraComponent;
 public:
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera)
+	float MovementSpeedMultiplier = 1.f;
+
 	// Sets default values for this character's properties
 	AFirstPersonCharacter();
 

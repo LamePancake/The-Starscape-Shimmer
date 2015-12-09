@@ -19,8 +19,11 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
+	bool IsPlaying();
+	void Reset();
+
 	// Starts the shimmer's voice
-	void Speak();
+	void Play();
 
 	// The list of clips to play
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Sound)
@@ -35,7 +38,9 @@ public:
 		AEmitter* ShimmerVoiceParticles;
 
 private:
-	float TimeSinceLastClip;
+	float TimeToNextClip;
+	int32 CurrentClipIdx;
+	bool IsSpeaking;
 	AAmbientSound* Speaker;
 	bool HasSpoken;
 	

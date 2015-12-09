@@ -107,7 +107,7 @@ void ACharacterHUD::DrawHUD()
 		if (BlackBackgroundAlpha >= 255)
 		{
 			BlackBackgroundAlpha = 255;
-			GetWorld()->GetAuthGameMode()->EndPlay(EEndPlayReason::Quit);
+			FGenericPlatformMisc::RequestExit(false);
 		}
 	}
 

@@ -146,7 +146,7 @@ void AFirstPersonCharacter::MoveForward(float Value)
 			if (Value != 0.0f)
 			{
 				// add movement in that direction
-				AddMovementInput(GetActorForwardVector(), Value);
+				AddMovementInput(GetActorForwardVector(), Value * MovementSpeedMultiplier);
 				Walking = true;
 			}
 		}
@@ -164,7 +164,7 @@ void AFirstPersonCharacter::MoveRight(float Value)
 			if (Value != 0.0f)
 			{
 				// add movement in that direction
-				AddMovementInput(GetActorRightVector(), Value);
+				AddMovementInput(GetActorRightVector(), Value * MovementSpeedMultiplier);
 				Walking = true;
 			}
 		}
