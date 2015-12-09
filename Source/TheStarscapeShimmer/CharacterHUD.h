@@ -63,6 +63,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool FadeAfterPortal;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+		bool FadeAtGameOver;
+
 	// Fade at end
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 	bool FadeInAtEnd;

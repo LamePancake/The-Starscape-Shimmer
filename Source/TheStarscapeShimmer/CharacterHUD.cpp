@@ -18,6 +18,7 @@ ACharacterHUD::ACharacterHUD()
 	FadeInAtEnd = false;
 	PortalTeleport = false;
 	FadeAfterPortal = false;
+	FadeAtGameOver = false;
 
 	DrawNoteImage = false;
 
@@ -97,6 +98,16 @@ void ACharacterHUD::DrawHUD()
 		{
 			FadeAfterPortal = false;
 			BlackBackgroundAlpha = 0;
+		}
+	}
+
+	if (FadeAtGameOver) {
+		BlackBackgroundAlpha += 2;
+
+		if (BlackBackgroundAlpha >= 255)
+		{
+			BlackBackgroundAlpha = 255;
+			GetWorld()->GetAuthGameMode()->EndPlay(EEndPlayReason::Quit);
 		}
 	}
 
