@@ -106,9 +106,7 @@ void AProjectorInteract::RunFilm(AFilmReelPickup* Reel)
         Reel->Film->Play();
 
         puzzleZoneStart = rand() % (int)(puzzleStartMax) + puzzleStartMin;
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Start: %f"), puzzleZoneStart));
         puzzleZoneEnd = puzzleZoneStart + puzzleDurationInMinutes;
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("End: %f"), puzzleZoneEnd));
     }
 
     UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
@@ -123,9 +121,6 @@ void AProjectorInteract::Tick(float DeltaTime)
     if (CurrentFilmReel != NULL) {
         double minutesElapsed = CurrentFilmReel->Film->GetTime().GetTotalMinutes();
         if (!puzzleLocked && minutesElapsed >= puzzleZoneStart && minutesElapsed <= puzzleZoneEnd) {
-            if (!inPuzzleZone)
-                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("In Puzzle Zone")));
-
             inPuzzleZone = true;
             UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 1.0f);
         }
@@ -139,7 +134,6 @@ void AProjectorInteract::Tick(float DeltaTime)
             }
         } else if (inPuzzleZone) {
             if (minutesElapsed > puzzleZoneEnd) {
-                GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Out of Puzzle Zone")));
                 UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZone")), 0.0f);
                 inPuzzleZone = false;
             }
@@ -152,7 +146,6 @@ void AProjectorInteract::LockPuzzleZone()
     if (CurrentFilmReel->Film != NULL)
     {
         puzzleLocked = true;
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Puzzle Zone Locked")));
         UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZoneLocked")), 1.0f);
     }
 }
@@ -162,7 +155,6 @@ void AProjectorInteract::UnlockPuzzleZone()
     if (CurrentFilmReel->Film != NULL)
     {
         puzzleLocked = false;
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Puzzle Zone Unlocked")));
         UKismetMaterialLibrary::SetScalarParameterValue(this, ScreenMatParams, FName(TEXT("PuzzleZoneLocked")), 0.0f);
     }
 }
@@ -178,7 +170,6 @@ void AProjectorInteract::ScalePlayRate(float scale) {
     if (playRate == 0) playRate = 1.0f;
 
     if (CurrentFilmReel != NULL && CurrentFilmReel->Film != NULL && playRate != currentPlayRate) {
-        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Changed Rate %d"), playRate));
         currentPlayRate = playRate;
         CurrentFilmReel->Film->SetRate(playRate);
 
@@ -194,25 +185,25 @@ void AProjectorInteract::ScalePlayRate(float scale) {
 
 void AProjectorInteract::FastForward_Implementation()
 {
-    if (HasPower) {
+    /*if (HasPower) {
         CurrentFilmReel->Film->SetRate(16);
         UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
         SpeakerAudio->Stop();
-    }
+    }*/
 }
 
 void AProjectorInteract::PlayReverse_Implementation()
 {
-    if (HasPower) {
+    /*if (HasPower) {
         CurrentFilmReel->Film->SetRate(-16);
         UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
         SpeakerAudio->Stop();
-    }
+    }*/
 }
 
 void AProjectorInteract::PlayNormal_Implementation()
 {
-    if (HasPower) {
+    /*if (HasPower) {
         UAudioComponent* SpeakerAudio = TheatreSpeaker->GetAudioComponent();
         CurrentFilmReel->Film->SetRate(1);
         SpeakerAudio->Play(CurrentFilmReel->Film->GetTime().GetTotalSeconds());
@@ -221,5 +212,5 @@ void AProjectorInteract::PlayNormal_Implementation()
         //SpeakerAudio->Stop();
         //UE_LOG(LogTemp, Warning, TEXT("timespan Seconds: %f"), currentTime.GetSeconds());
         //SpeakerAudio->Play(currentTime.GetTotalSeconds());
-    }
+    }*/
 }

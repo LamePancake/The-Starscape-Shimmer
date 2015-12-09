@@ -24,8 +24,8 @@ public:
 	double puzzleZoneStart = 0.0;
 	double puzzleZoneEnd = 0.0;
 	double puzzleDurationInMinutes = 4.0;
-	double puzzleStartMin = 4;
-	double puzzleStartMax = 16;
+	double puzzleStartMin = 2;
+	double puzzleStartMax = 4;
 	int maxPlayRate = 16;
 	int currentPlayRate = 1;
 	bool inPuzzleZone = false;
