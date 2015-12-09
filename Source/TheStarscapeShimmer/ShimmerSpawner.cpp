@@ -7,7 +7,6 @@
 
 #define SHIMMER_POOL_SIZE (10)
 
-
 // Sets default values
 AShimmerSpawner::AShimmerSpawner()
 {

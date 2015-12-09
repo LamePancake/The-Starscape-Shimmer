@@ -346,31 +346,6 @@ void AProceduralStaticMeshActor::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 	ElapsedTime += DeltaTime;
 
-	// Since the ThreadPool's Data will change between invocations, this is necessary to do each time
-	//uint32_t Size = Bounds.Z * Bounds.Y;
-	//for (uint32_t i = 0; i < Size; i++) {
-	//	uint32_t Y = i / (uint32_t)Bounds.Y;
-	//	uint32_t Z = i % (uint32_t)Bounds.Y;
-
-	//	double ShiftedY = (Y / Bounds.Y * 2) - 1.0;
-	//	double ShiftedZ = (Z / Bounds.Z * 2) - 1.0;
-
-	//	// Use the lookup tables, which are hopefully faster than computing the values
-	//	float mov0 = ShiftedY + ShiftedZ + cos(sin(ElapsedTime) * 2.0) * 100.f + sin(ShiftedY / 100.f) * 1000.f;
-	//	float mov1 = ShiftedY / 0.9 + ElapsedTime;
-	//	float mov2 = ShiftedY / 0.2;
-	//	float c1 = fabs(sin(mov1 + ElapsedTime) / 2.f + mov2 / 2.f - mov1 - mov2 + ElapsedTime);
-	//	float c2 = fabs(sin(c1 + sin(mov0 / 1000.f + ElapsedTime) + sin(ShiftedZ / 40.f + ElapsedTime) + sin((ShiftedY + ShiftedZ) / 100.f) * 3.f));
-	//	float c3 = fabs(sin(c2 + cos(mov1 + mov2 + c2) + cos(mov2) + sin(ShiftedY / 1000.f)));
-
-	//	// TODO: Need some check here to make sure we don't write to the buffer if the thread stopped
-	//	// *Theoretically*, nothing should be freed before we finish the loop, but I don't really trust that. At all.
-	//	DynamicColours[i * 4] = (uint8)(c1 * 255);
-	//	DynamicColours[(i * 4) + 1] = (uint8)(c2 * 255);
-	//	DynamicColours[(i * 4) + 2] = (uint8)(c3 * 255);
-	//	DynamicColours[(i * 4) + 3] = 255;
-	//}
-
 	WorkerThreads->DoProceduralGeneration(DynamicColours, ChunkOffsets, ChunkSizes, &TextureBounds, ElapsedTime);
 
 	UpdateTextureRegions(DynamicTexture, 0, 1, UpdateTextureRegion, DataSizeSqrt, (uint32_t)4, DynamicColours, false);
