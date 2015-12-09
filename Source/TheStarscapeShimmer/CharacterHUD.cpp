@@ -21,6 +21,9 @@ ACharacterHUD::ACharacterHUD()
 
 	DrawNoteImage = false;
 
+	PauseFade = false;
+	PauseFadeOut = false;
+
 	DefaultFontScale = 1.5f;
 }
 
@@ -64,7 +67,7 @@ void ACharacterHUD::DrawHUD()
 
 	if (FadeInAtStart)
 	{
-		BlackBackgroundAlpha -= 5;
+		BlackBackgroundAlpha -= 3;
 
 		if (BlackBackgroundAlpha <= 0)
 		{
@@ -75,7 +78,7 @@ void ACharacterHUD::DrawHUD()
 
 	if (FadeAtPortal)
 	{
-		BlackBackgroundAlpha += 8;
+		BlackBackgroundAlpha += 6;
 
 		if (BlackBackgroundAlpha >= 255)
 		{
@@ -88,12 +91,32 @@ void ACharacterHUD::DrawHUD()
 
 	if (FadeAfterPortal)
 	{
-		BlackBackgroundAlpha -= 8;
+		BlackBackgroundAlpha -= 6;
 
 		if (BlackBackgroundAlpha <= 0)
 		{
 			FadeAfterPortal = false;
 			BlackBackgroundAlpha = 0;
+		}
+	}
+
+	if (PauseFade)
+	{
+		BlackBackgroundAlpha += 8;
+		if (BlackBackgroundAlpha >= 150)
+		{
+			BlackBackgroundAlpha = 150;
+			PauseFade = false;
+		}
+	}
+
+	if (PauseFadeOut)
+	{
+		BlackBackgroundAlpha -= 8;
+		if (BlackBackgroundAlpha <= 0)
+		{
+			BlackBackgroundAlpha = 0;
+			PauseFadeOut = false;
 		}
 	}
 

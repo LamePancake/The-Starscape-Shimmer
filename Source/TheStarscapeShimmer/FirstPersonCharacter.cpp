@@ -11,6 +11,7 @@
 #include "FilmReelPickup.h"
 #include "NotePickup.h"
 
+//This is the first person character.
 // Sets default values
 AFirstPersonCharacter::AFirstPersonCharacter()
 {
