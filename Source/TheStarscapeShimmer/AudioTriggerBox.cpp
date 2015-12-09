@@ -5,11 +5,13 @@
 #include "AudioTriggerBox.h"
 
 AAudioTriggerBox::AAudioTriggerBox() {
-	//Speaker = GetWorld()->SpawnActor<AAmbientSound>(AAmbientSound::StaticClass());
+	PrimaryActorTick.bCanEverTick = true;
 }
 
 void AAudioTriggerBox::BeginPlay() {
+	Speaker = GetWorld()->SpawnActor<AAmbientSound>(AAmbientSound::StaticClass());
 	Speaker->SetActorLocation(GetActorLocation());
+	GetCollisionComponent()->OnComponentBeginOverlap.AddDynamic(this, &AAudioTriggerBox::OnOverlapBegin);
 }
 
 bool AAudioTriggerBox::IsPlaying() {
@@ -25,7 +27,9 @@ void AAudioTriggerBox::Reset() {
 
 void AAudioTriggerBox::Tick(float DeltaTime) {
 	if (IsSpeaking) {
-		TimeToNextClip -= fmaxf(0, DeltaTime);
+
+		TimeToNextClip -= DeltaTime;
+		TimeToNextClip = fmaxf(0, TimeToNextClip);
 		if (TimeToNextClip == 0) {
 			CurrentClipIdx++;
 
@@ -54,6 +58,17 @@ void AAudioTriggerBox::Tick(float DeltaTime) {
 	}
 }
 
+void AAudioTriggerBox::OnOverlapBegin(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	// Dirty hack to determine whether we collided with the player
+	UCapsuleComponent* PlayerComponent = Cast<UCapsuleComponent>(OtherComp);
+	// Other Actor is the actor that triggered the event. Check that is not ourself.  
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && PlayerComponent && !HasSpoken)
+	{
+		Play();
+	}
+}
+
 void AAudioTriggerBox::Play() {
 	if (HasSpoken) return;
 	
@@ -68,4 +83,5 @@ void AAudioTriggerBox::Play() {
 		if (*ActorItr == Speaker) continue;
 		ActorItr->GetAudioComponent()->SetVolumeMultiplier(0.1f);
 	}
+	IsSpeaking = true;
 }

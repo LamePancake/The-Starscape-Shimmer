@@ -22,6 +22,9 @@ public:
 	bool IsPlaying();
 	void Reset();
 
+	UFUNCTION()
+	void OnOverlapBegin(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	// Starts the shimmer's voice
 	void Play();
 
