@@ -30,8 +30,8 @@ void ANotePickup::Read()
 			h->DrawNoteString = !h->DrawNoteString;
 			h->DrawSafeString = false;
 			h->NoteString = Notes[NoteIndex];
-			//h->NoteImage = NoteImage;
-			//h->DrawNoteImage = !h->DrawNoteImage;
+			h->NoteImage = NoteImage;
+			h->DrawNoteImage = !h->DrawNoteImage;
 
 			if (h->DrawNoteString)
 				Fade = 1.0;
@@ -51,7 +51,7 @@ void ANotePickup::OnDrop_Implementation()
 		if (h)
 		{
 			h->DrawNoteString = false;
-			//h->DrawNoteImage = false;
+			h->DrawNoteImage = false;
 			h->NoteString = "";
 			Fade = -1.0;
 		}
