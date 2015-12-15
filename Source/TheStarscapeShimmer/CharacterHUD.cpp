@@ -144,7 +144,7 @@ void ACharacterHUD::DrawHUD()
 				if (DrawNoteImage)
 				{
 					float Height = ViewportSize.Y;
-					float Width = NoteImage->Source.GetSizeX() * ViewportSize.Y / NoteImage->Source.GetSizeY();
+					float Width = NoteImage->GetSizeX() * ViewportSize.Y / NoteImage->GetSizeY();
 					float XDrawPos = (ViewportSize.X - Width) / 2;
 					const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 					DrawHUD_Image(NoteImage, 255, XDrawPos, 0, Width, Height);
