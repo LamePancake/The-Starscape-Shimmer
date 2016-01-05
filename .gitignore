@@ -91,3 +91,17 @@ Deploy/StarscapeShimmerBetaV1.zip.tmp
 Deploy/StarscapeShimmerBetaV1/Manifest_NonUFSFiles.txt
 Deploy/StarscapeShimmerBetaV1/TheStarscapeShimmer/Content/Paks/TheStarscapeShimmer-WindowsNoEditor.pak
 Deploy/
+TheStarscapeShimmer/
+TheStarscapeShimmer.zip
+Content/Audio/DrillerKiller.uasset
+Content/Audio/DrillerKiller.wav
+Content/Audio/Driller_Killer/DrillerKiller.uasset
+Content/Audio/Driller_Killer/DrillerKiller.wav
+Content/Audio/Grave-of-the-Vampire/Grave_of_the_Vampire.uasset
+Content/Audio/Grave-of-the-Vampire/Grave_of_the_Vampire.wav
+Content/Audio/Grave_of_the_Vampire.uasset
+Content/Audio/Grave_of_the_Vampire.wav
+Content/Audio/Messiah_of_Evil.uasset
+Content/Audio/Messiah_of_Evil.wav
+Content/Audio/Messiah_of_Evil/Messiah_of_Evil.uasset
+Content/Audio/Messiah_of_Evil/Messiah_of_Evil.wav
