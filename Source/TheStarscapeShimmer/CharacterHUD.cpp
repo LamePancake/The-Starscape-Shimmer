@@ -25,7 +25,14 @@ ACharacterHUD::ACharacterHUD()
 	PauseFade = false;
 	PauseFadeOut = false;
 
+	DisplayEnding = false;
+
 	DefaultFontScale = 1.5f;
+	EndingCounter = 0;
+
+	EndingString1 = "The next morning, the police came to investigate the Starscape,";
+	EndingString2 = "only to find a film left playing. They found no traces of life.";
+	EndingString3 = "It was as if you never existed.";
 }
 
 
@@ -54,12 +61,12 @@ void ACharacterHUD::DrawHUD_Image(UTexture2D* tex, float alpha, float x, float y
 void ACharacterHUD::DrawHUD()
 {
 	//Draw HUD?
-	if (!DrawTheHUD) 
+	if (!DrawTheHUD)
 		return;
 
 	Super::DrawHUD();
 
-	if (!Canvas) 
+	if (!Canvas)
 		return;
 
 	// Draws the reticle.
@@ -107,7 +114,7 @@ void ACharacterHUD::DrawHUD()
 		if (BlackBackgroundAlpha >= 255)
 		{
 			BlackBackgroundAlpha = 255;
-			FGenericPlatformMisc::RequestExit(false);
+			DisplayEnding = true;
 		}
 	}
 
@@ -155,7 +162,7 @@ void ACharacterHUD::DrawHUD()
 					const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 
 					DrawHUD_String(VerdanaFont, NoteString, ViewportSize.X * 0.2, ViewportSize.Y * 0.3, DefaultFontScale);
-				}			
+				}
 			}
 
 			if (DrawSafeString)
@@ -169,10 +176,28 @@ void ACharacterHUD::DrawHUD()
 				DrawHUD_String(VerdanaFont, SafeString, ViewportCenter.X - (VerdanaFont->GetStringSize(*(SafeString)) * 2 / 2), ViewportSize.Y * 0.6, 2.0f);
 			}
 		}
+
+		if (DisplayEnding)
+		{
+			EndingCounter++;
+			//Get the width and height of the screen
+			const FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+			//Calculate the center of the screen            
+			const FVector2D  ViewportCenter = FVector2D(ViewportSize.X / 2, ViewportSize.Y / 2);
+
+			DrawHUD_String(VerdanaFont, EndingString1, ViewportCenter.X - (VerdanaFont->GetStringSize(EndingString1.GetCharArray().GetData()) * 1.5 / 2), ViewportSize.Y * 0.35, 1.5f);
+			DrawHUD_String(VerdanaFont, EndingString2, ViewportCenter.X - (VerdanaFont->GetStringSize(EndingString2.GetCharArray().GetData()) * 1.5 / 2), ViewportSize.Y * 0.5, 1.5f);
+			DrawHUD_String(VerdanaFont, EndingString3, ViewportCenter.X - (VerdanaFont->GetStringSize(EndingString3.GetCharArray().GetData()) * 1.5 / 2), ViewportSize.Y * 0.65, 1.5f);
+
+			if (EndingCounter > 1000)
+			{
+				FGenericPlatformMisc::RequestExit(false);
+			}
+		}
 	}
 
 
-	
+
 
 
 	//Put other hud related things here.

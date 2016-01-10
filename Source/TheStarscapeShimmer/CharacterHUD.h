@@ -9,8 +9,8 @@
 #include "CharacterHUD.generated.h"
 
 /**
- * 
- */
+*
+*/
 UCLASS()
 class THESTARSCAPESHIMMER_API ACharacterHUD : public AHUD
 {
@@ -21,84 +21,100 @@ public:
 
 	/** Verdana */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HUD)
-	UFont* VerdanaFont;
+		UFont* VerdanaFont;
 
 	/** Font Scaling Used By Your HUD Code */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HUD)
-	float DefaultFontScale;
+		float DefaultFontScale;
 
 	// The reticle for the player
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
-	UTexture2D* reticle;
-	
-	// Background for when the player reads a note or enters the safe code
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
-	UTexture2D* BlackBackground;
+		UTexture2D* reticle;
 
 	// Background for when the player reads a note or enters the safe code
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
-	UTexture2D* NoteImage;
+		UTexture2D* BlackBackground;
+
+	// Background for when the player reads a note or enters the safe code
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = T2D)
+		UTexture2D* NoteImage;
 
 	// Just incase we dont want to draw the hud
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool DrawTheHUD;
+		bool DrawTheHUD;
 
 	// True if we want to draw the reticle
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool DrawReticle;
+		bool DrawReticle;
 
 	// Fade in at the start
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool FadeInAtStart;
+		bool FadeInAtStart;
 
 	// Fade when in portal
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool FadeAtPortal;
+		bool FadeAtPortal;
 
 	// Tells the blueprint when to teleport
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool PortalTeleport;
+		bool PortalTeleport;
 
 	// Fade when in portal after teleport
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool FadeAfterPortal;
+		bool FadeAfterPortal;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
 		bool FadeAtGameOver;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+		bool DisplayEnding;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
+		float EndingCounter;
+
 	// Fade at end
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool FadeInAtEnd;
+		bool FadeInAtEnd;
 
 	// Fade during pause
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool PauseFade;
+		bool PauseFade;
 
 	// Fade during pause out
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool PauseFadeOut;
+		bool PauseFadeOut;
 
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool DrawNoteString;
+		bool DrawNoteString;
 
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool DrawNoteImage;
+		bool DrawNoteImage;
 
 	// Representns the alpha channel of the black background.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	float BlackBackgroundAlpha;
+		float BlackBackgroundAlpha;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
-	FString NoteString;
+		FString NoteString;
 
 	// True if we want to draw a string
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Options)
-	bool DrawSafeString;
+		bool DrawSafeString;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Note)
-	FString SafeString;
+		FString SafeString;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ending)
+		FString EndingString1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ending)
+	FString EndingString2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Ending)
+		FString EndingString3;
+
 
 	// Add other hud things here like text or other things.
 
@@ -114,9 +130,9 @@ public:
 	//Draws the texture on screen
 	FORCEINLINE void DrawFullSizeTile(UTexture2D* tex, float x, float y, const FColor& Color)
 	{
-		if (!Canvas) 
+		if (!Canvas)
 			return;
-		if (!tex) 
+		if (!tex)
 			return;
 
 		Canvas->SetDrawColor(Color);
@@ -159,7 +175,7 @@ public:
 	}
 
 	//DrawText
-	FORCEINLINE void DrawText(UFont* TheFont, const FString& TheStr, const float& X, const float& Y, const FLinearColor& TheColor, const float& TheScale, bool DrawOutline = false, const FLinearColor OutlineColor = FLinearColor(0, 0, 0, 1)) 
+	FORCEINLINE void DrawText(UFont* TheFont, const FString& TheStr, const float& X, const float& Y, const FLinearColor& TheColor, const float& TheScale, bool DrawOutline = false, const FLinearColor OutlineColor = FLinearColor(0, 0, 0, 1))
 	{
 		if (!Canvas)
 		{
