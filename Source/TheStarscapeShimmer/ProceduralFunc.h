@@ -21,7 +21,7 @@ typedef struct _Vec4 {
 	double W;
 } Vec4;
 
-typedef void (*GeneratorFunc)(uint8_t* Colours, Vec2* Pos, Vec2* Bounds, double ElapsedTime);
+typedef void(*ProceduralFunc)(uint8_t* Colours, Vec2* Pos, Vec2* Bounds, double ElapsedTime);
 
 #define step(x, y) ((y) < (x) ? 0.0 : 1.0)
 

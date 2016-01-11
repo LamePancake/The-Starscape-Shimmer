@@ -15,18 +15,19 @@ void AAudioTriggerBox::BeginPlay() {
 }
 
 bool AAudioTriggerBox::IsPlaying() {
-	return IsSpeaking;
+	return bPlaying;
 }
 
 void AAudioTriggerBox::Reset() {
-	if (IsSpeaking) return;
-	HasSpoken = false;
+	if (bPlaying) Speaker->GetAudioComponent()->Stop();
+	bPlaying = false;
+	bPlayedAll = false;
 	TimeToNextClip = 0.f;
 	CurrentClipIdx = -1;
 }
 
 void AAudioTriggerBox::Tick(float DeltaTime) {
-	if (IsSpeaking) {
+	if (bPlaying) {
 
 		TimeToNextClip -= DeltaTime;
 		TimeToNextClip = fmaxf(0, TimeToNextClip);
@@ -34,9 +35,9 @@ void AAudioTriggerBox::Tick(float DeltaTime) {
 			CurrentClipIdx++;
 
 			// If we've gone through all of the clips, then reset all the properties and get out of here
-			if (CurrentClipIdx == ShimmerVoiceClips.Num()) {
-				HasSpoken = true;
-				IsSpeaking = false;
+			if (CurrentClipIdx == SoundClips.Num()) {
+				bPlayedAll = true;
+				bPlaying = false;
 				for (TActorIterator<AAmbientSound> ActorItr(GetWorld()); ActorItr; ++ActorItr)
 				{
 					if (*ActorItr == Speaker) continue;
@@ -49,9 +50,9 @@ void AAudioTriggerBox::Tick(float DeltaTime) {
 
 			// Otherwise, we have some work to do
 			// Only add on the delay if we're not on the last clip
-			TimeToNextClip = ShimmerVoiceClips[CurrentClipIdx]->GetDuration();
-			TimeToNextClip += CurrentClipIdx == ShimmerVoiceClips.Num() - 1 ? 0 : ShimmerVoiceDelays[CurrentClipIdx];
-			Speaker->GetAudioComponent()->SetSound(ShimmerVoiceClips[CurrentClipIdx]);
+			TimeToNextClip = SoundClips[CurrentClipIdx]->GetDuration();
+			TimeToNextClip += CurrentClipIdx == SoundClips.Num() - 1 ? 0 : SoundClipDelays[CurrentClipIdx];
+			Speaker->GetAudioComponent()->SetSound(SoundClips[CurrentClipIdx]);
 			Speaker->GetAudioComponent()->Play();
 
 		}
@@ -63,14 +64,14 @@ void AAudioTriggerBox::OnOverlapBegin(class AActor* OtherActor, class UPrimitive
 	// Dirty hack to determine whether we collided with the player
 	UCapsuleComponent* PlayerComponent = Cast<UCapsuleComponent>(OtherComp);
 	// Other Actor is the actor that triggered the event. Check that is not ourself.  
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && PlayerComponent && !HasSpoken)
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && PlayerComponent && !bPlayedAll)
 	{
 		Play();
 	}
 }
 
 void AAudioTriggerBox::Play() {
-	if (HasSpoken) return;
+	if (bPlayedAll) return;
 	
 	Reset();
 
@@ -83,5 +84,5 @@ void AAudioTriggerBox::Play() {
 		if (*ActorItr == Speaker) continue;
 		ActorItr->GetAudioComponent()->SetVolumeMultiplier(0.1f);
 	}
-	IsSpeaking = true;
+	bPlaying = true;
 }

@@ -8,187 +8,6 @@
 #include <cmath>
 #include "HideWindowsPlatformTypes.h"
 
-struct ProceduralWorkerThreads;
-static void ProceduralFunction(ProceduralWorkerThreads*, int);
-
-class FProceduralRunnable : public FRunnable {
-
-public:
-	FProceduralRunnable(const int Index, ProceduralWorkerThreads* Threads)
-		: Index(Index), ThreadPool(Threads)
-	{}
-
-	// We've already done all necessary initialisation in the constructor
-	virtual bool Init() override {
-		return true;
-	}
-
-	// I didn't want to bother putting the function in here for now
-	// TOOD: Move the function into here sometime from now
-	virtual uint32 Run() override {
-		ProceduralFunction(ThreadPool, Index);
-		return 0;
-	}
-
-	virtual void Exit() override {
-		// Lol don't do anything here
-	}
-
-	virtual void Stop() override {
-		// Lol don't do anything here
-	}
-
-private:
-	int Index;
-	ProceduralWorkerThreads* ThreadPool;
-};
-
-struct ProceduralWorkerThreads {
-	
-	// Initialise the threads
-	ProceduralWorkerThreads()
-		: CompletionCounter(0), ChunkOffsets(nullptr), ChunkSizes(nullptr), ShouldStop(false), ShouldGenerate(false), ElapsedTime(0.0) {
-		for (int i = 0; i < NUM_THREADS; i++) {
-			FString ThreadName = FString::Printf(TEXT("ProcThread %d"), i);
-			Finished[i] = true;
-			Runnables[i] = new FProceduralRunnable(i, this);
-			Threads[i] = FRunnableThread::Create(Runnables[i], ThreadName.GetCharArray().GetData(), 0, TPri_Normal);
-		}
-	}
-
-	// TODO Clean up the rest of this stupid object
-	virtual ~ProceduralWorkerThreads() {
-		Stop();
-		for (int i = 0; i < NUM_THREADS; i++) {
-			delete Runnables[i];
-		}
-	}
-
-	// Generates the texture
-	void DoProceduralGeneration(uint8* Data, uint32_t* ChunkOffsets, size_t* ChunkSizes, FVector* Bounds, double ElapsedTime) {
-		
-		this->ChunkOffsets = ChunkOffsets;
-		this->ChunkSizes = ChunkSizes;
-		this->Data = Data;
-		this->Bounds = Bounds;
-		this->ElapsedTime = ElapsedTime;
-
-		// Tell the threads to start
-		for (int i = 0; i < NUM_THREADS; i++) {
-			Finished[i] = false;
-		}
-		unsigned int Iterations = 0;
-		bool AllFinished = false;
-
-		for (int i = 0; i < NUM_THREADS; i++) {
-			Finished[i] = false;
-		}
-
-		// Continue looping through finished array until every thread has finished
-		while (!AllFinished && Iterations < 100000000) {
-			AllFinished = true;
-			for (int i = 0; i < NUM_THREADS; i++) {
-				if (!Finished[i]) {
-					AllFinished = false;
-					break;
-				}
-			}
-			Iterations++;
-		}
-
-		if (Iterations == 100000000) {
-			UE_LOG(LogTemp, Warning, TEXT("Reached 100000000 iterations! AllFinished is %d"), AllFinished);
-		}
-	}
-
-	uint32_t GetChunkOffset(int Index) const {
-		return ChunkOffsets[Index];
-	}
-
-	size_t GetChunkSize(int Index) const {
-		return ChunkSizes[Index];
-	}
-
-	uint8* GetData() const {
-		return Data;
-	}
-
-	FVector* GetBounds() const {
-		return Bounds;
-	}
-
-	double GetElapsedTime() const {
-		return ElapsedTime;
-	}
-
-	// Stops the threads
-	void Stop() {
-		ShouldStop.store(true);
-		for (int i = 0; i < NUM_THREADS; i++)
-			Finished[i] = false;
-	}
-
-	// Allows the game thread to wait until all threads have completed
-	std::atomic<unsigned int> CompletionCounter;
-
-	// Whether we should stop running
-	std::atomic<bool> ShouldStop;
-
-	// The variable that signals when to start (and its associated lock)
-	std::atomic<bool> ShouldGenerate;
-
-	// Array to hold whether a given thread has finished execution yet
-	std::atomic<bool> Finished[NUM_THREADS];
-	
-private:
-	FRunnableThread* Threads[NUM_THREADS];
-
-	// The runnable objects that handle the content generation
-	FProceduralRunnable* Runnables[NUM_THREADS];
-
-	// An array holding the pointers into the colours array for each thread 
-	uint32_t* ChunkOffsets;
-
-	// Holds the size of each chunk
-	size_t* ChunkSizes;
-
-	// The colour data that will be operated on
-	uint8* Data;
-
-	// The bounds of the currently processed object
-	FVector* Bounds;
-
-	double ElapsedTime;
-};
-
-static void ProceduralFunction(ProceduralWorkerThreads* ThreadPool, int Index) {
-	while (1) {
-		while (ThreadPool->Finished[Index]);
-
-		// Since the ThreadPool's Data will change between invocations, this is necessary to do each time
-		uint8* Data = ThreadPool->GetData();
-		uint32_t Offset = ThreadPool->GetChunkOffset(Index);
-		uint8* Chunk = Data + (Offset * 4);						// Each pixel is 4 bytes, so we have to skip ahead by offset * 4
-		size_t Size = ThreadPool->GetChunkSize(Index);
-		FVector Bounds = *ThreadPool->GetBounds();				// Make a copy in case we're supposed to stop later
-		double ElapsedTime = ThreadPool->GetElapsedTime();
-
-		Vec2 Pos;
-		Vec2 ShaderBounds = { Bounds.Y, Bounds.Z };
-		for (uint32_t i = 0; i < Size && !ThreadPool->ShouldStop; i++) {
-			uint32_t Y = (i + Offset) / (uint32_t)Bounds.Y;
-			uint32_t Z = (i + Offset) % (uint32_t)Bounds.Y;
-
-			Pos.X = Y;
-			Pos.Y = Z;
-
-			CirclePlasma(Chunk + i * 4, &Pos, &ShaderBounds, ElapsedTime);
-		}
-
-		ThreadPool->Finished[Index] = true;
-	}
-}
-
 // TOOD: See here to understand: https://wiki.unrealengine.com/Dynamic_Textures
 void UpdateTextureRegions(UTexture2D* Texture, int32 MipIndex, uint32_t NumRegions, FUpdateTextureRegion2D* Regions, uint32_t SrcPitch, uint32_t SrcBpp, uint8* SrcData, bool bFreeData)
 {
@@ -246,33 +65,23 @@ void UpdateTextureRegions(UTexture2D* Texture, int32 MipIndex, uint32_t NumRegio
 	}
 }
 
-// The all-important thread pool
-static ProceduralWorkerThreads *WorkerThreads = 0;
-
-// We're getting pretty messy here...
-static size_t InstanceCount = 0;
-
-AProceduralStaticMeshActor::AProceduralStaticMeshActor() {
+AProceduralStaticMeshActor::AProceduralStaticMeshActor()
+{
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bAllowTickOnDedicatedServer = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
-	InstanceCount++;
 }
 
 AProceduralStaticMeshActor::~AProceduralStaticMeshActor() {
 	
+	WorkerThreads->Release();
 	delete DynamicColours;
 	delete UpdateTextureRegion;
-
-	// REALLY want to make this cleaner, but it might not happen
-	InstanceCount--;
-	if (InstanceCount == 0) {
-		delete WorkerThreads;
-	}
 }
 
 void AProceduralStaticMeshActor::PostInitializeComponents() {
 	Super::PostInitializeComponents();
+	WorkerThreads = ProceduralThreadPool::GetInstance();
 
 	TextureBounds = FVector(0, 64, 64);
 
@@ -281,8 +90,6 @@ void AProceduralStaticMeshActor::PostInitializeComponents() {
 	FVector Origin(0, 0, 0);
 	GetActorBounds(false, Origin, this->Bounds);
 	Bounds = TextureBounds;///= 3;
-
-	// If the actor is rotated
 
 	// Convert the static material in our mesh into a dynamic one, and store it (please note that if you have more than one material that you wish to mark dynamic, do so here).
 	DynamicMat = GetStaticMeshComponent()->CreateAndSetMaterialInstanceDynamic(0);
@@ -310,43 +117,13 @@ void AProceduralStaticMeshActor::PostInitializeComponents() {
 	DataSizeSqrt = Bounds.Y * 4;
 
 	DynamicColours = new uint8[DataSize];
-
-	// Y is the texture width and Z is the height
-	uint32_t NumPixels = (uint32_t)(Bounds.Z * Bounds.Y);
-	uint32_t ChunkSize = NumPixels / NUM_THREADS;
-	uint32_t LastChunkSize = ChunkSize + (NumPixels % NUM_THREADS);
-
-	// If there's some left over at the end (or Bounds.Z * Bounds.Y < NUM_THREADS), the last thread will get that;
-	// otherwise, every thread gets the same size chunk
-	if (LastChunkSize)
-	{
-		for (int i = 0; i < NUM_THREADS - 1; i++) 
-		{
-			ChunkOffsets[i] = i * ChunkSize;
-			ChunkSizes[i] = ChunkSize;
-		}
-		ChunkOffsets[NUM_THREADS - 1] = NumPixels - LastChunkSize;
-		ChunkSizes[NUM_THREADS - 1] = LastChunkSize;
-	}
-	else
-	{
-		for (int i = 0; i < NUM_THREADS; i++)
-		{
-			ChunkOffsets[i] = i * Bounds.Y * ChunkSize;
-			ChunkSizes[i] = ChunkSize;
-		}
-	}
-
-	if (WorkerThreads == NULL) {
-		WorkerThreads = new ProceduralWorkerThreads();
-	}
 }
 
 void AProceduralStaticMeshActor::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
 	ElapsedTime += DeltaTime;
 
-	WorkerThreads->DoProceduralGeneration(DynamicColours, ChunkOffsets, ChunkSizes, &TextureBounds, ElapsedTime);
+	WorkerThreads->DoGeneration(DynamicColours, &TextureBounds, ElapsedTime, CirclePlasma);
 
 	UpdateTextureRegions(DynamicTexture, 0, 1, UpdateTextureRegion, DataSizeSqrt, (uint32_t)4, DynamicColours, false);
 	DynamicMat->SetTextureParameterValue("Texture2DParam", DynamicTexture);

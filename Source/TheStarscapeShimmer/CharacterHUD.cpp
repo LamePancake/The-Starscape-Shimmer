@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TheStarscapeShimmer.h"
+#include "AudioTriggerBox.h"
+#include "Runtime/Engine/Classes/Engine/TriggerSphere.h"
 #include "CharacterHUD.h"
 
 ACharacterHUD::ACharacterHUD()
@@ -189,9 +191,33 @@ void ACharacterHUD::DrawHUD()
 			DrawHUD_String(VerdanaFont, EndingString2, ViewportCenter.X - (VerdanaFont->GetStringSize(EndingString2.GetCharArray().GetData()) * 1.5 / 2), ViewportSize.Y * 0.5, 1.5f);
 			DrawHUD_String(VerdanaFont, EndingString3, ViewportCenter.X - (VerdanaFont->GetStringSize(EndingString3.GetCharArray().GetData()) * 1.5 / 2), ViewportSize.Y * 0.65, 1.5f);
 
+			// Go back t0o main menu when we've displayed the ending screen for an appropriate amount of time.
 			if (EndingCounter > 1000)
 			{
-				FGenericPlatformMisc::RequestExit(false);
+				UWorld* World = GetWorld();
+				// Reset all the audio triggers and the end-game trigger (which for some reason don't reset on reloading the level...)
+				for (TActorIterator<AAudioTriggerBox> ActorItr(World); ActorItr; ++ActorItr)
+				{
+					ActorItr->Reset();
+					
+					// A bit dirty - the ones we want to enable later only after having completed the objective are the ones with tags,
+					// so we can get them this way
+					UShapeComponent* CollisionComponent = ActorItr->GetCollisionComponent();
+					if (CollisionComponent->ComponentTags.Num() > 0)
+					{
+						CollisionComponent->bGenerateOverlapEvents = false;
+					}
+				}
+				for (TActorIterator<ATriggerSphere> SphereTriggerItr(World); SphereTriggerItr; ++SphereTriggerItr)
+				{
+					UShapeComponent* CollisionComponent = SphereTriggerItr->GetCollisionComponent();
+					if (CollisionComponent->ComponentHasTag(TEXT("EndGameTrigger")))
+					{
+						CollisionComponent->bGenerateOverlapEvents = false;
+						break;
+					}
+				}
+				UGameplayStatics::OpenLevel(GetWorld(), "TheStarscape");
 			}
 		}
 	}

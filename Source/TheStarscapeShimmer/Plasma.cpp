@@ -7,7 +7,6 @@ void Plasma(uint8_t* Colours, Vec2* Pos, Vec2* Bounds, double ElapsedTime) {
 	double ShiftedX = (Pos->X / Bounds->X * 2) - 1.0;
 	double ShiftedY = (Pos->Y / Bounds->Y * 2) - 1.0;
 
-	// Use the lookup tables, which are hopefully faster than computing the values
 	float mov0 = ShiftedX + ShiftedY + cosf(sinf(ElapsedTime) * 2.0) * 100.f + sinf(ShiftedX / 100.f) * 1000.f;
 	float mov1 = ShiftedX / 0.9 + ElapsedTime;
 	float mov2 = ShiftedX / 0.2;

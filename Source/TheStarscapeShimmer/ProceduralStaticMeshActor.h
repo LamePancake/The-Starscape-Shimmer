@@ -1,13 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include <cstdint>
 #include "ProceduralFunc.h"
+#include "ProceduralThreadPool.h"
 #include "Engine/StaticMeshActor.h"
 #include "ProceduralStaticMeshActor.generated.h"
-
-#define NUM_THREADS 3
 
 /**
  * 
@@ -50,9 +48,6 @@ private:
 	// The texture region to update (will be the entire thing)
 	FUpdateTextureRegion2D* UpdateTextureRegion;
 
-	// An array holding the pointers into the colours array for each thread 
-	uint32_t ChunkOffsets[NUM_THREADS];
-
-	// Holds the size of each chunk
-	size_t ChunkSizes[NUM_THREADS];
+	// The worker threads that will perform the texture generation
+	ProceduralThreadPool* WorkerThreads;
 };
